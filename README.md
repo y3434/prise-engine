@@ -127,6 +127,11 @@ Analysis is built on **CPAD 2.0** (Curated Protein Aggregation Database).
 Attribution — source dataset, citation, and engine build id — is carried on
 every API response and shown in the app footer.
 
+## License
+
+MIT — see [LICENSE](LICENSE). The CPAD 2.0 data itself is not covered by this
+licence and remains subject to its own attribution terms.
+
 ## Author
 
 Yassin Ali — independent research project.
