@@ -1,0 +1,12 @@
+# CPAD 2.0 data — attribution-gated (bulk reuse requires author contact) and
+# large. This repo is CODE ONLY; see README "You will need the artifacts".
+data/
+
+# Python cruft
+__pycache__/
+*.pyc
+*.pyo
+
+# OS / editor cruft
+Thumbs.db
+.DS_Store

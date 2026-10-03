@@ -1,0 +1,9 @@
+# Never line-ending-normalise the derived artifacts: they are data, and the
+# container reads them byte-for-byte. (Not LFS — Render does not fetch LFS.)
+data/processed/** -text
+
+# Keep container/build files LF so they work on Linux.
+Dockerfile      text eol=lf
+*.sh            text eol=lf
+render.yaml     text eol=lf
+requirements.txt text eol=lf

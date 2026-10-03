@@ -1,0 +1,14 @@
+.git/
+tmp/
+etl/
+reports/
+docs/
+__pycache__/
+**/__pycache__/
+*.pyc
+web/test_web.py
+# Attribution-gated CPAD bulk — never goes into the image.
+data/cpad_raw/
+data/snapshots/
+data/pdb_cache/
+data/*.zip

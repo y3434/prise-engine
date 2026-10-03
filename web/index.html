@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PRISE — Protein-aggregation Reachability & Inference Support Engine</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <!-- Plotly from CDN; the app DEGRADES GRACEFULLY (table/SVG fallback) if this
+       fails to load (no internet). The page is never blank without it. -->
+  <script
+    src="https://cdn.plot.ly/plotly-2.32.0.min.js"
+    charset="utf-8"
+    onerror="window.__PLOTLY_FAILED__=true"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo">PRISE</span>
+      <span class="tagline">Protein-aggregation analysis &middot; honesty-first inference</span>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="browse">Browse &amp; analyze datasets</button>
+      <button class="tab" data-tab="dashboard">Corpus overview</button>
+      <button class="tab" data-tab="crossmodal">Cross-modal</button>
+      <button class="tab" data-tab="analyze">Analyze your own curve</button>
+    </nav>
+    <div class="build" id="build-badge" title="engine build id"></div>
+  </header>
+
+  <main id="main">
+    <!-- BROWSE (default landing view) -->
+    <section class="view" id="view-browse">
+      <div class="browse-intro">
+        <h1>Browse &amp; analyze real CPAD&nbsp;2.0 datasets</h1>
+        <p>Pick a protein, then click any of its CPAD&nbsp;2.0 curves to see PRISE's full
+          per-dataset analysis — curve &amp; fit, features, propensity, sequence axis, the
+          recommended next experiment, and an honest account of what is <em>not</em>
+          licensed. <strong>No upload needed</strong> — the
+          <em>Analyze your own curve</em> tab is only for curves you bring yourself.</p>
+      </div>
+      <div class="browse-layout">
+        <aside class="protein-list-panel">
+          <div class="search-row">
+            <input id="protein-search" type="search"
+                   placeholder="Search proteins / UniProt&hellip;" autocomplete="off" />
+          </div>
+          <div id="protein-list" class="protein-list loading">Loading&hellip;</div>
+        </aside>
+        <div class="protein-detail-panel" id="protein-detail">
+          <div class="empty-hint">Select a protein on the left to choose one of its
+            CPAD&nbsp;2.0 datasets and see PRISE's full analysis.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORPUS OVERVIEW (secondary) -->
+    <section class="view hidden" id="view-dashboard">
+      <div id="dashboard-content" class="loading">Loading the corpus overview&hellip;</div>
+    </section>
+
+    <!-- CROSS-MODAL (M10): sequence x kinetics x structure -->
+    <section class="view hidden" id="view-crossmodal">
+      <div id="crossmodal-content" class="loading">Loading the cross-modal analysis&hellip;</div>
+    </section>
+
+    <!-- ANALYZE -->
+    <section class="view hidden" id="view-analyze">
+      <div class="analyze-layout">
+        <div class="analyze-input card">
+          <h2>Analyze a curve</h2>
+          <p class="muted">Paste two columns (time, signal) — whitespace, comma or
+            tab separated, one point per line — or upload a CSV. Runs the live
+            engine: M1 triage &rarr; M2 fit &rarr; M4 features &rarr; M5 classify.</p>
+          <textarea id="analyze-text" rows="10" spellcheck="false"
+            placeholder="0    0.01&#10;4    0.03&#10;8    0.08&#10;..."></textarea>
+          <div class="analyze-controls">
+            <label>Concentration (µM)
+              <input id="analyze-conc" type="number" step="any" placeholder="optional" />
+            </label>
+            <label>Assay
+              <select id="analyze-assay">
+                <option value="ThT">ThT</option>
+                <option value="ThS">ThS</option>
+                <option value="Congo Red">Congo Red</option>
+                <option value="Cytofluor">Cytofluor</option>
+                <option value="unknown">unknown / other</option>
+              </select>
+            </label>
+            <label class="file-label">CSV
+              <input id="analyze-file" type="file" accept=".csv,.tsv,.txt" />
+            </label>
+          </div>
+          <div class="analyze-buttons">
+            <button id="analyze-run" class="primary">Analyze</button>
+            <button id="analyze-example">Load an example</button>
+          </div>
+          <div id="analyze-error" class="error-banner hidden"></div>
+        </div>
+        <div class="analyze-result" id="analyze-result">
+          <div class="empty-hint">Results appear here after you analyze a curve.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer" id="app-footer">
+    <div class="footer-inner" id="footer-inner">Loading attribution&hellip;</div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

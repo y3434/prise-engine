@@ -1,0 +1,6 @@
+# PRISE deployment deps.
+# The web/ backend itself is stdlib-only by design (see web/README.md);
+# these two are the engine's requirements, needed for /api/analyze and
+# the fitted-model overlays.
+numpy==2.5.0
+scipy==1.18.0

@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PRISE — Full Product Report (M0–M16)</title>
+<script>
+  MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$']] }, svg:{fontCache:'global'} };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#0f141b; --panel:#161d27; --panel2:#1b2431; --ink:#e6edf3; --muted:#9fb0c0;
+    --faint:#6b7d8f; --line:#28323f; --accent:#5ec6a8; --accent2:#4ea1d3;
+    --warn:#e0a458; --danger:#e06c6c; --ok:#5ec6a8; --purple:#b48ce0;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px 120px}
+  header.hero{padding:54px 22px 30px;border-bottom:1px solid var(--line);
+    background:radial-gradient(1200px 320px at 50% -90px,#1c2b34,transparent);}
+  header.hero .wrap{padding-bottom:0}
+  h1{font-size:2.15rem;margin:.1em 0 .15em;letter-spacing:-.02em}
+  h1 .sub{color:var(--accent);font-weight:600}
+  .tagline{color:var(--muted);font-size:1.06rem;max-width:760px}
+  .badges{margin:18px 0 4px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{background:var(--panel2);border:1px solid var(--line);border-radius:999px;
+    padding:3px 11px;font-size:.78rem;color:var(--muted)}
+  .badge.ok{border-color:#2c5a4a;color:var(--ok)}
+  .badge.warn{border-color:#5a4a2c;color:var(--warn)}
+  .badge.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  h2{font-size:1.5rem;margin:2.4em 0 .5em;padding-top:.4em;border-top:1px solid var(--line);letter-spacing:-.01em}
+  h2 .n{color:var(--faint);font-weight:600;margin-right:.5rem;font-size:1.05rem}
+  h3{font-size:1.14rem;margin:1.7em 0 .3em;color:#cfe0ee}
+  h4{font-size:.98rem;margin:1.2em 0 .2em;color:var(--accent2)}
+  p{margin:.6em 0}
+  a{color:var(--accent2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0c1118;
+    border:1px solid var(--line);border-radius:5px;padding:.05em .4em;font-size:.86em;color:#cbd8e3}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:14px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+  .callout{border-left:3px solid var(--accent);background:var(--panel2);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin:14px 0}
+  .callout.warn{border-left-color:var(--warn)}
+  .callout.danger{border-left-color:var(--danger)}
+  .callout.ok{border-left-color:var(--ok)}
+  .callout .lbl{font-weight:700;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase;color:var(--faint)}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.92rem}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:var(--muted);font-weight:600}
+  td.num{font-family:ui-monospace,Menlo,monospace;text-align:right;white-space:nowrap}
+  .tbl-scroll{overflow-x:auto}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+  @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .kpi .v{font-size:1.5rem;font-weight:700;color:var(--accent);font-family:ui-monospace,Menlo,monospace}
+  .kpi .k{font-size:.78rem;color:var(--muted);margin-top:2px}
+  .toc{columns:2;column-gap:26px;font-size:.92rem}
+  @media(max-width:640px){.toc{columns:1}}
+  .toc a{display:block;padding:2px 0;color:var(--muted)}
+  .toc a:hover{color:var(--accent2)}
+  .mod{border-top:1px solid var(--line);padding-top:2px}
+  .mtag{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.72rem;
+    background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;color:var(--accent);margin-left:8px;vertical-align:middle}
+  .pill{display:inline-block;font-size:.72rem;border-radius:999px;padding:1px 9px;margin:0 3px 3px 0;border:1px solid var(--line)}
+  .pill.real{color:var(--ok);border-color:#2c5a4a}
+  .pill.approx{color:var(--warn);border-color:#5a4a2c}
+  .pill.stub{color:var(--danger);border-color:#5a2c2c}
+  .small{font-size:.86rem;color:var(--muted)}
+  .footer{margin-top:60px;border-top:1px solid var(--line);padding-top:20px;color:var(--faint);font-size:.85rem}
+  hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+  ul{margin:.5em 0 .5em 0;padding-left:1.2em}
+  li{margin:.25em 0}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>PRISE — <span class="sub">Full Product Report</span></h1>
+    <p class="tagline"><b>P</b>rotein aggregation <b>R</b>egime <b>I</b>nference &amp; <b>S</b>coring
+      <b>E</b>ngine. An epistemically-disciplined analytical engine over the CPAD&nbsp;2.0 amyloid
+      aggregation-kinetics corpus: it fits, classifies, scores, and — above all — states honestly
+      <em>what the data can and cannot support</em>.</p>
+    <div class="badges">
+      <span class="badge mono">build&nbsp;e660cb452b41</span>
+      <span class="badge mono">corpus&nbsp;c09ac0cf398e</span>
+      <span class="badge mono">thresholds-1.0</span>
+      <span class="badge ok">engine tests 477/477 ✓</span>
+      <span class="badge warn">web test 1 fail (see §Gaps)</span>
+      <span class="badge">report date 2026-07-21</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="callout">
+  <div class="lbl">What this report is</div>
+  This report was written <b>after auditing the running product</b> — every headline number was
+  read from the engine's own output artifacts (<code>data/processed/*.json</code>) or reproduced by
+  running the code, at engine build <code>e660cb452b41</code>. Where the product differs from the
+  plan or from its own stale docs, that gap is described (§13). The code, tests, and
+  <code>PRISE_DESIGN.md</code> remain the source of truth; this is a descriptive snapshot, not an
+  authority. Math typesets via MathJax (needs a connection).
+</div>
+
+<h2>Contents</h2>
+<div class="toc card">
+  <a href="#summary">1 · Executive summary</a>
+  <a href="#what">2 · What PRISE is &amp; the data foundation</a>
+  <a href="#discipline">3 · The epistemic discipline</a>
+  <a href="#ladder">4 · The inference ladder (headline result)</a>
+  <a href="#m0">M0 · Dataset selection &amp; cohort assembly</a>
+  <a href="#m1">M1 · Ingestion, censoring &amp; artifact gate</a>
+  <a href="#m2">M2 · Model-fitting bank</a>
+  <a href="#m3">M3 · Selection &amp; identifiability</a>
+  <a href="#m4">M4 · Features, definition contract &amp; dual-γ</a>
+  <a href="#globalfit">global_fit · Shared-rate Knowles/Cohen ODE</a>
+  <a href="#pooling">pooling · Empirical-Bayes shrinkage spine</a>
+  <a href="#m5">M5 · Classification &amp; regime registry</a>
+  <a href="#m6">M6 · Propensity &amp; sequence axis</a>
+  <a href="#m7">M7 · Output assembler &amp; build id</a>
+  <a href="#servicec">Service C · Synthetic calibration</a>
+  <a href="#conformal">conformal · Calibrated coverage</a>
+  <a href="#reality">reality_check · Blind external falsification</a>
+  <a href="#m8">M8 · Inferential reachability map</a>
+  <a href="#m9">M9 · Experimental-design recommender</a>
+  <a href="#m10">M10 · Cross-modal analysis</a>
+  <a href="#m11">M11 · Metadata quality &amp; completeness</a>
+  <a href="#m12">M12 · Information geometry</a>
+  <a href="#m13">M13 · Bayesian optimal experimental design</a>
+  <a href="#m14">M14 · Cross-study meta-analysis</a>
+  <a href="#m15">M15 · Literature ingestion &amp; claims</a>
+  <a href="#m16">M16 · Sequence↔Structure↔Kinetics bridge</a>
+  <a href="#web">The web application</a>
+  <a href="#results">Corpus results at a glance</a>
+  <a href="#gaps">13 · Honest gaps, discrepancies &amp; deferrals</a>
+  <a href="#repro">14 · Reproducibility &amp; test suite</a>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="summary"><span class="n">1</span>Executive summary</h2>
+<p>PRISE turns a corpus of <b>1,654 digitized amyloid aggregation-kinetics curves</b> (CPAD&nbsp;2.0,
+spanning ~105 proteins) into calibrated, provenance-stamped scientific claims. Its distinguishing
+feature is not any single model — it is a refusal to overclaim: every estimate carries its
+censoring status, its identifiability, a calibrated confidence, and a <em>validity ceiling</em>.
+The engine is complete through <b>Module 16</b> plus a full cross-cutting validation stack, and is
+surfaced through a working web application.</p>
+
+<div class="kpis">
+  <div class="kpi"><div class="v">1,654</div><div class="k">kinetic curves analysed</div></div>
+  <div class="kpi"><div class="v">M0–M16</div><div class="k">modules built &amp; tested</div></div>
+  <div class="kpi"><div class="v">477 / 477</div><div class="k">engine tests passing</div></div>
+  <div class="kpi"><div class="v">0</div><div class="k">mechanisms licensed (honestly)</div></div>
+</div>
+
+<p>The single most important corpus finding is a piece of <em>honesty made quantitative</em>: of 1,654
+curves, <b>0 support a single-mechanism claim</b> — not because the models fail, but because the two
+metadata fields that gate mechanism (<b>agitation</b> and <b>seeding</b>) are unrecorded corpus-wide.
+PRISE proves this is a <em>metadata</em> ceiling, not a data ceiling: <b>33 proteins / 48
+concentration series</b> are structurally rich enough that recording those two fields would unlock
+mechanistic inference (§M8, §M9).</p>
+
+<div class="callout warn">
+  <div class="lbl">Accuracy note surfaced by this audit</div>
+  The engine's live corpus numbers have <b>drifted from <code>engine/README.md</code></b> (which
+  still quotes the superseded first-pass build and even claims "only the web app remains" — the web
+  app and M8–M16 all exist). And the <b>web test suite currently fails one assertion</b>: the final
+  M16 commit upgraded structure features to a real-3D nested schema but did not re-sync the web
+  layer. Both are detailed in §13. This report uses the <b>live</b> numbers throughout.
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="what"><span class="n">2</span>What PRISE is &amp; the data foundation</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>The problem</h4>
+    <p>Amyloid aggregation kinetics (ThT/ThS fluorescence vs time) are the workhorse assay of protein
+    misfolding, but the published record is a minefield: curves are <b>digitized from figures</b>
+    (no ground-truth values), differently normalized, often <b>censored</b> (still rising at the end,
+    or no lag at the start), and reported without the conditions (agitation, seeding) that decide
+    which <em>mechanism</em> is even identifiable. Naïve fitting manufactures false certainty.</p>
+  </div>
+  <div class="card">
+    <h4>The approach</h4>
+    <p>A pipeline of pure functions — <em>data in → JSON-serialisable data out</em> — each of which
+    does one job and <b>declares its own limits</b>. Descriptive shape is always available;
+    mechanism is granted only when every licensing gate passes; and a synthetic-calibration backbone
+    (Service&nbsp;C) measures what the engine can actually recover so its confidences are earned,
+    not asserted.</p>
+  </div>
+</div>
+
+<h4>Data foundation</h4>
+<ul>
+  <li><b>CPAD 2.0 kinetics</b> — 1,654 curves, ~105 proteins, with concentration/pH/temperature/assay/
+  construct metadata. <b>Attribution-gated &amp; non-redistributable</b> → the corpus is
+  <code>.gitignore</code>d and lives server-side only; the browser receives derived results, never
+  bulk records.</li>
+  <li><b>CPAD sequence layer</b> (ETL <code>cpad-sequence-1.1</code>) — TANGO / AGGRESCAN / PASTA /
+  Waltz predictors, APRs, and PDB cross-references per UniProt.</li>
+  <li><b>PDB coordinates</b> (CC0) — fetched on demand into a local cache; real 3D structural
+  features are computed from them (§M16).</li>
+</ul>
+
+<!-- ===================================================================== -->
+<h2 id="discipline"><span class="n">3</span>The epistemic discipline (the product's whole point)</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Never manufacture certainty</h4>
+    <ul>
+      <li><b>Censoring is first-class.</b> A right-censored (still-rising) curve yields a t50
+      <em>lower bound</em>, never a plateau-normalized point; a left-censored curve reports t50 as
+      biased-early with lag undefined.</li>
+      <li><b>Mechanism is gated, not guessed.</b> M5 returns an equivalence class and every gate it
+      failed — it never names one mechanism when the data can't separate them.</li>
+      <li><b>Confidence is calibrated or null.</b> A verdict that isn't licensed carries a
+      <code>null</code> confidence, not a fabricated number.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Everything is versioned &amp; reproducible</h4>
+    <ul>
+      <li><b><code>engine_build_id</code></b> hashes every comparability axis (module versions,
+      thresholds, corpus digest, environment). Cross-build comparison is <em>blocked</em> unless
+      the ids match.</li>
+      <li><b>Governed thresholds.</b> Cutoffs are Service-C-calibrated with a signed/dated apply
+      record; the previous value is retained and reversible.</li>
+      <li><b>Deterministic.</b> Seeded generation + frozen splits → byte-identical re-runs.</li>
+      <li><b>Validity ceiling.</b> Phase-2 headlines are explicitly <em>upper bounds on
+      reachability</em>, conditional on forward-model adequacy.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="ladder"><span class="n">4</span>The inference ladder — the headline result</h2>
+<p>Of 1,654 curves, how far up the inference ladder can each honestly climb? (Live from
+<code>m8_reachability.json</code> / <code>m7_rollup.json</code>, build <code>e660cb452b41</code>.)</p>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Rung</th><th>Meaning</th><th class="num">Curves</th><th class="num">% of 1,654</th></tr>
+  <tr><td>signal_present</td><td>usable signal under the forward model</td><td class="num">1,606</td><td class="num">97.1%</td></tr>
+  <tr><td>fittable</td><td>a model can be fit</td><td class="num">1,240</td><td class="num">75.0%</td></tr>
+  <tr><td>descriptive_regime</td><td>a resolved shape class</td><td class="num">1,240</td><td class="num">75.0%</td></tr>
+  <tr><td>scaling / γ-significant</td><td>a resolved concentration-scaling exponent (CI excludes 0)</td><td class="num">59</td><td class="num">3.6%</td></tr>
+  <tr><td><b>mechanistic_licensed</b></td><td>a single mechanism is defensible</td><td class="num"><b>0</b></td><td class="num"><b>0%</b></td></tr>
+</table>
+</div>
+<p class="small">The ladder is monotone and reconciles with the M7 rollup. The drop to 0 is the
+central, honest finding — and §M8/§M9 show it is closed by a single cheap metadata fix.</p>
+
+<!-- ===================================================================== MODULES -->
+<h2>The pipeline, module by module</h2>
+<p class="small">Each module is a pure function consuming the canonical <code>AggregationSeries</code>.
+Numbers below are live at build <code>e660cb452b41</code>.</p>
+
+<h3 id="m0" class="mod">M0 — Dataset Selection &amp; Cohort Assembly <span class="mtag">m0_cohort.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The entry point. CPAD holds many datasets per protein; what is scientifically
+  <em>licensed</em> depends on what the user assembles and on what <em>varies</em> across it. M0 runs
+  a Service-A comparability gate <em>before</em> any fitting and routes to a <code>data_mode</code>:</p>
+  <div class="tbl-scroll"><table>
+    <tr><th>Assembled selection</th><th>data_mode</th><th>Unlocks</th></tr>
+    <tr><td>1 dataset</td><td>single_curve</td><td>per-curve descriptive + features (M4/M5)</td></tr>
+    <tr><td>≥2 identical condition vectors</td><td>replicates</td><td>random-effects meta + nucleation scatter</td></tr>
+    <tr><td>concentration varies (≥3), else matched</td><td>concentration_series</td><td>dual-γ (M4) + shared-rate ODE (global_fit)</td></tr>
+    <tr><td>pH or T varies, conc fixed</td><td>condition_series</td><td>feature-vs-condition surface (no γ)</td></tr>
+    <tr><td>&gt;1 condition axis co-varies</td><td>confounded</td><td><b>refused</b> → descriptive-only + confound flag</td></tr>
+  </table></div>
+  <p class="small">Refusing confounded assemblies (Invariant 19) is the point: a comparison that
+  isn't licensed is never silently run.</p>
+</div>
+
+<h3 id="m1" class="mod">M1 — Ingestion, Normalization, Artifact Gate, Censoring &amp; QC <span class="mtag">m1_ingest.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Faithful triage of every curve — no fitting yet. Assigns a
+  <code>fittability_class</code>, a <code>censoring_class</code>, and a normalization discipline that
+  <b>only min–max-normalizes when a plateau is validated</b> (never manufacturing a plateau on a
+  right-censored curve). All heuristics are scale-robust (CPAD intensities are digitized a.u.).</p>
+  <p><b>Live triage (1,654 curves).</b></p>
+  <div class="grid2">
+    <div>
+      <div class="tbl-scroll"><table>
+        <tr><th>Fittability</th><th class="num">n</th></tr>
+        <tr><td>fittable</td><td class="num">1,240</td></tr>
+        <tr><td>suspect</td><td class="num">408</td></tr>
+        <tr><td>unfittable</td><td class="num">6</td></tr>
+      </table></div>
+    </div>
+    <div>
+      <div class="tbl-scroll"><table>
+        <tr><th>Censoring</th><th class="num">n</th></tr>
+        <tr><td>none</td><td class="num">736</td></tr>
+        <tr><td>left</td><td class="num">607</td></tr>
+        <tr><td>right</td><td class="num">168</td></tr>
+        <tr><td>left_right</td><td class="num">130</td></tr>
+        <tr><td>interval</td><td class="num">13</td></tr>
+      </table></div>
+    </div>
+  </div>
+  <p class="small">The lag-slope gate <code>LAG_SLOPE_FRAC</code> runs the Service-C-calibrated
+  <b>0.45</b> (held-out separation AUC 1.0), superseding the first-pass 0.30 — correcting an
+  over-flagging of "no lag" as left-censoring. <b>60% of the corpus is censored in some way</b>, which
+  is why censoring propagates through every downstream module.</p>
+</div>
+
+<h3 id="m2" class="mod">M2 — Model-Fitting Bank <span class="mtag">m2_fit.py · models.py · mechanistic.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Fit (only) a bank of models on three axes; selection is M3, mechanism is M5.</p>
+  <ul>
+    <li><b>Kinetic (signal vs time):</b> linear-no-threshold, logistic, Gompertz, Richards
+    (generalised-logistic), exponential, power/scaling, Brain–Cousens (hormesis), Finke–Watzky.</li>
+    <li><b>Dose–response (response vs conc):</b> LNT, threshold (hockey-stick), Hill 4PL,
+    Brain–Cousens, scaling.</li>
+    <li><b>Tier-B mechanistic (ODE):</b> one Knowles/Cohen moment framework covering
+    nucleation-elongation, secondary-nucleation, saturating-secondary, fragmentation — integrated
+    with LSODA, fit in log-rate space.</li>
+  </ul>
+  <p>Each fit reports SSE / \(R^2\) / AIC / AICc / BIC and parameter SEs. Candidates are routed by
+  M1's handling (a sigmoid is never forced onto a non-monotonic curve). The Tier-B ODE fits are
+  <em>sloppy</em> on one curve — individual rates aren't identifiable — which is exactly why global
+  concentration fitting (below) exists.</p>
+</div>
+
+<h3 id="m3" class="mod">M3 — Comparison, Selection &amp; Identifiability <span class="mtag">m3_select.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The statistical spine. <b>Model selection runs <em>inside</em> the bootstrap</b>
+  (Mammen wild resampling): each resample re-fits and re-selects, so PRISE reports honest
+  <em>selection-stability frequencies</em> instead of pretending the winner was known.</p>
+  <p>Per curve: Akaike weights \(w_i = e^{-\Delta_i/2}\big/\sum_j e^{-\Delta_j/2}\); a cross-model
+  <b>t50 predictive interval</b> (pooled only over the model-transferable quantity, flagged when
+  selection is multimodal); per-model conditional CIs (never pooled across models); and an
+  <b>identifiability</b> diagnostic — the condition number of the column-normalised sensitivity
+  (correlation) matrix, with a practical-non-identifiability flag at the Service-C-calibrated cutoff
+  <code>COND_NUMBER_NONIDENT = 107</code> (was a round-guess 1000).</p>
+  <p class="small">Deferred &amp; documented: block/sieve bootstrap for serial correlation, BCa
+  intervals, corpus-scale FDR.</p>
+</div>
+
+<h3 id="m4" class="mod">M4 — Feature Extractor, Definition Contract &amp; Dual-γ <span class="mtag">m4_features.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Turn selected models into interpretable quantities under a <b>versioned definition
+  contract</b> (<code>m4-defs-1.0</code>) — because a Gompertz t50 and a tangent-intercept lag are
+  only comparable across proteins when computed the <em>same</em> way.</p>
+  <p><b>Single-curve features</b> (read off the selected model on a dense grid): t50 (primary),
+  tangent-intercept lag, the dimensionless <b>lag-to-t50 ratio</b>, inflection time, max rate,
+  t10/t90, transition sharpness, plateau, dynamic range — each <b>censoring-aware</b> and with a
+  non-cooperative guard (a line/saturation has no interior inflection → lag returned <code>None</code>,
+  never a fake argmax).</p>
+  <p><b>Dual-γ</b> — the headline mechanistic constraint for a concentration series, with the
+  half-time scaling exponent defined by</p>
+  $$ t_{50}(m)\;\propto\;m^{-\gamma}, \qquad \log t_{50} = c - \gamma\,\log m. $$
+  <p>Two <em>separately-provenanced, never-merged</em> estimators: (1) <code>gamma_regression</code> —
+  a <b>censored</b> log–log regression (right-censored curves contribute an inequality
+  \(P(Y\ge \text{bound})\), not a point), with a curvature test, an informative-censoring test, an
+  m<sub>crit</sub> identifiability diagnostic, and a negative-γ driving-force gate; (2)
+  <code>gamma_global</code> — a phenomenological <b>master-curve collapse</b> coupling every curve
+  through one shared logistic shape in rescaled time \(\tau=t/t_{50}(m)\). An operational
+  disagreement test always reports \(|\gamma_{\text{reg}}-\gamma_{\text{collapse}}|\) against a
+  pre-registered margin (0.3). γ is a <em>constraint, not a discriminator</em>.</p>
+  <div class="callout ok">
+    <div class="lbl">Live corpus finding</div>
+    Of 1,240 fittable curves, <b>690 are genuinely cooperative</b> (interior inflection). Across the
+    532 with a defined tangent-intercept lag, the <b>lag-to-t50 ratio clusters at median 0.70</b> —
+    the textbook signature of nucleation-dependent amyloid kinetics, surfaced as a corpus result.
+    Over the 52 concentration series, <b>77 γ fits run cleanly and 59 resolve a scaling exponent</b>
+    (95% CI excludes 0); e.g. Aβ42 \(\gamma_{\text{reg}}\approx1.07\) (CI 0.94–1.14) vs
+    \(\gamma_{\text{global}}\approx1.10\).
+  </div>
+</div>
+
+<h3 id="globalfit" class="mod">global_fit — Shared-rate Knowles/Cohen ODE global fit <span class="mtag">global_fit.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The real AmyloFit-grade fit the design promised. For a concentration series it fits
+  <b>all member curves simultaneously with shared microscopic parameters</b>
+  \(\{\log_{10}k_n,\log_{10}k_+,\log_{10}k_2, n_c, n_2, [K_M]\}\) — <em>reaction orders estimated,
+  not hard-fixed at 2</em> — with only the monomer concentration varying per curve. Residuals from
+  every curve stack into one vector; fit with bounded TRF least-squares, multi-start, per mechanism
+  family, AICc-ranked.</p>
+  <p>It emits an <b>observed Fisher Information</b> identifiability report</p>
+  $$ \mathcal{I} = S^{\mathsf T}\Sigma^{-1}S, \qquad \Sigma=\sigma^2 I, $$
+  <p>eigen-decomposed into identifiable <em>combinations</em> vs sloppy directions, plus an analytic
+  third \(\gamma_{\text{mech}}\) from the fitted orders (Meisl/Knowles:
+  \(\gamma=\tfrac{n_2+1}{2}\) secondary, \(\tfrac{n_c+1}{2}\) primary, \(\tfrac12\) fragmentation).
+  <b>Honesty:</b> these fits are sloppy on this corpus — only stiff rate combinations are
+  identifiable, so the value is the reaction-order <em>constraint</em>, and it does <em>not</em>
+  license a single mechanism.</p>
+  <p class="small">E.g. ABeta40 series → best family nucleation-elongation, \(n_c\approx2.96\),
+  \(\gamma_{\text{mech}}\approx1.98\), \(R^2\approx0.99\), sloppy (1 stiff / 2 sloppy directions).</p>
+</div>
+
+<h3 id="pooling" class="mod">pooling — Empirical-Bayes partial-pooling spine <span class="mtag">pooling.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The §4 hierarchical layer: shrink noisy single-curve estimates toward their
+  <b>condition+assay-matched stratum</b> mean by a frozen, versioned, monotone function of each
+  estimate's own sampling variance — deterministic empirical-Bayes (James–Stein), closed-form, no
+  MCMC. Two-level Gaussian with a DerSimonian–Laird moment \(\tau^2\):</p>
+  $$ \hat\theta_i^{\text{EB}} = \bar\theta + B_i(\hat\theta_i-\bar\theta), \qquad
+     B_i = \frac{\tau^2}{\tau^2+s_i^2}. $$
+  <p>Cross-condition pooling is forbidden (Service-A discipline). This is the defensible first layer
+  of the spine, not a full latent-rate ODE hierarchy (documented as a deferred extension).</p>
+</div>
+
+<h3 id="m5" class="mod">M5 — Classification &amp; Regime Registry <span class="mtag">m5_classify.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Emit three things against a declarative, versioned <code>REGIME_REGISTRY</code>
+  (<code>m5-regimes-1.0</code>): a <b>descriptive regime</b> (pure shape, always available), a
+  <b>mechanistic equivalence class + failed gates</b> (never a single mechanism), and a
+  <b>model-agnostic anomaly detector</b> (Wald–Wolfowitz runs test on residuals → corpus
+  Benjamini–Hochberg FDR, plus a material-misfit \(R^2<0.9\) gate so near-perfect curves don't flood
+  the queue).</p>
+  <div class="callout">
+    <div class="lbl">Live corpus (1,240 fittable)</div>
+    <span class="pill real">cooperative_sigmoidal 679</span>
+    <span class="pill">gradual_non_cooperative 502</span>
+    <span class="pill">no_detectable 48</span>
+    <span class="pill">threshold_driven 11</span>
+    <br><span class="small">Internal-consistency check: cooperative 679 + threshold 11 = 690, exactly
+    M4's interior-inflection count. <b>Mechanistic inference licensed on 0 curves</b> — correct,
+    because agitation/seeding are unknown corpus-wide (the quiescent-vs-shaken hard branch is
+    undetermined).</span>
+  </div>
+  <p class="small">Shape thresholds are Service-C-calibrated (<code>THRESHOLD_SHARPNESS</code>
+  3.0→5.7, <code>THRESHOLD_LAG_RATIO</code> 0.80→0.97); the higher bar is why <code>threshold_driven</code>
+  fell from a first-pass 79 to <b>11</b> and cooperative rose to 679.</p>
+</div>
+
+<h3 id="m6" class="mod">M6 — Propensity Scorer &amp; Sequence Axis <span class="mtag">m6_propensity.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> A propensity statement in <b>three never-collapsed views</b> — <em>surface</em>
+  (feature-vs-driving-force + γ), <em>intrinsic</em> (a leakage-free corpus anchor, query excluded
+  from its own stratum, else a versioned reference scale), and <em>cohort</em> (a Hazen mid-rank
+  percentile, self-excluded, suppressed for singletons). Because low t50 = high propensity, every
+  record carries an explicit <code>direction</code> and a sign-corrected percentile so a consumer
+  can't sort backwards.</p>
+  <p>The <b>sequence axis is de-conflated</b>: TANGO / AGGRESCAN / PASTA / Waltz as separate named
+  sub-axes, and a comparison is <b>licensed only on endpoint match</b> — vs an amyloid dye
+  (ThT/ThS/Congo Red) only the amyloid-specific PASTA &amp; Waltz are licensed; TANGO &amp; AGGRESCAN
+  (generic β-aggregation) are barred; an unknown assay licenses nothing.</p>
+  <p class="small">Live: <b>151 protein×construct records</b> — 119 with a sequence axis, 126 with
+  structure linkage, 108 corpus-anchored, 39 censored-only-suppressed, 65 with a γ surface. Only
+  point t50 enters ranked pools; right-censored proteins are emitted but intrinsic/cohort suppressed
+  (a "≥" value isn't rankable).</p>
+</div>
+
+<h3 id="m7" class="mod">M7 — Output Assembler &amp; Build ID <span class="mtag">m7_assemble.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Join M1–M6 into one <code>ProteinAnalysisResult</code> per curve (no new inference),
+  with graceful degradation (a compact result for the common signal-only case, not a caveat
+  avalanche) and an FDR-aware corpus rollup. The sortable <b>information_yield</b> tier
+  (mechanistic &gt; scaling &gt; descriptive &gt; signal_only &gt; uninformative) requires a
+  <em>significant</em> γ for <code>scaling</code> — a reliable-but-CI-spans-0 γ falls to
+  <code>descriptive</code>, no borrowed claim.</p>
+  <div class="tbl-scroll"><table>
+    <tr><th>information_yield (live)</th><th class="num">curves</th><th></th><th>descriptive_regime</th><th class="num">curves</th></tr>
+    <tr><td>mechanistic</td><td class="num">0</td><td></td><td>cooperative_sigmoidal</td><td class="num">679</td></tr>
+    <tr><td>scaling</td><td class="num">59</td><td></td><td>gradual_non_cooperative</td><td class="num">502</td></tr>
+    <tr><td>descriptive</td><td class="num">1,135</td><td></td><td>(no resolved regime)</td><td class="num">414</td></tr>
+    <tr><td>signal_only</td><td class="num">454</td><td></td><td>no_detectable_aggregation</td><td class="num">48</td></tr>
+    <tr><td>uninformative</td><td class="num">6</td><td></td><td>threshold_driven</td><td class="num">11</td></tr>
+  </table></div>
+  <p><b><code>engine_build_id</code></b> is a deterministic hash over all comparability axes; applying
+  the Service-C calibration flipped it <code>bc442463dfdf → </code><b><code>e660cb452b41</code></b>,
+  correctly marking first-pass results non-comparable. Live: 959 curves have a propensity attached;
+  87 are construct-mismatch-suppressed (no Wild-Type bleed onto a mutant).</p>
+</div>
+
+<!-- ===================================================================== VALIDATION -->
+<h2>Cross-cutting validation stack</h2>
+
+<h3 id="servicec" class="mod">Service C — Synthetic Calibration &amp; Identifiability <span class="mtag">service_c.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The de-circularized backbone. It generates curves from a <em>known</em> ground
+  truth under a <b>pre-registered</b> noise/artifact/censoring law (fixed from physics/instrument
+  specs, never tuned to the data it later judges), runs the <em>real</em> engine on them, and measures
+  what the engine recovers — deterministic (seeded → byte-identical).</p>
+  <ul>
+    <li><b>Parameter recovery</b> — bias / RMSE / Wald-95% coverage per parameter and t50.</li>
+    <li><b>The concentration-series advantage, measured (K2):</b> a single curve collapses all four
+    Tier-B mechanisms into <b>one</b> equivalence class; a γ-resolved multi-concentration family
+    <b>splits them into four singletons</b>. This is the quantitative basis of the M8/M9 boundary.</li>
+    <li><b>FDR-null with a power arm</b> — realized false-discovery-proportion 0 with demonstrated
+    power on a bank-unrepresentable alternative (control only claimed where power is shown).</li>
+    <li><b>Calibration</b> — held-out threshold recommendations (out-of-sample AUC reported; a test
+    proves the leakage mechanism on pure noise) → the governed apply step.</li>
+    <li><b>De-circularization (C1)</b> — a mismatched generator (ODE truth vs closed-form fitter) is
+    reported as <b>mechanism-misidentification degradation</b>: matched mechanism-ID accuracy 0.667,
+    mismatched 0.0, yet coarse-regime accuracy holds at 0.933 — the engine degrades on <em>mechanism</em>
+    exactly where it should, not on shape.</li>
+  </ul>
+  <p class="small">Deferred: an external forward-model (KMC/Smoluchowski) generator, artifact-realism
+  distributional check, synthetic→real transfer.</p>
+</div>
+
+<h3 id="conformal" class="mod">conformal — Split / Mondrian Conformal Prediction <span class="mtag">conformal.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Finite-sample-valid, distribution-free coverage — the thing bootstrap percentile
+  intervals under-deliver on this small/noisy/censored corpus. Calibrated on Service-C synthetic
+  curves (the only ground truth), running the real engine on each. For a continuous target the
+  split-conformal score is \(s=|\hat t_{50}-t_{50}|\); the interval uses the empirical quantile</p>
+  $$ q = \Big\lceil (n+1)(1-\alpha)\Big\rceil\text{-th of the calibration scores},\qquad
+     \big[\hat t_{50}-q,\ \hat t_{50}+q\big]\ \text{covers} \ge 1-\alpha. $$
+  <p><b>Mondrian</b>: the quantile is stratified by the same tags the engine already emits
+  (<code>censoring × assay × regime</code>) so coverage holds within strata; right-censored t50 becomes
+  a one-sided \([\hat t_{50}-q,\infty)\). The regime classifier yields <b>prediction sets</b> with
+  the same guarantee (set size &gt; 1 only when evidence is genuinely split).</p>
+  <div class="callout ok">
+    <div class="lbl">Live validation (α = 0.1, target 0.90)</div>
+    t50 marginal realized coverage <b>0.974</b> (mean width 7.8 h, 110 one-sided); regime marginal
+    coverage <b>0.915</b> (mean set size 2.28) — both ≥ target. Per-stratum quantiles are much
+    tighter than the pooled marginal.
+  </div>
+  <p class="small">Honesty: calibrated on synthetic truth; real-data coverage holds insofar as the
+  pre-registered noise/censoring law matches the digitized traces — a stated, testable assumption.</p>
+</div>
+
+<h3 id="reality" class="mod">reality_check — Blind External Falsification <span class="mtag">reality_check.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The de-circularizing falsification test — a <em>thermometer against fixed
+  points</em>, not a statistical calibration. Run blind, once, on the handful of proteins the field
+  considers mechanistically resolved (reserved solely for this role, never used for anchoring):
+  does PRISE's honest output <em>contradict</em> consensus?</p>
+  <div class="callout ok">
+    <div class="lbl">Live result</div>
+    <b>5 / 5 fixed points CONSISTENT, 0 contradictions</b> (Aβ42, Aβ40, α-synuclein, insulin,
+    β2-microglobulin). PRISE's honest refusal to name a single mechanism (agitation/seeding unknown)
+    does not contradict the field on any resolved case it can see. <span class="small">This is a
+    non-contradiction reading on a tiny n — <em>not</em> proof of correctness.</span>
+  </div>
+</div>
+
+<!-- ===================================================================== PHASE 2 -->
+<h2>Phase-2 research deliverables</h2>
+
+<h3 id="m8" class="mod">M8 — Inferential Reachability Map <span class="mtag">m8_reachability.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Consolidate existing artifacts into a falsifiable map of <em>what is inferable from
+  CPAD's bulk kinetics, and what is not</em> — no new inference. Every headline carries the
+  conditioning clause "reachability under the PRISE forward model" and a validity ceiling.</p>
+  <p><b>The boundary (the headline).</b> A <b>structural upper bound of 33 proteins / 48 concentration
+  series</b> are rich enough that Service C shows a γ-series <em>could</em> resolve mechanism — vs
+  <b>0 actually licensed</b> → <b>GAP = 33</b>. Blocker census (impact-ranked): agitation/seeding
+  unknown <b>1,654 (100%)</b> · censoring 1,020 (62%) · no concentration series 1,005 (61%).</p>
+  <p>M8 <em>consumes</em> M11 to make the map causal: median metadata_score is 0.69 but median
+  mechanistic-completeness is only 0.4 — the corpus records the <em>conditions</em> but not the
+  mechanism-gating {agitation, seeding}, which is <em>why</em> the gap is unresolved. If
+  <code>metadata_quality.json</code> is absent, M8 degrades gracefully.</p>
+</div>
+
+<h3 id="m9" class="mod">M9 — Experimental-Design Recommender <span class="mtag">m9_recommender.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> For each unit, the experiment that would most reduce <em>practical</em> degeneracy,
+  ranked by <b>reduction ÷ cost</b>, from a Service-C-distilled rule table whose gains are
+  <em>quantified by Service C's measured degeneracy reduction</em> (the 1→4 Tier-B split — a measured
+  ~4×). It is dependency-honest: recording agitation/seeding only unblocks mechanism where a series
+  <em>already</em> exists, and is discounted + flagged elsewhere. Full EIG is deferred to M13.</p>
+  <div class="callout">
+    <div class="lbl">Live headline</div>
+    <b>Recording agitation &amp; seeding is the single cheapest action that closes the M8 GAP</b> — it
+    unblocks the mechanistic license for the 33 series-bearing structural-reachable proteins (48
+    series). On single-curve units it only removes a future gate; there the binding prerequisite is a
+    concentration series.
+  </div>
+</div>
+
+<h3 id="m10" class="mod">M10 — Cross-modal Sequence × Kinetics × Structure <span class="mtag">m10_crossmodal.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> PRISE uniquely co-holds sequence predictors, measured kinetics, and structure/APR
+  for the <em>same</em> proteins. M10 asks the honest question: <em>does a sequence-only predictor
+  actually predict the measured rate/regime?</em> — at protein-level rigor (effective n = proteins,
+  not curves).</p>
+  <p><b>The binding honesty constraint — a variance ceiling.</b> A sequence-only predictor is a
+  per-protein <em>constant</em>; it cannot explain any within-protein t50 variance. Live: the
+  between-protein fraction is only <b>0.32</b>, so <b>the most any sequence predictor could explain
+  is ~32%</b> — the other 68% is condition-driven. Discordance (predictor vs measured) fires on just
+  2 of 22 proteins (9.1%).</p>
+  <p class="small">Coverage: 45 proteins / 1,433 curves; effective n ≈ 20 proteins; PASTA n=20,
+  Waltz n=14.</p>
+</div>
+
+<!-- ===================================================================== M11-M16 -->
+<h2>The recent wave — M11 through M16 (Jul 2–3)</h2>
+
+<h3 id="m11" class="mod">M11 — Metadata Quality &amp; Information Completeness <span class="mtag">m11_metadata.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Formalize and quantify the metadata layer the engine <em>already</em> licenses
+  inference against — every gate M11 reasons about mirrors a real M5/M8 gate. Per series it computes a
+  weighted <b>metadata_score</b> \(=\sum_f w_f\,\text{present}(f)\big/\sum_f w_f\) (mechanism-gating
+  fields weighted high), a separate <b>uncertainty</b> scalar, and a per-missing-field
+  <b>Δ-inferential-power</b> (which tiers it blocks + the tier-lift it would enable, labelled
+  <code>service_c_measured</code> where anchored).</p>
+  <div class="callout">
+    <div class="lbl">Live (105 proteins)</div>
+    Median metadata_score <b>0.685</b> (nothing below 0.52, nothing above 0.79 — the corpus records
+    conditions consistently) but median <b>mechanistic_completeness 0.40</b> — the mechanism-gating
+    fields are the systematic hole. <b>Completeness ≠ correctness</b>, and information-gain numbers are
+    structural upper bounds except the Service-C-measured ones.
+  </div>
+</div>
+
+<h3 id="m12" class="mod">M12 — Information Content &amp; Experimental-Design Geometry <span class="mtag">m12_information.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Unify the information geometry the pipeline already touches into one per-curve
+  treatment — <em>consistent with</em>, not a third opinion of, M3/M4/global_fit. Given a fitted
+  curve it computes the sensitivity Jacobian \(S\), the observed FIM \(\mathcal I = S^{\mathsf T}\Sigma^{-1}S\),
+  its eigen-spectrum (effective rank, condition number, spectral entropy), per-parameter observability
+  (CRLB \(\text{SE}\ge\sqrt{[\mathcal I^{-1}]_{jj}}\)), the per-point information-density profile
+  \(D(t)\) by lag/growth/plateau phase, redundancy \(n_{\text{eff}}\) vs \(n\), and a
+  Sherman–Morrison optimal-next-timepoint scan.</p>
+  <div class="callout">
+    <div class="lbl">Live (1,240 curves)</div>
+    Median effective rank <b>4.0</b> = median parameter count 4.0 (only <b>5.3% sloppy</b>); median
+    information-richness 0.57; redundancy 0.28; and <b>87% of curves carry more information in the
+    growth phase than the plateau</b> — so the modal recommended action is
+    <em>sample denser at the transition</em>.
+  </div>
+</div>
+
+<h3 id="m13" class="mod">M13 — Bayesian Optimal Experimental Design (BOED) <span class="mtag">m13_boed.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The rigorous BOED capstone of the design thread (M9 rules → M12 geometry → M13
+  multi-variable BOED). It scores candidate next experiments ξ by expected information gain, reusing
+  M12's exact FIM machinery on <em>prospective</em> designs. For the linear-Gaussian/Laplace regime
+  the EIG is a D-optimality log-det:</p>
+  $$ \text{EIG}(\xi)\;\approx\;\tfrac12\log\det\!\big(\mathcal I_{\text{prior}}+\mathcal I(\xi)\big)
+     -\tfrac12\log\det\mathcal I_{\text{prior}}, $$
+  <p>ranked by EIG ÷ cost, with a non-dominated Pareto frontier and a greedy K-step batch whose
+  marginal gains diminish (submodular log-det). It is honest that its 8 design variables are of two
+  kinds — <b>quantitative</b> (concentration, T, pH, replicate count, sampling frequency/duration:
+  a real simulated \(\mathcal I(\xi)\)) and ones needing the self-similar-shape approximation (stated).</p>
+  <p class="small">Live: 839 units (49 series, 790 single-curve). Top recommendation distribution —
+  increase_measurement_frequency 482 · extend_sampling_duration 241 · add_concentration_series 86 ·
+  record_agitation_and_seeding 23.</p>
+</div>
+
+<h3 id="m14" class="mod">M14 — Cross-Study Hierarchical Meta-Analysis <span class="mtag">m14_meta.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Generalize the replicate-level random-effects meta (pooling.py) up to the
+  <b>study</b> level (one publication = one study). Because raw t50 can't be pooled across
+  concentrations, it is a <em>meta-regression</em> on condition-adjusted log-t50:</p>
+  $$ \hat\theta_c = \mu + \beta\,x_{\text{condition}} + u_{\text{study}} + \varepsilon_c,\qquad
+     u_{\text{study}}\sim N(0,\tau^2_{\text{between}}), $$
+  <p>with \(\tau^2_{\text{between}}\) by DerSimonian–Laird (Paule–Mandel refinement) + BLUP shrinkage,
+  and — under weak priors — a posterior-predictive interval for a <em>new</em> study. This is not a
+  full latent-ODE MCMC hierarchy (documented deferral).</p>
+  <p class="small">Live: 60 proteins; <b>11 have ≥2 studies</b> and receive a meta-analysis; 49 are
+  single-study. The web app renders forest / funnel / heterogeneity panels per protein.</p>
+</div>
+
+<h3 id="m15" class="mod">M15 — Literature Ingestion &amp; Claim Extraction <span class="mtag">m15_litingest.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Turn papers into <b>structured, traceable claims — never trusted facts</b>. Every
+  extraction is a <code>Claim</code> with full provenance (doi + page + char-span + verbatim text), a
+  calibrated confidence, and an entry in an <b>append-only immutable ledger</b> — a correction
+  <em>appends</em> a superseding claim, and divergent values across papers surface as
+  <code>conflict</code> records (both provenances kept, never auto-resolved). Accuracy is
+  <em>measured</em> against CPAD, not asserted.</p>
+  <div class="callout ok">
+    <div class="lbl">Live validation vs curated CPAD (PMID 18258258)</div>
+    Precision / recall / accuracy = <b>1.00 / 1.00 / 1.00</b> (tp 6, fp 0, fn 0) on the extracted
+    conditions; <b>2 conflicts</b> logged. <span class="small">Honesty: the PDF/OCR/NER/figure-digitize
+    front-ends are declared <b>pluggable stubs</b> — the offline environment has no
+    pdfminer/PyMuPDF/pytesseract/spacy, so everything downstream of the <code>Document</code>
+    abstraction is deterministic-real on synthetic fixtures, and the front-ends raise a clear
+    <code>NotImplementedError</code> naming the missing dependency (they are not faked).</span>
+  </div>
+</div>
+
+<h3 id="m16" class="mod">M16 — Sequence ↔ Structure ↔ Kinetics Bridge <span class="mtag">m16_structure.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Extend M10 with a <b>structure-feature axis</b> — do structure-derived features
+  associate with measured kinetics? — at the same protein-level rigor (LOPO CV, permutation nulls,
+  variance ceiling, BH-FDR). The final commit upgraded this from sequence proxies to
+  <b>real 3D features computed from actual PDB coordinates in pure numpy</b> (no BioPython/DSSP/
+  FreeSASA). Every extractor stamps a fidelity label:</p>
+  <p>
+    <span class="pill real">contact_map — Cβ distance matrix, contact order · EXACT</span>
+    <span class="pill real">real_sasa — Shrake–Rupley rolling-ball (96 sphere pts) · EXACT algorithm</span>
+    <span class="pill approx">secondary_struct — φ/ψ dihedral geometry · APPROXIMATION (not DSSP H-bonding)</span>
+    <span class="pill real">hydrophobic_patches — SASA-exposed clusters via contact map</span>
+  </p>
+  <div class="callout">
+    <div class="lbl">Live coverage &amp; result</div>
+    382 sequence proteins → 45 in kinetics → 14 with a PDB reference → <b>11 with real 3D features</b>
+    (10 native, 1 fibril = tau/4NP8), all 11 PDB fetches succeeded. <b>30 association cards</b>
+    (18 real-3D, 12 proxy). The structure→kinetics variance ceiling is <b>42.7%</b> between-protein.
+    Honestly, the associations are weak: e.g. β-propensity vs lag_time ρ = 0.25, permutation p = 0.25,
+    FDR q = 0.51, <b>LOPO R² negative</b> — i.e. no out-of-sample predictive skill, reported as a
+    null rather than dressed up. And a first-class caveat rides every card: <b>a native-monomer
+    structure is not the fibril state</b>, so any structure→kinetics link is associative and
+    confounded.
+  </div>
+</div>
+
+<!-- ===================================================================== WEB -->
+<h2 id="web">The web application</h2>
+<div class="card">
+  <p>A working stdlib-based HTTP server (<code>web/server.py</code>) + single-page frontend
+  (<code>web/index.html</code>, <code>app.js</code>) exposes the engine over a JSON API: browse
+  proteins (M0), plot a curve with its M1 triage, run an analysis to the assembled
+  <code>ProteinAnalysisResult</code>, and open per-milestone panels — pooling, reachability (M8),
+  information density (M12), the BOED Pareto frontier (M13), the M14 forest/funnel/heterogeneity
+  plots, the M15 claims/conflicts browser, and the M16 structure ↔ kinetics panel. The honesty UI is
+  the differentiator: censoring badges, degeneracy cards, calibrated-confidence-with-its-caveat, and
+  the <code>information_yield</code> badge. The frozen corpus stays server-side (licensing); the
+  browser receives only derived results.</p>
+  <p class="small">Every milestone has a matching "web:" commit, so the UI tracked the engine — with
+  one exception noted next.</p>
+</div>
+
+<!-- ===================================================================== RESULTS -->
+<h2 id="results">Corpus results at a glance</h2>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Quantity</th><th class="num">Value</th><th>Source artifact</th></tr>
+  <tr><td>Curves in corpus</td><td class="num">1,654</td><td>curves_triaged.jsonl</td></tr>
+  <tr><td>Fittable / suspect / unfittable</td><td class="num">1,240 / 408 / 6</td><td>M1</td></tr>
+  <tr><td>Censored in some way</td><td class="num">918 (56%)</td><td>M1</td></tr>
+  <tr><td>Genuinely cooperative (interior inflection)</td><td class="num">690</td><td>M4</td></tr>
+  <tr><td>Lag-to-t50 ratio, median</td><td class="num">0.70</td><td>M4 (n=532)</td></tr>
+  <tr><td>Concentration series with a resolved γ</td><td class="num">59</td><td>M4 / M7</td></tr>
+  <tr><td>Mechanistically licensed curves</td><td class="num">0</td><td>M5 / M7</td></tr>
+  <tr><td>Structural-reachable boundary (proteins / series)</td><td class="num">33 / 48</td><td>M8</td></tr>
+  <tr><td>M8 GAP (structural − licensed)</td><td class="num">33</td><td>M8</td></tr>
+  <tr><td>Proteins with real 3D structure features</td><td class="num">11</td><td>M16</td></tr>
+  <tr><td>Reality-check fixed points consistent</td><td class="num">5 / 5</td><td>reality_check</td></tr>
+  <tr><td>Conformal t50 / regime coverage (target 0.90)</td><td class="num">0.974 / 0.915</td><td>conformal</td></tr>
+  <tr><td>Engine tests passing</td><td class="num">477 / 477</td><td>engine/test_*.py</td></tr>
+</table>
+</div>
+
+<!-- ===================================================================== GAPS -->
+<h2 id="gaps"><span class="n">13</span>Honest gaps, discrepancies &amp; deferrals</h2>
+
+<div class="callout warn">
+  <div class="lbl">Live discrepancy A — web test fails (engine ↔ web desync)</div>
+  The final M16 commit (<code>bcb2eba</code>, "real PDB 3D features — no proxies") upgraded
+  <code>beta_sheet_content</code> from a flat proxy to a <b>nested <code>{proxy, real_3d}</code>
+  schema</b> with a <code>has_real_3d</code> flag, but touched <em>only</em>
+  <code>engine/m16_structure.py</code> + its test. It never re-synced <code>web/server.py</code>,
+  <code>app.js</code>, or <code>web/test_web.py</code>. So <code>/api/structure</code> now passes
+  through the richer 3D shape, while <code>test_web.py</code> still asserts the old flat
+  <code>is_3d_derived is False</code> → <b>the web test fails today</b>. The engine's own 37 M16 tests
+  all pass; this is a low-severity web-layer lag, not an engine defect. <b>Fix</b>: update the
+  <code>/api/structure</code> serializer + honesty labels + web test to the nested 3D schema (a
+  code change, not part of this report).
+</div>
+
+<div class="callout warn">
+  <div class="lbl">Live discrepancy B — stale in-repo docs</div>
+  <code>engine/README.md</code> still states "the web app remains" (it exists) and quotes the
+  superseded first-pass build (e.g. cooperative 611 / threshold 79 / scaling 67). Live at
+  <code>e660cb452b41</code> those are 679 / 11 / 59. The prior report
+  (<code>2026-07-02_full-product-report.html</code>) covers only M0–M10 and predates M11–M16. This
+  report supersedes both for current numbers.
+</div>
+
+<div class="card">
+  <h4>Documented within-module deferrals (by design, clearly flagged)</h4>
+  <ul>
+    <li><b>M15 front-ends</b> — PDF/OCR/NER/figure-digitize are pluggable stubs (no libs / no PDFs /
+    no network offline); everything downstream is real.</li>
+    <li><b>M3</b> — block/sieve bootstrap for serial correlation, BCa intervals, corpus-scale FDR.</li>
+    <li><b>M4</b> — a full Knowles/Cohen ODE global γ as the primary estimator (the master-curve
+    collapse is v1), separate left-censoring algebra, an errors-in-variables term for concentration.</li>
+    <li><b>Service C</b> — an external forward-model (KMC/Smoluchowski) generator, artifact-realism
+    distributional check, synthetic→real transfer.</li>
+    <li><b>pooling / M14</b> — a full latent-rate ODE Bayesian hierarchy (the closed-form EB /
+    random-effects layer is the defensible first step).</li>
+    <li><b>M7</b> — <code>env_manifest</code> is <code>python3.13</code> only (OS/BLAS/RNG fingerprints
+    await a pinned container).</li>
+    <li><b>M13</b> — EIG beyond the linear-Gaussian/Laplace regime for the non-simulable variables.</li>
+  </ul>
+</div>
+
+<div class="callout">
+  <div class="lbl">The standing scientific ceiling (not a bug — the finding)</div>
+  0 curves license a single mechanism because agitation &amp; seeding are unrecorded corpus-wide. This
+  is a <em>metadata</em> ceiling: PRISE quantifies exactly which 33 proteins / 48 series would cross
+  it, and that recording two fields is the cheapest way through. Every reachability count is an upper
+  bound conditional on forward-model adequacy (Service C's mismatch degradation is the backing
+  evidence).
+</div>
+
+<!-- ===================================================================== REPRO -->
+<h2 id="repro"><span class="n">14</span>Reproducibility &amp; test suite</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Build identity</h4>
+    <p class="small" style="font-family:ui-monospace,Menlo,monospace">
+      engine_build_id&nbsp;=&nbsp;e660cb452b41<br>
+      corpus_version&nbsp;=&nbsp;c09ac0cf398e<br>
+      thresholds_version&nbsp;=&nbsp;thresholds-1.0<br>
+      m1..m7&nbsp;=&nbsp;{triage,fitbank,select,defs,regimes,anchor,assembler}-1.0<br>
+      etl&nbsp;=&nbsp;cpad-kinetics-1.0 · cpad-sequence-1.1<br>
+      env&nbsp;=&nbsp;python3.13 (numpy 2.5.0, scipy 1.18.0)
+    </p>
+    <p class="small">Cross-build comparison is blocked unless ids match. Applying the calibration
+    flipped the id from <code>bc442463dfdf</code>, invalidating first-pass results by design.</p>
+  </div>
+  <div class="card">
+    <h4>Test suite (reproduced 2026-07-21)</h4>
+    <p><b>24 engine test files — 477 tests — 0 failures.</b> Largest: M7 (47), M16 (37), M6 (33),
+    Service C (29), M9 (28), M5 (26), M10 (25), M15 (24), conformal (22), pooling (22).</p>
+    <p class="small">Run standalone (<code>python engine/test_*.py</code>) or via
+    <code>pytest engine/</code>. <b>web/test_web.py fails 1 assertion</b> (discrepancy A above).</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>PRISE — Protein aggregation Regime Inference &amp; Scoring Engine · Full product report ·
+  generated 2026-07-21 against engine build <code>e660cb452b41</code> by auditing and re-running the
+  live product. Descriptive snapshot; the code, tests, and <code>PRISE_DESIGN.md</code> are the source
+  of truth. PRISE is under active development — this is not the final product.</p>
+</div>
+
+</div>
+</body>
+</html>

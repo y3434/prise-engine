@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRISE Engine — Design Plan (Plain-Language Edition)</title>
+<style>
+  :root{
+    --ink:#1c2230; --muted:#5b6675; --line:#e2e6ee; --bg:#ffffff;
+    --accent:#2f6fb0; --accent-soft:#eaf2fb; --warn:#b5481f; --warn-soft:#fdf0e9;
+    --good:#2e7d57; --good-soft:#e9f6ef; --code:#f4f6fa;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:var(--bg); line-height:1.65;
+    max-width:880px; margin:0 auto; padding:48px 28px 80px;
+    font-size:17px;
+  }
+  h1{font-size:2.1rem; line-height:1.2; margin:0 0 6px;}
+  .sub{color:var(--muted); font-size:1.05rem; margin:0 0 4px;}
+  .tag{display:inline-block; background:var(--accent-soft); color:var(--accent);
+    font-size:.78rem; font-weight:600; padding:3px 10px; border-radius:20px; margin:14px 8px 0 0;}
+  h2{font-size:1.5rem; margin:48px 0 4px; padding-top:18px; border-top:2px solid var(--line);}
+  h3{font-size:1.18rem; margin:30px 0 6px; color:var(--accent);}
+  p{margin:10px 0;}
+  .lead{font-size:1.12rem; color:var(--ink);}
+  .callout{border-left:4px solid var(--accent); background:var(--accent-soft);
+    padding:14px 18px; border-radius:0 8px 8px 0; margin:18px 0;}
+  .analogy{border-left:4px solid var(--good); background:var(--good-soft);
+    padding:14px 18px; border-radius:0 8px 8px 0; margin:18px 0;}
+  .analogy strong, .callout strong{color:inherit;}
+  .why{border-left:4px solid var(--warn); background:var(--warn-soft);
+    padding:14px 18px; border-radius:0 8px 8px 0; margin:18px 0;}
+  .module{border:1px solid var(--line); border-radius:12px; padding:6px 22px 16px;
+    margin:18px 0; background:#fcfdff;}
+  .module h3{margin-top:18px;}
+  .pill{display:inline-block; font-size:.74rem; font-weight:700; color:#fff;
+    background:var(--accent); padding:2px 9px; border-radius:6px; margin-right:8px; vertical-align:2px;}
+  code{background:var(--code); padding:1px 6px; border-radius:5px; font-size:.92em;
+    font-family:Consolas,Menlo,monospace;}
+  pre{background:var(--code); padding:14px 16px; border-radius:10px; overflow-x:auto;
+    font-size:.86rem; line-height:1.5; border:1px solid var(--line);}
+  table{border-collapse:collapse; width:100%; margin:18px 0; font-size:.95rem;}
+  th,td{border:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top;}
+  th{background:var(--accent-soft); color:var(--accent);}
+  ul,ol{padding-left:22px;} li{margin:5px 0;}
+  .toc{background:#f8fafd; border:1px solid var(--line); border-radius:12px; padding:14px 24px;}
+  .toc a{color:var(--accent); text-decoration:none;}
+  .toc a:hover{text-decoration:underline;}
+  .flow{font-family:Consolas,Menlo,monospace; font-size:.82rem; background:var(--code);
+    border:1px solid var(--line); border-radius:10px; padding:16px; white-space:pre; overflow-x:auto;}
+  dt{font-weight:700; margin-top:12px; color:var(--accent);}
+  dd{margin:2px 0 0 0;}
+  .printbtn{position:fixed; top:16px; right:16px; background:var(--accent); color:#fff;
+    border:none; padding:10px 16px; border-radius:8px; font-size:.9rem; cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);}
+  footer{margin-top:50px; padding-top:18px; border-top:2px solid var(--line);
+    color:var(--muted); font-size:.9rem;}
+  @media print{
+    body{font-size:11.5pt; max-width:none; padding:0;}
+    .printbtn{display:none;}
+    h2{border-top:1px solid #ccc; page-break-after:avoid;}
+    h3{page-break-after:avoid;}
+    .module,.callout,.analogy,.why,table,pre,.flow{page-break-inside:avoid;}
+    a{color:var(--ink); text-decoration:none;}
+  }
+</style>
+</head>
+<body>
+
+<button class="printbtn" onclick="window.print()">🖨 Print / Save as PDF</button>
+
+<h1>The PRISE Engine</h1>
+<p class="sub"><strong>P</strong>rotein ag<strong>g</strong>regation <strong>R</strong>egime <strong>I</strong>nference &amp; <strong>S</strong>coring <strong>E</strong>ngine</p>
+<p class="sub">Plain-language design plan (v7) — written to be readable without a biophysics background.</p>
+<span class="tag">Design / Planning</span>
+<span class="tag">No code yet</span>
+<span class="tag">Undergraduate-friendly</span>
+<span class="tag">Revised after expert review</span>
+
+<div class="callout">
+<strong>What is this document?</strong> A blueprint for a piece of software — not the software itself. It describes, in plain English, what the PRISE Engine should do and why each part exists. A separate, more technical version (<code>PRISE_DESIGN.md</code>) contains the same plan in full scientific detail.
+</div>
+
+<div class="why">
+<strong>Why "v7"?</strong> This plan was deliberately handed to a panel of senior experts — a biostatistician, an amyloid-kinetics chemist, a protein-database specialist, and a research-software engineer — and revised across several rounds until no major problems remained. Then something important happened: one reviewer claim — that the public CPAD&nbsp;2.0 database lacks enough real clumping <em>curves</em> to work with — turned out to be <strong>wrong</strong>. A direct check of the live database found <strong>83,098 real time-resolved aggregation measurements</strong> across many proteins, with their experimental conditions. So v7 <em>reverses</em> the overly-cautious earlier decision: the engine now analyzes the real public data by default, as originally intended. The hard-won rigor from the review rounds (handling messy data honestly, not over-claiming mechanisms, admitting uncertainty) is <strong>kept</strong>; only the mistaken "the data barely exists" assumption is undone. The lesson: even good expert review can be wrong on a fact — so we checked.
+</div>
+
+<h2 id="big">1. The big picture (start here)</h2>
+
+<p class="lead">Some proteins, under certain conditions, clump together into solid deposits — a process called <strong>aggregation</strong>. This matters enormously: protein aggregation is central to Alzheimer's, Parkinson's, type-2 diabetes, and many other diseases, and it's a major headache in manufacturing protein-based drugs.</p>
+
+<p>Scientists measure aggregation by watching a signal (often a glowing dye) rise over time as clumps form. The result is a <strong>curve</strong>. The PRISE Engine is a tool that reads these curves and answers questions like:</p>
+<ul>
+<li>Is this protein aggregating at all — and if so, <em>how</em>?</li>
+<li>What kind of behavior is it? (Slow creep? Sudden snap past a threshold? A classic S-shaped takeoff?)</li>
+<li>How "aggregation-prone" is it, as a number we can rank and compare?</li>
+<li>Can we trust that answer — or is the data too messy or ambiguous to say?</li>
+</ul>
+
+<div class="analogy">
+<strong>An everyday analogy.</strong> Think of PRISE like a smart weather analyst for protein clumping. Give it the raw readings and it doesn't just say "it rained." It says: <em>"This looks like a thunderstorm building (here's the evidence), it started around 3pm, it'll peak hard — but honestly the sensor was glitchy between 2 and 2:30, and I genuinely can't tell a thunderstorm from a heavy squall with this data alone. Here's the one extra measurement that would settle it."</em> That honesty — knowing the limits of what the data can prove — is the heart of the design.
+</div>
+
+<h2 id="principles">2. The five ideas that shape everything</h2>
+
+<h3>① Aggregation depends on conditions, not just the protein</h3>
+<p>The same protein can be totally calm in one test tube and aggregate violently in another, depending on concentration, temperature, acidity (pH), salt, shaking, and more. So PRISE <strong>never</strong> reports an aggregation score without also recording the exact conditions it applies to. A score with no conditions attached is, scientifically, meaningless.</p>
+
+<h3>② Describe the shape, but don't fake the mechanism</h3>
+<p>It's easy to fit a nice curve to data. It's much harder to prove <em>why</em> the protein aggregated (the underlying mechanism). PRISE keeps these two things strictly separate: a <strong>description</strong> ("this curve is S-shaped") is always available; a <strong>mechanism claim</strong> ("this is driven by surface-catalyzed nucleation") is only made when the data genuinely support it.</p>
+
+<h3>③ Be honest about uncertainty</h3>
+<p>Real data is noisy. Different mechanisms can produce nearly identical curves. PRISE measures how confident it should be and reports that confidence — including saying <em>"these two explanations are impossible to tell apart with this data."</em></p>
+
+<h3>④ Garbage in must not become confident garbage out</h3>
+<p>Many real measurements are corrupted (faulty wells, evaporation, a dye that fades). PRISE inspects and <strong>triages</strong> every curve <em>before</em> analyzing it, and refuses to force a tidy answer onto broken data.</p>
+
+<h3>⑤ The most valuable output is a map of what's knowable</h3>
+<p>Instead of just labeling thousands of proteins (a claim experts rightly distrust), PRISE's flagship output is a <strong>map of what can and cannot be reliably concluded</strong> from this kind of data — and a recommendation for the single experiment that would resolve each unanswered question.</p>
+
+<h2 id="flow">3. How data flows through the engine</h2>
+
+<p>Data passes through a series of stations, each cleaning up or adding to the result. Here is the whole journey at a glance:</p>
+
+<div class="flow">RAW DATA
+   │
+   ▼
+[ M1 ]  Clean &amp; inspect  ──►  is this curve usable? flag the junk
+   │
+   ▼
+[ M2 ]  Fit many candidate models (simple shapes + real physics models)
+   │
+   ▼
+[ M3 ]  Pick the best model — and measure how sure we are
+   │
+   ▼
+[ M4 ]  Read key numbers off the curve (timing, steepness, etc.)
+   │
+   ├──►  [ M5 ]  Label the behavior  (and say "can't tell" when true)
+   └──►  [ M6 ]  Score how aggregation-prone it is
+   │
+   ▼
+[ M7 ]  Package one clear result
+   │
+   ▼
+[ M8 ]  Add it to the big "map of what's knowable"
+   │
+   ▼
+[ M9 ]  Suggest the next experiment to run</div>
+
+<p>A note on the built-in data. PRISE ships with a curated public research database (CPAD&nbsp;2.0) plus structural data from the Protein Data Bank. CPAD&nbsp;2.0 provides three useful things: <strong>(1)</strong> a large set of <strong>real aggregation-vs-time curves</strong> — about <strong>1,781 curves</strong> (~46 points each) across <strong>50+ proteins</strong>, each tagged with its experimental conditions (concentration, pH, temperature, salt, buffer, assay, mutation, and even a PDB structure ID) — this is the main fuel for the curve-analysis pipeline; <strong>(2)</strong> a large <strong>sequence/annotation library</strong> (which protein <em>recipes</em> tend to clump) for browsing and sequence-based predictions; and <strong>(3)</strong> hundreds of <strong>aggregation-related 3D structures</strong> which — together with the Protein Data Bank — let PRISE connect a protein's clumping behavior to its structure for biological insight. Users can also <strong>upload their own data</strong>, treated exactly like the built-in examples. <em>(One honest caveat: CPAD's curve values were read off published graphs, so they carry a small digitization error, which the engine accounts for.)</em></p>
+
+<h2 id="modules">4. The parts of the engine, explained simply</h2>
+
+<div class="module">
+<h3><span class="pill">M0</span>Choosing the data</h3>
+<p><strong>Job:</strong> let you pick which real experiments to analyze. CPAD&nbsp;2.0 often has many datasets for the same protein, measured under different conditions (concentration, pH, temperature). You browse a protein and select one dataset or several — the same protein under the same conditions (repeat runs) or across different conditions.</p>
+<div class="why"><strong>The honesty rule built in:</strong> you can only pick from experiments that were <em>actually done</em>. The engine never invents a curve for a condition nobody measured. And <em>what</em> you select decides what it can conclude: a set of the same protein at several concentrations unlocks the deep "mechanism" analysis; varying pH or temperature instead gives a picture of how behavior shifts with conditions; accidentally changing two things at once gets flagged, and the engine refuses to over-claim a mechanism from it.</p>
+</div>
+
+<div class="module">
+<h3><span class="pill">M1</span>Intake &amp; quality control</h3>
+<p><strong>Job:</strong> turn any incoming data into one standard format — and screen out bad data first.</p>
+<p>This station records the experimental conditions, then acts like a quality inspector. It flags curves ruined by common problems (a fading dye, liquid evaporating, bubbles, sensor drift). Crucially, it spots curves where the measurement <em>started too late</em> (the action was already underway) or <em>stopped too early</em> (never reached the finish line) — and marks those numbers as "at least this much" rather than pretending they're exact.</p>
+<div class="why"><strong>Why it matters:</strong> if you skip this step, the engine will happily fit a beautiful curve to broken data and hand you a confident, wrong answer. That's the most embarrassing way for a tool like this to fail.</div>
+</div>
+
+<div class="module">
+<h3><span class="pill">M2</span>The model toolbox</h3>
+<p><strong>Job:</strong> try out many mathematical descriptions of the curve.</p>
+<p>PRISE keeps two kinds of models. <strong>Tier A</strong> are simple shape-describers (straight lines, S-curves, etc.). <strong>Tier B</strong> are real <em>physics-based</em> models of how protein clumps actually form and grow (the well-known Knowles/Cohen equations). When several curves at different concentrations are available, it fits them all together — which is the only way to pin down the real physical constants.</p>
+<div class="callout"><strong>A built-in safety rule:</strong> the physics models are only allowed on measurements that specifically detect fibrils (the ThT dye). On a generic "cloudiness" measurement — which also reacts to harmless blobs — claiming a specific fibril mechanism would be a mistake, so the engine forbids it.</div>
+</div>
+
+<div class="module">
+<h3><span class="pill">M3</span>Choosing the best model — honestly</h3>
+<p><strong>Job:</strong> pick the model that best explains the data, and measure how trustworthy that choice is.</p>
+<p>A good fit isn't enough — a complicated model can always fit better, so PRISE penalizes needless complexity and prefers the simplest model that works. The clever part: it repeats the whole "pick a model" process on hundreds of slightly-jiggled copies of the data. If the same model wins every time, great. If the winner keeps changing, PRISE reports that instability honestly instead of hiding it.</p>
+<div class="why"><strong>Why it matters:</strong> measuring your confidence <em>after</em> you've already picked a winner makes you look more certain than you are. Repeating the whole choice many times fixes this. This is a subtle statistical point that a lot of published work gets wrong.</div>
+</div>
+
+<div class="module">
+<h3><span class="pill">M4</span>Reading the curve's key features</h3>
+<p><strong>Job:</strong> extract the meaningful numbers.</p>
+<p>The headline number is <strong>t50</strong> — the time to reach the halfway point — because it's the most reliable summary. "Lag time" (the delay before things take off) is also reported, but always with a note on exactly how it was measured, since there are several definitions that disagree.</p>
+<p>A special feature is <strong>γ (gamma)</strong>: a number describing how the speed of aggregation changes as you add more protein. It's one of the most powerful clues to the underlying mechanism — but it's tricky, so PRISE computes it two independent ways, reports both, and flags the range over which it's actually valid (it's not a single fixed number across all concentrations).</p>
+</div>
+
+<div class="module">
+<h3><span class="pill">M5</span>Labeling the behavior</h3>
+<p><strong>Job:</strong> assign an understandable category.</p>
+<p>Examples of categories: <em>no detectable aggregation</em>, <em>slow gradual creep</em>, <em>threshold-triggered</em>, <em>classic S-shaped takeoff</em>, or <em>unusual / doesn't fit the known patterns</em>. The label always comes with the conditions and a plain reason.</p>
+<div class="callout"><strong>Two honest habits built in:</strong> (1) the engine never says "no aggregation" — only "no signal in <em>this</em> test at <em>this</em> sensitivity," because a calm reading might just mean the dye couldn't see it. (2) When two mechanisms genuinely can't be told apart, it says so explicitly — <em>"it's one of these two; here's what you'd need to decide."</em></div>
+</div>
+
+<div class="module">
+<h3><span class="pill">M6</span>Scoring aggregation-proneness</h3>
+<p><strong>Job:</strong> give a number you can rank and compare.</p>
+<p>PRISE produces three views: a <strong>surface</strong> (how behavior changes across conditions — the richest view), an <strong>absolute score</strong> (tied to one specific set of conditions), and a <strong>ranking</strong> within a group of comparable experiments. It only ever compares apples to apples — never proteins measured under different conditions or on different instruments.</p>
+<p>It also reports a separate, parallel clue: predictions of aggregation-proneness based purely on the protein's <em>sequence</em> (its amino-acid "recipe"). When the sequence prediction and the actual measured behavior disagree, that disagreement is itself useful information — so PRISE keeps them as two separate numbers and never blends them into one.</p>
+</div>
+
+<div class="module">
+<h3><span class="pill">M7</span>Packaging the result</h3>
+<p><strong>Job:</strong> bundle everything — the label, the score, the key numbers, the confidence, and a full quality report — into one tidy result per protein.</p>
+</div>
+
+<div class="module" style="border-style:dashed;">
+<h3><span class="pill" style="background:var(--warn);">M8</span>The "Map of What's Knowable" <em>(ambitious — Phase 2)</em></h3>
+<p><strong>Job:</strong> chart where this kind of data can give a trustworthy answer and where it simply cannot.</p>
+<p>This flips the usual sales pitch. Instead of "we confidently classified thousands of proteins" (which experts doubt), PRISE aims to say: <em>"here is the honest boundary of what's provable from this kind of measurement, and here's where it runs out."</em></p>
+<div class="why"><strong>The catch the reviewers caught:</strong> if the engine only ever tests itself against its own simulations, it can only "discover" problems it already imagined — and would give a falsely reassuring map. So before this map is trusted, the engine <em>must</em> be checked against (a) deliberately different simulations and (b) a handful of real proteins whose behavior the scientific community already agrees on. Until that external check passes, the map is labeled clearly as <em>"an estimate of what's knowable under our own assumptions,"</em> not the final word. A simpler, honest version — just <strong>counting</strong> how much of the data is actually analyzable — ships first.</div>
+</div>
+
+<div class="module" style="border-style:dashed;">
+<h3><span class="pill" style="background:var(--warn);">M9</span>The next-experiment recommender <em>(Phase 2)</em></h3>
+<p><strong>Job:</strong> when the data can't decide something, suggest the single most useful experiment to run next to settle it — turning "we can't tell" into "do this one test, and you'll know."</p>
+<p>Honestly flagged as a research feature: it only works for questions a <em>better experiment could</em> actually resolve (some ambiguities are baked into the math and no experiment of that type fixes them — the engine must tell those two cases apart).</p>
+</div>
+
+<div class="callout"><strong>Phase 1 vs Phase 2.</strong> The two dashed boxes above (M8, M9) are <em>research ambitions</em> built on top of the solid, buildable core (everything else). The plan deliberately separates them so the dependable parts ship first and aren't held hostage to the ambitious ones.</div>
+
+<h2 id="services">5. Three things running in the background</h2>
+<dl>
+<dt>Quality &amp; comparability guard</dt>
+<dd>The rule-enforcer. It blocks unfair comparisons (different conditions, different machines) and decides sensibly what to do when information is missing — lowering confidence rather than either refusing everything or pretending everything matches.</dd>
+<dt>The reference library</dt>
+<dd>The built-in ~2,000-protein dataset, carefully organized by experiment type and conditions, with honest notes about how many entries actually have usable curves.</dd>
+<dt>The self-test engine</dt>
+<dd>PRISE checks itself by analyzing fake data where the right answer is known in advance, measuring how often it gets confused. This is also what powers the "Map of What's Knowable."</dd>
+</dl>
+
+<h2 id="promises">6. The engine's core promises</h2>
+<table>
+<tr><th>Promise</th><th>In plain terms</th></tr>
+<tr><td>Conditions always attached</td><td>No score floats free of the experiment it came from.</td></tr>
+<tr><td>Honest uncertainty</td><td>Confidence is measured properly, including the model-choice step.</td></tr>
+<tr><td>No fitting broken data</td><td>Bad or ambiguous curves are flagged, not forced.</td></tr>
+<tr><td>Apples to apples only</td><td>Comparisons only between truly comparable measurements.</td></tr>
+<tr><td>"Can't tell" is a valid answer</td><td>Genuine ambiguity is reported, not hidden.</td></tr>
+<tr><td>Reproducible</td><td>Run it twice, get the identical answer, with a full record of how.</td></tr>
+<tr><td>Self-checking</td><td>The engine knows and reports its own limits.</td></tr>
+</table>
+
+<h2 id="novel">7. Why this is more than "just another tool"</h2>
+<p>Many of PRISE's building blocks already exist individually. What makes it genuinely new:</p>
+<ul>
+<li><strong>It maps the limits of knowledge</strong> (M8) — charting what this kind of data can and can't prove, across a whole database.</li>
+<li><strong>It recommends the decisive next experiment</strong> (M9) — turning ambiguity into action.</li>
+<li><strong>It refuses to overclaim</strong> — reporting "these explanations are indistinguishable" as a real, first-class result.</li>
+<li><strong>It treats honesty as the feature</strong>, not a footnote — which, in a field where overconfident claims are common, is exactly what's missing.</li>
+</ul>
+
+<div class="analogy" style="margin-top:24px;">
+<strong>In one sentence:</strong> PRISE reads protein-clumping experiments, tells you what's happening in plain terms, scores how prone each protein is to clumping — and, unusually, is brutally honest about when the data simply can't support a confident answer, then tells you how to get one.
+</div>
+
+<footer>
+<p><strong>PRISE Engine — Plain-Language Design Plan (v7).</strong> This is a planning document; no software has been built yet. A full technical specification with exact terminology lives alongside this file as <code>PRISE_DESIGN.md</code>.</p>
+<p>To save this as a PDF: click <em>Print / Save as PDF</em> (top-right), or use your browser's File → Print → "Save as PDF".</p>
+</footer>
+
+</body>
+</html>

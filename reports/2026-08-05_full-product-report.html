@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PRISE — Full Product Report (M0–M17)</title>
+<script>
+  MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$']] }, svg:{fontCache:'global'} };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#0f141b; --panel:#161d27; --panel2:#1b2431; --ink:#e6edf3; --muted:#9fb0c0;
+    --faint:#6b7d8f; --line:#28323f; --accent:#5ec6a8; --accent2:#4ea1d3;
+    --warn:#e0a458; --danger:#e06c6c; --ok:#5ec6a8; --purple:#b48ce0;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden;
+    font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px 120px}
+  header.hero{padding:54px 22px 30px;border-bottom:1px solid var(--line);
+    background:radial-gradient(1200px 320px at 50% -90px,#1c2b34,transparent);}
+  header.hero .wrap{padding-bottom:0}
+  h1{font-size:2.15rem;margin:.1em 0 .15em;letter-spacing:-.02em}
+  h1 .sub{color:var(--accent);font-weight:600}
+  .tagline{color:var(--muted);font-size:1.06rem;max-width:760px}
+  .badges{margin:18px 0 4px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{background:var(--panel2);border:1px solid var(--line);border-radius:999px;
+    padding:3px 11px;font-size:.78rem;color:var(--muted)}
+  .badge.ok{border-color:#2c5a4a;color:var(--ok)}
+  .badge.warn{border-color:#5a4a2c;color:var(--warn)}
+  .badge.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  h2{font-size:1.5rem;margin:2.4em 0 .5em;padding-top:.4em;border-top:1px solid var(--line);letter-spacing:-.01em}
+  h2 .n{color:var(--faint);font-weight:600;margin-right:.5rem;font-size:1.05rem}
+  h3{font-size:1.14rem;margin:1.7em 0 .3em;color:#cfe0ee}
+  h4{font-size:.98rem;margin:1.2em 0 .2em;color:var(--accent2)}
+  p{margin:.6em 0}
+  a{color:var(--accent2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0c1118;
+    border:1px solid var(--line);border-radius:5px;padding:.05em .4em;font-size:.86em;color:#cbd8e3;
+    overflow-wrap:anywhere}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:14px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+  .callout{border-left:3px solid var(--accent);background:var(--panel2);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin:14px 0}
+  .callout.warn{border-left-color:var(--warn)}
+  .callout.danger{border-left-color:var(--danger)}
+  .callout.ok{border-left-color:var(--ok)}
+  .callout .lbl{font-weight:700;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase;color:var(--faint)}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.92rem}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:var(--muted);font-weight:600}
+  td.num{font-family:ui-monospace,Menlo,monospace;text-align:right;white-space:nowrap}
+  .tbl-scroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+  .tbl-scroll table{min-width:520px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+  @media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .kpi .v{font-size:1.5rem;font-weight:700;color:var(--accent);font-family:ui-monospace,Menlo,monospace}
+  .kpi .k{font-size:.78rem;color:var(--muted);margin-top:2px}
+  .toc{columns:2;column-gap:26px;font-size:.92rem}
+  @media(max-width:640px){.toc{columns:1}}
+  .toc a{display:block;padding:2px 0;color:var(--muted)}
+  .toc a:hover{color:var(--accent2)}
+  .mod{border-top:1px solid var(--line);padding-top:2px}
+  .mtag{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.72rem;
+    background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;color:var(--accent);margin-left:8px;vertical-align:middle}
+  .pill{display:inline-block;font-size:.72rem;border-radius:999px;padding:1px 9px;margin:0 3px 3px 0;border:1px solid var(--line)}
+  .pill.real{color:var(--ok);border-color:#2c5a4a}
+  .pill.approx{color:var(--warn);border-color:#5a4a2c}
+  .pill.stub{color:var(--danger);border-color:#5a2c2c}
+  .pend{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:.74rem;font-weight:700;
+    letter-spacing:.04em;color:#0f141b;background:var(--warn);border-radius:5px;padding:1px 7px;
+    margin:0 2px;vertical-align:baseline}
+  .new{display:inline-block;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    color:var(--purple);border:1px solid #4a3a5e;border-radius:999px;padding:1px 8px;margin-left:8px;vertical-align:middle}
+  .small{font-size:.86rem;color:var(--muted)}
+  .footer{margin-top:60px;border-top:1px solid var(--line);padding-top:20px;color:var(--faint);font-size:.85rem}
+  hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+  ul{margin:.5em 0 .5em 0;padding-left:1.2em}
+  li{margin:.25em 0}
+  .mono{font-family:ui-monospace,Menlo,monospace;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>PRISE — <span class="sub">Full Product Report</span></h1>
+    <p class="tagline"><b>P</b>rotein aggregation <b>R</b>egime <b>I</b>nference &amp; <b>S</b>coring
+      <b>E</b>ngine. An epistemically-disciplined analytical engine over the CPAD&nbsp;2.0 amyloid
+      aggregation-kinetics corpus: it fits, classifies, scores, and — above all — states honestly
+      <em>what the data can and cannot support</em>.</p>
+    <div class="badges">
+      <span class="badge mono">build&nbsp;e660cb452b41</span>
+      <span class="badge mono">corpus&nbsp;c09ac0cf398e</span>
+      <span class="badge mono">thresholds-1.0</span>
+      <span class="badge mono">m17-explain-1.0</span>
+      <span class="badge mono">fitprov-1.0</span>
+      <span class="badge ok">engine tests 574 / 574</span>
+      <span class="badge">report date 2026-08-05</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="callout">
+  <div class="lbl">What this report is</div>
+  Written <b>after auditing the running product</b>. Every headline number below was re-read from the
+  engine's own artifacts in <code>data/processed/</code>, or recomputed from them, at engine build
+  <code>e660cb452b41</code>. <b>Nothing was copied from the previous report</b> — and where the two
+  disagree, the artifact wins and the correction is stated explicitly in §14. Where the product
+  differs from <code>PRISE_DESIGN.md</code>, the gap is described (§15). The code, tests and
+  <code>PRISE_DESIGN.md</code> remain the source of truth; this is a descriptive snapshot, not an
+  authority. Math typesets via MathJax (needs a connection).
+</div>
+
+<div class="callout ok">
+  <div class="lbl">All five pending values were RESOLVED on 2026-08-06 — see the closing note in §16</div>
+  A rebuild of three fit artifacts was <b>in flight while this report was being written</b>, so five
+  values could not be measured today and are left as explicit placeholders rather than estimated:
+  <b>(1)</b> the final engine test-suite pass result; <b>(2)</b> the full 5-artifact invariance
+  result; <b>(3)</b> confirmation that <code>gamma.jsonl</code>, <code>m3_sample.jsonl</code> and
+  <code>global_fit.json</code> carry provenance; <b>(4)</b> <code>global_fit</code>'s own basin
+  verdict; <b>(5)</b> regeneration of <code>explanation_coverage.json</code>. Everything else is
+  measured. <b>No number in this document is an estimate.</b>
+</div>
+
+<h2>Contents</h2>
+<div class="toc card">
+  <a href="#summary">1 · Executive summary</a>
+  <a href="#what">2 · What PRISE is &amp; the data foundation</a>
+  <a href="#discipline">3 · The epistemic discipline</a>
+  <a href="#ladder">4 · The inference ladder (headline result)</a>
+  <a href="#fitprov">5 · The <code>FitProvenance</code> finding</a>
+  <a href="#m17">6 · M17 — Explanation &amp; evidence graph (Stage A)</a>
+  <a href="#buildid">7 · Why the build id deliberately does not bump</a>
+  <a href="#pipeline">8 · The pipeline, module by module</a>
+  <a href="#validation">9 · Cross-cutting validation stack</a>
+  <a href="#phase2">10 · Phase-2 deliverables (M8–M10)</a>
+  <a href="#wave">11 · The M11–M16 wave</a>
+  <a href="#web">12 · The web application</a>
+  <a href="#results">13 · Corpus results at a glance</a>
+  <a href="#corrections">14 · Corrections to the 2026-07-21 report</a>
+  <a href="#gaps">15 · Honest gaps, discrepancies &amp; deferrals</a>
+  <a href="#repro">16 · Reproducibility &amp; test suite</a>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="summary"><span class="n">1</span>Executive summary</h2>
+<p>PRISE turns a corpus of <b>1,654 digitized amyloid aggregation-kinetics curves</b> (CPAD&nbsp;2.0,
+105 proteins) into calibrated, provenance-stamped scientific claims. Its distinguishing feature is not
+any single model — it is a refusal to overclaim: every estimate carries its censoring status, its
+identifiability, a calibrated confidence, and a <em>validity ceiling</em>. The engine is now complete
+through <b>Module 17</b> plus a full cross-cutting validation stack.</p>
+
+<div class="kpis">
+  <div class="kpi"><div class="v">1,654</div><div class="k">kinetic curves analysed</div></div>
+  <div class="kpi"><div class="v">M0–M17</div><div class="k">modules built &amp; tested</div></div>
+  <div class="kpi"><div class="v">9,633</div><div class="k">model-fits now carrying §2.3 provenance</div></div>
+  <div class="kpi"><div class="v">0</div><div class="k">mechanisms licensed (honestly)</div></div>
+</div>
+
+<p>This report covers one wave of work, and it has an unusual shape: <b>the new module audited the
+engine and found the engine wanting.</b></p>
+
+<div class="grid2">
+  <div class="card">
+    <h4>M17 shipped — and it derives nothing</h4>
+    <p>Every value the engine emits becomes a node in a directed acyclic <b>evidence graph</b> whose
+    edges are facts the engine already computed. M17 performs no fitting, no statistics, no
+    thresholding, and emits <b>no number of its own</b> — enforced <em>mechanically</em>, not by
+    convention. Its coverage is <b>measured against a published 329-path denominator</b>, not asserted:
+    <b>150/329 distinct paths (45.6%)</b>.</p>
+  </div>
+  <div class="card">
+    <h4>M17 went looking for a record that did not exist</h4>
+    <p><code>PRISE_DESIGN.md</code> §2.3 specifies a <code>FitProvenance</code> object on every emitted
+    parameter, and §10.12 tagged it <b><code>[test]</code>-enforced</b>. It was emitted
+    <b>nowhere</b>, and <b>no test enforced it</b>. Not a falsely-passing test — <em>no test at all</em>.
+    The consequence for §7 was sharper than "unenforced": the basin-stability gate was
+    <b>unevaluable</b>, because the evidence it needs was destroyed at fit time.</p>
+  </div>
+</div>
+
+<div class="callout danger">
+  <div class="lbl">The sharpest consequence, now measured</div>
+  <code>m7_assemble.gamma_significant()</code> requires a bootstrap CI to <b>exclude zero</b> before a
+  curve earns the <code>scaling</code> tier of the published <code>information_yield</code> ladder.
+  That CI comes out of M4's γ bootstrap. So an <b>unrecorded RNG stream was gating a published tier
+  count</b> — the <b>59</b> curves on the <code>scaling</code> rung of §4's headline table. This was
+  never bookkeeping; it was an unrecorded input to a headline number. It is now recorded (§5).
+</div>
+
+<p>The fix ships as <code>engine/fit_provenance.py</code> + <code>engine/artifact_invariance.py</code>.
+It is <b>additive and value-preserving</b>, and that claim is <em>mechanically checked</em> rather than
+argued: across <b>9,633 kinetic model-fits</b>, every pre-existing key is byte-identical and only
+<code>provenance</code> was added. That is why <code>engine_build_id</code> <b>deliberately does not
+bump</b> (§7) — an additive, value-identical record must not assert a non-comparability that does not
+exist.</p>
+
+<div class="callout warn">
+  <div class="lbl">This report also corrects its predecessor</div>
+  Re-reading every number from the artifacts turned up <b>four published figures in the 2026-07-21
+  report that the artifacts do not support</b> — including one rung of the headline inference ladder.
+  They are corrected explicitly in <b>§14</b>, with the old value, the new value, the artifact, and the
+  cause where it is known. A published number that turned out wrong is a finding, not an embarrassment;
+  the correction <em>is</em> the product working.
+</div>
+
+<p>The single most important <em>corpus</em> finding is unchanged and remains a piece of honesty made
+quantitative: of 1,654 curves, <b>0 support a single-mechanism claim</b> — not because the models fail,
+but because the two metadata fields that gate mechanism (<b>agitation</b> and <b>seeding</b>) are
+unrecorded corpus-wide.</p>
+
+<!-- ===================================================================== -->
+<h2 id="what"><span class="n">2</span>What PRISE is &amp; the data foundation</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>The problem</h4>
+    <p>Amyloid aggregation kinetics (ThT/ThS fluorescence vs time) are the workhorse assay of protein
+    misfolding, but the published record is a minefield: curves are <b>digitized from figures</b>
+    (no ground-truth values), differently normalized, often <b>censored</b> (still rising at the end,
+    or no lag at the start), and reported without the conditions (agitation, seeding) that decide
+    which <em>mechanism</em> is even identifiable. Naïve fitting manufactures false certainty.</p>
+  </div>
+  <div class="card">
+    <h4>The approach</h4>
+    <p>A pipeline of pure functions — <em>data in → JSON-serialisable data out</em> — each of which
+    does one job and <b>declares its own limits</b>. Descriptive shape is always available;
+    mechanism is granted only when every licensing gate passes; and a synthetic-calibration backbone
+    (Service&nbsp;C) measures what the engine can actually recover so its confidences are earned,
+    not asserted.</p>
+  </div>
+</div>
+
+<h4>Data foundation</h4>
+<ul>
+  <li><b>CPAD 2.0 kinetics</b> — <b>1,654 curves, 105 proteins, 52 concentration-series groups</b>
+  (counted from <code>curves_triaged.jsonl</code>), with concentration/pH/temperature/assay/construct
+  metadata. <b>Attribution-gated &amp; non-redistributable</b> → the corpus is <code>.gitignore</code>d
+  and lives server-side only; the browser receives derived results, never bulk records.</li>
+  <li><b>CPAD sequence layer</b> (ETL <code>cpad-sequence-1.1</code>) — TANGO / AGGRESCAN / PASTA /
+  Waltz predictors, APRs, and PDB cross-references per UniProt.</li>
+  <li><b>PDB coordinates</b> (CC0) — fetched on demand into a local cache; real 3D structural
+  features are computed from them (§11, M16).</li>
+</ul>
+
+<!-- ===================================================================== -->
+<h2 id="discipline"><span class="n">3</span>The epistemic discipline (the product's whole point)</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Never manufacture certainty</h4>
+    <ul>
+      <li><b>Censoring is first-class.</b> A right-censored (still-rising) curve yields a t50
+      <em>lower bound</em>, never a plateau-normalized point; a left-censored curve reports t50 as
+      biased-early with lag undefined.</li>
+      <li><b>Mechanism is gated, not guessed.</b> M5 returns an equivalence class and every gate it
+      failed — it never names one mechanism when the data can't separate them.</li>
+      <li><b>Confidence is calibrated or null.</b> A verdict that isn't licensed carries a
+      <code>null</code> confidence, not a fabricated number.</li>
+      <li><b>An absent quantity is recorded as absent, with a reason.</b> New this wave: a fit that
+      draws no random number records <code>rng: not applicable</code> <em>and why</em>, rather than
+      writing <code>rng_seed: 0</code>. A fabricated provenance record is a lie that <em>passes</em> —
+      strictly worse than the honest absence it replaces.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Everything is versioned &amp; reproducible</h4>
+    <ul>
+      <li><b><code>engine_build_id</code></b> hashes every comparability axis (module versions,
+      thresholds, corpus digest, environment). Cross-build comparison is <em>blocked</em> unless
+      the ids match — and is <b>not</b> bumped for a change that moves no value (§7).</li>
+      <li><b>Governed thresholds.</b> Cutoffs are Service-C-calibrated with a signed/dated apply
+      record; the previous value is retained and reversible.</li>
+      <li><b>Deterministic.</b> Seeded generation + frozen splits → byte-identical re-runs.</li>
+      <li><b>Validity ceiling.</b> Phase-2 headlines are explicitly <em>upper bounds on
+      reachability</em>, conditional on forward-model adequacy.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout">
+  <div class="lbl">The discipline turned on itself — the lesson of this wave</div>
+  <b>A <code>[test]</code> tag is worth exactly the negative controls behind it.</b> §10.12 carried a
+  <code>[test]</code> tag for months with <em>no test at all</em> behind it, and nothing in the suite
+  noticed, because a missing test cannot fail. The replacement is written the other way round: the new
+  suite asserts not only that the knife-edge detector <b>fires</b> on a fit that genuinely bifurcates,
+  but that it does <b>not</b> fire on a clean one, that single-start models report
+  <code>not_evaluable</code> and <em>never</em> <code>stable</code>, and that M2 <b>never fabricates an
+  <code>rng_seed</code></b>. A detector that never fires would pass every positive test while stamping
+  <code>stable</code> on exactly the fits §7 exists to refuse.
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="ladder"><span class="n">4</span>The inference ladder — the headline result</h2>
+<p>Of 1,654 curves, how far up the inference ladder can each honestly climb? Live from
+<code>m8_reachability.json</code> (<code>inference_ladder.rungs</code>) at build
+<code>e660cb452b41</code>.</p>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Rung</th><th>Meaning</th><th class="num">Curves</th><th class="num">% of 1,654</th><th class="num">Proteins</th></tr>
+  <tr><td>signal_present</td><td>usable signal under the forward model</td><td class="num">1,606</td><td class="num">97.1%</td><td class="num">66</td></tr>
+  <tr><td>fittable</td><td>a model can be fit</td><td class="num">1,240</td><td class="num">75.0%</td><td class="num">63</td></tr>
+  <tr><td>descriptive_regime</td><td>a resolved shape class</td><td class="num">1,194</td><td class="num">72.2%</td><td class="num">63</td></tr>
+  <tr><td>scaling / γ-significant</td><td>a resolved concentration-scaling exponent (CI excludes 0)</td><td class="num">59</td><td class="num">3.6%</td><td class="num">3</td></tr>
+  <tr><td><b>mechanistic_licensed</b></td><td>a single mechanism is defensible</td><td class="num"><b>0</b></td><td class="num"><b>0%</b></td><td class="num"><b>0</b></td></tr>
+</table>
+</div>
+<p class="small">The ladder is monotone (<code>monotone_non_increasing: true</code>) and reconciles with
+the M7 rollup. <b>The <code>descriptive_regime</code> row is corrected from the 2026-07-21 report</b>,
+which published 1,240 (75.0%) — the <code>fittable</code> row's value duplicated. See §14.</p>
+<p class="small">Two of these rungs are now known to have depended on machinery that was not recorded:
+the <code>scaling</code> count of <b>59</b> is gated by a bootstrap CI excluding zero, and until this
+wave the RNG stream behind that CI was unrecorded (§5).</p>
+
+<!-- ===================================================================== -->
+<h2 id="fitprov"><span class="n">5</span>The <code>FitProvenance</code> finding<span class="new">new</span></h2>
+
+<p>This is the most consequential content in this report. It has three parts: what was found, what it
+cost, and what the fix measures.</p>
+
+<h3>5.1 What was found</h3>
+<div class="callout danger">
+  <div class="lbl">An invariant carrying a <code>[test]</code> tag it never earned</div>
+  <code>PRISE_DESIGN.md</code> §2.3 specifies
+  <code class="mono">FitProvenance {rng_seed, rng_algorithm, stream_policy, n_starts, winning_basin,
+  basin_spread, optimizer, version, tolerance, convergence_flag, env_manifest_ref}</code>
+  on every emitted parameter, and §10 invariant 12 tagged it <b><code>[test]</code></b>.
+  <b>No engine module constructed it and no artifact contained its fields</b> — those names returned
+  zero hits across <code>engine/</code>, <code>etl/</code>, <code>web/</code> and every artifact in
+  <code>data/processed/</code>. And it was <b>not a falsely-passing test — there was no test at all</b>:
+  every <code>provenance</code> match in the engine suite was either M1's <code>field_provenance</code>
+  (metadata presence, an unrelated concept) or M15's claim provenance. Surfaced while building M17,
+  which went looking for the record every parameter is supposed to carry; recorded honestly in commit
+  <code>a6c9f88</code> <em>before</em> any fix was attempted.
+</div>
+
+<p>What the engine <em>did</em> emit as method provenance — module version tags, <code>engine_build_id</code>,
+and per-fit <code>converged</code>/<code>param_se</code> — is enough to identify <b>which code</b>
+produced a number, and <b>not</b> enough to reproduce it.</p>
+
+<h3>5.2 Four consequences, all confirmed</h3>
+<div class="tbl-scroll">
+<table>
+  <tr><th>#</th><th>Consequence</th><th>Why it is worse than "unenforced"</th></tr>
+  <tr>
+    <td class="num">1</td>
+    <td><b>§7's basin-stability gate was <em>unevaluable</em>.</b> §7 freezes an anchor only if
+      basin-stable ("winning multi-start basin robust to start perturbation"; "knife-edge fits are
+      refused").</td>
+    <td><code>m2_fit.fit_one</code> kept only the best-SSE start and <code>continue</code>d past
+      failures without recording them — so the spread the gate needs was <b>destroyed at fit time</b>.
+      You cannot enforce a gate whose input no longer exists.</td>
+  </tr>
+  <tr>
+    <td class="num">2</td>
+    <td><b>9 of 13 models were single-start.</b> <code>fit_one</code> builds its extra starts by testing
+      <em>parameter names</em> (<code>if "t0" in pnames</code>, <code>if "k" in pnames</code>).</td>
+    <td><code>n_starts=4</code> was a <b>no-op or partial no-op for 10 of the 13</b> registry models —
+      including the mechanistic <code>finke_watzky</code> (its rates are named k1/k2, not k) and all
+      five dose–response models. A multi-start that does not start multiply.</td>
+  </tr>
+  <tr>
+    <td class="num">3</td>
+    <td><b><code>global_fit</code>'s <code>seed</code> was decorative.</b></td>
+    <td>Accepted on the CLI, threaded through <code>fit_global_series</code>/<code>_fit_mechanism</code>
+      — and <b>never referenced</b>. The <code>np.random.seed()</code> call seeded the legacy global
+      <code>RandomState</code>, which <code>least_squares</code> does not consult. A no-op that read as
+      a reproducibility guarantee.</td>
+  </tr>
+  <tr>
+    <td class="num">4</td>
+    <td><b>An unrecorded RNG stream gated a published tier count.</b></td>
+    <td><code>m7_assemble.gamma_significant()</code> requires <code>gamma_ci</code> to <b>exclude
+      zero</b> before a curve earns the <code>scaling</code> tier; <code>gamma_ci</code> comes out of
+      M4's γ bootstrap. The <b>59</b> curves on §4's <code>scaling</code> rung therefore depended on a
+      stream nobody had written down.</td>
+  </tr>
+</table>
+</div>
+
+<h3>5.3 The fix, and why it is shaped the way it is</h3>
+<div class="card">
+  <p><b>Two halves.</b> §2.3's fields split cleanly into a part that is <em>constant</em> for a fitting
+  policy (optimizer, tolerances, RNG applicability, version, <code>env_manifest_ref</code>) and a part
+  that <em>varies per fit</em>. Inlining the constant half on 9,633 model-fits would say the same
+  sentence 9,633 times, so it is emitted <b>once</b> into <code>data/processed/fit_recipes.json</code>
+  and referenced by <code>recipe</code> id — the shape §2.3 already uses for
+  <code>env_manifest_ref</code>: a ref, not an inlined manifest. Five recipes ship
+  (<code>m2/trf-bounded/det-starts-1.0</code>, <code>mechanistic/…</code>, <code>global_fit/…</code>,
+  <code>m3/wild-bootstrap-mammen-1.0</code>, <code>m4/gamma-bootstrap-1.0</code>). A referenced record
+  is only honest if the reference <em>resolves</em>, so a test asserts every emitted id exists in the
+  table.</p>
+
+  <p><b>Cost was measured, not estimated — and the estimate was wrong.</b> A first pass grew
+  <code>fits.jsonl</code> by <b>76%</b>, not the ~26% predicted. Two fixes: the explanatory prose became
+  a <code>reason_code</code> resolved through the recipe table, and <code>winning_basin</code>/
+  <code>basin_spread</code> are omitted in the single-basin case where the first is derivable and the
+  second has no rival to measure against. <b>Measured final cost: 4,781,224 → 6,705,955 bytes
+  (+40.2%)</b>, ~200 B per model-fit — confirmed by comparing the live artifact against
+  <code>data/snapshots/pre_fitprovenance/</code>.</p>
+
+  <p><b>SSE alone cannot decide basin stability</b> — the load-bearing measurement, and the one that is
+  easy to get wrong. Two starts reaching the <em>same</em> optimum differ in SSE by ~1e-11; that is the
+  definition of <em>stable</em>. A knife-edge is the opposite: near-equal SSE at a <b>materially
+  different parameter vector</b>, where which vector "wins" is a numerical accident of start ordering.
+  So converged starts are clustered into basins by a scale-free <b>parameter-vector</b> distance</p>
+  $$ d\big(\theta^{(a)},\theta^{(b)}\big)\;=\;\max_j\;
+     \frac{\big|\theta^{(a)}_j-\theta^{(b)}_j\big|}
+          {\max\big(|\theta^{(a)}_j|,\,|\theta^{(b)}_j|,\,\epsilon_j\big)} $$
+  <p>and SSE is compared only <em>between</em> basins, relative to a denominator floored at a
+  billionth of the data's total sum of squares — so a near-perfect fit is still compared on a
+  dimensionally meaningful scale rather than against an arbitrary absolute epsilon.</p>
+  <p><b>Four verdicts, no fifth:</b> <code>stable</code> · <code>knife_edge</code> ·
+  <code>not_evaluable</code> · <code>no_fit</code>. <code>is_basin_stable()</code> returns
+  <code>False</code> for <code>not_evaluable</code>: <b>being unable to check is not permission.</b></p>
+  <p class="small">Both tolerances (<code>BASIN_SSE_REL_TOL</code>, <code>BASIN_PARAM_REL_TOL</code> =
+  1e-3) live in <code>fit_provenance.py</code> and <b>deliberately not</b> in
+  <code>calibrated_thresholds.py</code>: that module is the signed, dated registry of Service-C
+  <em>held-out-calibrated scientific</em> cutoffs, and filing a numerical tolerance there would falsely
+  imply Service-C provenance and drag <code>thresholds_version</code> — and therefore
+  <code>engine_build_id</code> — along for no reason.</p>
+</div>
+
+<h3>5.4 What the fix measures</h3>
+<p>Re-read today from <code>data/processed/fits.jsonl</code> (rebuilt, post-fix): <b>1,654 records,
+9,633 kinetic model-fits, and <span class="mono">provenance</span> present on 9,633 of 9,633</b>.</p>
+<div class="grid2">
+  <div>
+    <div class="tbl-scroll"><table>
+      <tr><th>§7 basin verdict</th><th class="num">fits</th><th class="num">%</th></tr>
+      <tr><td>stable</td><td class="num">4,710</td><td class="num">48.9%</td></tr>
+      <tr><td>not_evaluable</td><td class="num">4,487</td><td class="num">46.6%</td></tr>
+      <tr><td>knife_edge</td><td class="num">260</td><td class="num">2.70%</td></tr>
+      <tr><td>no_fit</td><td class="num">176</td><td class="num">1.83%</td></tr>
+    </table></div>
+  </div>
+  <div>
+    <div class="tbl-scroll"><table>
+      <tr><th>reason_code</th><th class="num">fits</th></tr>
+      <tr><td>all_starts_agree</td><td class="num">4,589</td></tr>
+      <tr><td>single_start_constructed</td><td class="num">4,487</td></tr>
+      <tr><td>basins_within_sse_tol</td><td class="num">260</td></tr>
+      <tr><td>too_few_points</td><td class="num">162</td></tr>
+      <tr><td>rivals_decisively_worse</td><td class="num">121</td></tr>
+      <tr><td>no_start_converged</td><td class="num">14</td></tr>
+    </table></div>
+  </div>
+</div>
+<p class="small">Internally consistent: 4,589 + 121 = 4,710 <code>stable</code>; 162 + 14 = 176
+<code>no_fit</code>. <b>Scope is named so the figure is falsifiable:</b> these are the <b>9,633 kinetic
+model-fits</b> in <code>fits.jsonl</code>; adding the 55 dose–response fits in
+<code>dose_response_fits.jsonl</code> (all <code>not_evaluable</code> or <code>no_fit</code>) gives
+<b>9,688</b> in total.</p>
+
+<div class="callout ok">
+  <div class="lbl">Three results that were previously invisible</div>
+  <ul style="margin-top:.4em">
+    <li><b>Knife-edge rate among fits that can actually be assessed: 5.2%</b> — 260 of the
+    <b>4,970</b> evaluable fits (9,633 − 4,487 <code>not_evaluable</code> − 176 <code>no_fit</code>).
+    These are precisely the fits §7 refuses to freeze an anchor on, and until now none of them could be
+    identified.</li>
+    <li><b>49 failed starts recovered</b> that the old code silently discarded (Σ <code>n_failed</code>
+    over <code>fits.jsonl</code>; 54 including dose–response). A failure that is not recorded is a
+    failure that cannot be reasoned about.</li>
+    <li><b>121 fits where the multi-start genuinely changed the answer</b> — the
+    <code>rivals_decisively_worse</code> cases: two or more <em>distinct</em> basins were found
+    <em>and</em> the winner beat every rival by more than the SSE tolerance. Had these been
+    single-started, the fit could have settled in the losing basin.</li>
+  </ul>
+</div>
+
+<h4>Why <code>not_evaluable</code> is so large — a measured fact about the fitter, not a defect of the gate</h4>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Model</th><th class="num">starts constructed</th><th class="num">fits</th><th>Axis</th></tr>
+  <tr><td>gompertz</td><td class="num">4</td><td class="num">1,277</td><td>kinetic</td></tr>
+  <tr><td>logistic</td><td class="num">4</td><td class="num">1,277</td><td>kinetic</td></tr>
+  <tr><td>richards</td><td class="num">4</td><td class="num">1,277</td><td>kinetic</td></tr>
+  <tr><td>exponential</td><td class="num">2</td><td class="num">1,277</td><td>kinetic</td></tr>
+  <tr><td>lnt</td><td class="num">1</td><td class="num">1,648</td><td>kinetic</td></tr>
+  <tr><td>scaling_law</td><td class="num">1</td><td class="num">1,277</td><td>kinetic</td></tr>
+  <tr><td>finke_watzky</td><td class="num">1</td><td class="num">1,277</td><td>kinetic (Tier-B closed form)</td></tr>
+  <tr><td>brain_cousens</td><td class="num">1</td><td class="num">323</td><td>kinetic</td></tr>
+  <tr><td>dr_lnt · dr_threshold · dr_hill · dr_brain_cousens · dr_scaling</td><td class="num">1</td><td class="num">55</td><td>dose–response</td></tr>
+</table>
+</div>
+<p class="small">Only <b>3 of 13</b> models receive the full four starts; <code>exponential</code>
+receives two; the remaining <b>9 of 13</b> receive exactly one and have nothing to be stable
+<em>between</em>. (Counts above are of fits with ≥1 constructed start; a further 0-start group exists
+where there were fewer data points than free parameters.) They report <code>not_evaluable</code>
+<b>with a reason</b> and never <code>stable</code>. Fixing this <b>changes fitted values</b>, so it is
+deferred to its own governed change with a build-id bump — see §15.</p>
+
+<h3>5.5 The additivity claim is proved, not argued</h3>
+<div class="card">
+  <p><code>engine/artifact_invariance.py</code> snapshots the five tracked artifacts before the rebuild
+  and compares after, failing on <b>any</b> pre-existing value that moved or vanished, and on any new
+  key outside a four-name allow-list (<code>provenance</code>, <code>fit_provenance</code>,
+  <code>bootstrap_provenance</code>, <code>seed_is_effective</code>). The comparison is
+  <b>exact, not tolerance-based</b> — the claim under test is that nothing moved <em>at all</em>, and a
+  tolerance would let real drift hide under it.</p>
+  <div class="callout ok">
+    <div class="lbl">Verified today, read-only, by this audit</div>
+    <code>fits.jsonl</code> → <b><code>ok</code>, 0 violations</b> across all <b>9,633</b> model-fits ·
+    <code>dose_response_fits.jsonl</code> → <b><code>ok</code>, 0 violations</b>. Every pre-existing key
+    byte-identical; only <code>provenance</code> added.
+  </div>
+  <div class="callout ok">
+    <div class="lbl">RESOLVED 2026-08-06 — the full 5-artifact result</div>
+    <code>m3_sample.jsonl</code>, <code>gamma.jsonl</code> and <code>global_fit.json</code> were
+    mid-rebuild while this report was drafted; all three completed on <b>2026-08-06</b>.
+    <b>Full 5-artifact invariance result: <code>all_ok: true</code> — 0 violations</b> across
+    <code>fits.jsonl</code>, <code>dose_response_fits.jsonl</code>, <code>m3_sample.jsonl</code>,
+    <code>gamma.jsonl</code> and <code>global_fit.json</code>. <b>All three carry provenance</b>,
+    verified in the files themselves: M3 <code>bootstrap_provenance.accepted_B = 150</code>;
+    M4 <code>bootstrap_provenance.requested_B = 300</code> with
+    <code>accepted_B_tracked: false</code>; <code>global_fit</code> per-mechanism
+    <code>fit_provenance</code> plus <code>seed_is_effective: false</code>.
+    <b>It did not pass first time, and that is the finding.</b> Rebuilding γ at the command the
+    README documented (<code>--bootstrap 150</code>) produced <b>39 changed values</b> —
+    <code>gamma_ci</code> bounds and <code>n_bootstrap_rejected_divergent</code>. The shipped
+    artifact had been built at the <code>B=300</code> function default; at 300 the check is clean.
+    The documented command never reproduced the artifact it documented — precisely the defect
+    §2.3 exists to prevent, surfaced while fixing §2.3. The significance verdict happened not to
+    move (5 series with a CI excluding zero, before and after), which was luck, not design. A dedicated test
+    (<code>test_gamma_ci_specifically_did_not_move</code>) exists precisely because
+    <code>gamma_ci</code> is the value that gates §4's <code>scaling</code> count.
+  </div>
+  <p class="small">This is also the real guard on the γ-bootstrap hazard: the shipped
+  <code>gamma.jsonl</code> was produced with a <code>--bootstrap</code> size recorded only in
+  <code>engine/README.md</code> and never in the artifact, so re-running with a different B would
+  silently move every <code>gamma_ci</code>. Pinning B from the README is a precaution; the checker is
+  the proof that the precaution worked.</p>
+</div>
+
+<h3>5.6 Honesty in both directions</h3>
+<div class="callout">
+  <div class="lbl">A record that says "not applicable", with a reason</div>
+  M2, <code>mechanistic</code> and <code>global_fit</code> use <b>no random number generator</b> — their
+  starts are constructed deterministically from the data and TRF is a deterministic descent. Their
+  record therefore carries <code>rng: {applicable: false, reason: …}</code> and <b>no
+  <code>rng_seed</code> key under any value</b>. Writing <code>rng_seed: 0</code> would state that a
+  stream was opened at seed 0, which is false, and would satisfy a naive §10.12 check while making the
+  record <em>less</em> truthful than the absence it replaced. <code>global_fit</code>'s decorative seed
+  is now recorded machine-readably as <code>seed_is_effective: false</code> with the reason attached,
+  and the no-op <code>np.random.seed()</code> line was <b>removed rather than kept</b> — a decorative
+  guarantee is worse than none.
+  <br><br>
+  M3's wild bootstrap and M4's γ bootstraps <b>do</b> draw, and carry a real seed, algorithm and
+  <code>stream_policy</code> — where the policy <b>states its own known defect</b>: every curve restarts
+  from the same constant seed 0, so two curves of equal length receive <em>identical</em> Mammen weight
+  sequences rather than independent ones. Deterministic, but correlated across curves. Recorded, and
+  deferred (fixing it moves every published CI).
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="m17"><span class="n">6</span>M17 — Explanation, Provenance &amp; Evidence Graph (Stage A)
+  <span class="mtag">m17_explain.py</span><span class="new">new</span></h2>
+
+<p><b>Role.</b> Every value the engine emits becomes a node in a directed <b>acyclic evidence graph</b>
+whose edges are facts the engine <em>already computed</em>. It answers "why does PRISE say this?" from
+artifacts on disk, never from a fresh calculation. Version <code>m17-explain-1.0</code>, commit
+<code>b978025</code>.</p>
+
+<div class="callout danger">
+  <div class="lbl">The load-bearing invariant: M17 derives nothing</div>
+  No fitting, no statistics, no thresholds, <b>no number of its own</b> — a harvester, a graph builder
+  and a deterministic renderer. The reason is not stylistic: <b>if M17 could compute, its explanations
+  could disagree with the engine, and an explanation that contradicts the thing it explains is worse
+  than none.</b> This is enforced <em>mechanically</em>, four ways, so a violation <b>fails</b> rather
+  than being discouraged.
+</div>
+
+<div class="tbl-scroll">
+<table>
+  <tr><th>Guard</th><th>What it actually does</th></tr>
+  <tr><td><b>Value provenance</b></td>
+      <td><code>assert_no_derivation()</code> byte-compares every non-null node value against the
+      artifact value at its declared key path, <b>re-resolved against the artifact re-read from
+      disk</b> — not the pruned in-memory bundle, so pruning cannot hide a bad reference. A number M17
+      invented exists at no key path, so it cannot pass.</td></tr>
+  <tr><td><b>Arithmetic ban</b></td>
+      <td><code>_frac()</code> is the <em>only</em> function in the module containing a division,
+      multiplication, subtraction or power — and it divides M17's own node counts, never an engine
+      value. The suite parses the file with <code>ast</code> and asserts it.</td></tr>
+  <tr><td><b>Template-only rendering</b></td>
+      <td><code>render_node()</code> is one dict lookup plus one <code>str.format_map</code>, with no
+      concatenation, f-string or <code>join</code> — a sentence <b>cannot</b> be composed at runtime.
+      Same graph ⇒ byte-identical text.</td></tr>
+  <tr><td><b>No numpy</b></td>
+      <td>Stdlib only, so every float arrives via <code>json.loads</code> as a plain Python float and no
+      <code>numpy.float64</code> repr can drift between builds.</td></tr>
+</table>
+</div>
+
+<h3>6.1 Closed vocabularies, one graph, four projections</h3>
+<div class="card">
+  <p>Node and edge kinds are <b>closed enums</b>. Assumption trees, evidence chains, uncertainty chains
+  and prose are <b>not four structures — they are four projections of the one DAG</b> (filter by edge
+  kind, topologically order), so they cannot contradict one another; they are computed on read and
+  never stored, because a stored view can drift from its graph.</p>
+  <div class="grid2">
+    <div>
+      <div class="tbl-scroll"><table>
+        <tr><th>node kind</th><th class="num">n</th></tr>
+        <tr><td>datum</td><td class="num">71,514</td></tr>
+        <tr><td>result</td><td class="num">59,796</td></tr>
+        <tr><td>metadata_fact</td><td class="num">20,209</td></tr>
+        <tr><td>ceiling</td><td class="num">6,614</td></tr>
+        <tr><td>uncertainty</td><td class="num">5,305</td></tr>
+        <tr><td>deferral</td><td class="num">3,905</td></tr>
+        <tr><td>gate</td><td class="num">3,061</td></tr>
+        <tr><td>assumption</td><td class="num">1,654</td></tr>
+        <tr><td>method</td><td class="num">1,654</td></tr>
+        <tr><td>refusal</td><td class="num">1,240</td></tr>
+        <tr><th>total</th><th class="num">174,952</th></tr>
+      </table></div>
+    </div>
+    <div>
+      <div class="tbl-scroll"><table>
+        <tr><th>edge kind</th><th class="num">n</th></tr>
+        <tr><td>computed_from</td><td class="num">23,659</td></tr>
+        <tr><td>uncertainty_from</td><td class="num">16,781</td></tr>
+        <tr><td>blocked_by</td><td class="num">13,695</td></tr>
+        <tr><td>bounded_by</td><td class="num">7,396</td></tr>
+        <tr><td>unblocked_by</td><td class="num">2,030</td></tr>
+        <tr><td>assumes</td><td class="num">1,654</td></tr>
+        <tr><td>gated_by</td><td class="num">1,648</td></tr>
+        <tr><th>total</th><th class="num">66,863</th></tr>
+      </table></div>
+    </div>
+  </div>
+  <p><b>Every node carries a causal licence the renderer inherits</b>, so a statistical-only source
+  (M10/M16 associations) can never reach a causal verb. Of 174,952 nodes, <b>14,586</b> carry
+  <code>deterministic_engine_logic</code> and <b>160,366</b> carry <code>none</code>.
+  <code>measured_causal</code> is <b>declared but unused — 0 instances corpus-wide</b>: nothing in this
+  engine licenses a causal claim about nature.</p>
+</div>
+
+<div class="callout ok">
+  <div class="lbl"><code>confidence</code> is always a tagged LIST, never a merged scalar</div>
+  The engine's confidences are <b>incommensurable</b>: M4's asymptotic <b>bootstrap CI</b> (960
+  objects), <code>conformal.py</code>'s finite-sample <b>conformal quantile</b> (1,654), M5's
+  <b>ordinal shape</b> level (1,240) and M11's <b>completeness</b> — which is <em>presence</em>,
+  explicitly not correctness (1,654). Averaging them would fabricate a number and violate invariant
+  §10.5, so <b>no code path collapses the list</b>. Distinct kinds &gt; 1 with no merge step is the
+  machine-readable form of "confidence never collapses".
+</div>
+
+<h3>6.2 Coverage — measured against a published denominator</h3>
+<p>A coverage percentage over a loosely-chosen denominator is unfalsifiable, so the enumeration ships
+with the number. The denominator is every <b>leaf key path</b> of the M7 per-series spine
+(<code>protein_analysis.jsonl</code>), unioned over all records — <b>329 distinct paths</b>, where a
+list is a leaf and a null or empty dict is a leaf at its own path.</p>
+
+<div class="tbl-scroll">
+<table>
+  <tr><th>Coverage measure</th><th class="num">explained</th><th class="num">total</th><th class="num">%</th><th>Population</th></tr>
+  <tr><td>by distinct field path</td><td class="num">150</td><td class="num">329</td><td class="num"><b>45.6%</b></td><td>—</td></tr>
+  <tr><td>by field instance, ALL series</td><td class="num">132,292</td><td class="num">259,456</td><td class="num"><b>51.0%</b></td><td>1,654 series</td></tr>
+  <tr><td>by field instance, EXPLAINABLE series</td><td class="num">120,554</td><td class="num">243,318</td><td class="num"><b>49.5%</b></td><td>1,240 series</td></tr>
+</table>
+</div>
+<p class="small">Both instance denominators were <b>independently reproduced by this audit</b> by
+re-walking <code>protein_analysis.jsonl</code> and <code>regimes.jsonl</code>: 259,456 and 243,318
+leaf instances, exactly.</p>
+
+<p>The two populations are <b>never blended</b>. "M17 has no adapter" and "the engine produced nothing
+to explain" are different failures with different fixes, and only the first is Stage B's to close:
+<code>regimes.jsonl</code> holds <b>1,240</b> records against the spine's <b>1,654</b>, so for
+<b>414 unfittable/suspect series there is no refusal, no regime and no feature vector in
+existence</b>. Those return <code>explanation_available: false</code> naming it an <em>engine</em>
+output gap.</p>
+
+<div class="callout warn">
+  <div class="lbl">The counter-intuitive result — do not "fix" it, it is not a bug</div>
+  Instance coverage over <em>explainable</em> series (<b>49.5%</b>) is <b>lower</b> than over
+  <em>all</em> series (<b>51.0%</b>). The naive reading — "explainable series are better explained" —
+  is <b>false</b>.
+  <br><br>
+  <b>Mechanism, measured by this audit rather than asserted.</b> The 414 series with no M5 record emit a
+  <em>compact</em> schema carrying <b>16,138</b> leaf instances, of which <b>11,738 are explained —
+  72.7%</b>, far above the 49.5% explainable-series rate. That compact schema is dominated by
+  <code>condition_vector</code>: <b>10,350 of 16,138 instances = 64.1% of all compact content</b>, and
+  <b>no <code>condition_vector</code> path appears anywhere in the unexplained set</b>. So the compact
+  records score <em>better</em> than full-schema series, which carry the un-adapted M6 and M3 blocks.
+  <br><br>
+  This is exactly why a single blended figure was refused: it would have hidden the effect.
+  <span class="small">(The <b>97.5%</b> figure that circulates alongside this result is a different
+  quantity — it is <b>M1's module-level distinct-path coverage, 39/40</b>. Both are true; they are not
+  the same number.)</span>
+</div>
+
+<h4>Per module — where the gap is breadth, not depth</h4>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Module</th><th class="num">paths explained</th><th class="num">paths total</th><th class="num">% paths</th><th class="num">% instances</th><th>Stage-A adapter</th></tr>
+  <tr><td>M1</td><td class="num">39</td><td class="num">40</td><td class="num">97.5%</td><td class="num">98.0%</td><td>yes</td></tr>
+  <tr><td>M4</td><td class="num">89</td><td class="num">93</td><td class="num">95.7%</td><td class="num">95.3%</td><td>yes</td></tr>
+  <tr><td>M5</td><td class="num">22</td><td class="num">31</td><td class="num">71.0%</td><td class="num">80.5%</td><td>yes</td></tr>
+  <tr><td><b>M6</b></td><td class="num">0</td><td class="num"><b>119</b></td><td class="num">0%</td><td class="num">0%</td><td>no</td></tr>
+  <tr><td>M3</td><td class="num">0</td><td class="num">35</td><td class="num">0%</td><td class="num">0%</td><td>no</td></tr>
+  <tr><td>M7</td><td class="num">0</td><td class="num">7</td><td class="num">0%</td><td class="num">0%</td><td>no</td></tr>
+  <tr><td>M9</td><td class="num">0</td><td class="num">4</td><td class="num">0%</td><td class="num">0%</td><td>no</td></tr>
+  <tr><th>Total</th><th class="num">150</th><th class="num">329</th><th class="num">45.6%</th><th class="num">51.0%</th><th></th></tr>
+</table>
+</div>
+<p><b>The honest headline: where M17 has an adapter it is near-complete (M1 and M4 both &gt; 95%); the
+gap is BREADTH, not depth.</b> Nine Stage-A adapters ship — <code>m1_triage</code>,
+<code>m2_fit</code>, <code>m4_features</code>, <code>m4_gamma</code>, <code>m5_regimes</code>,
+<code>m8_reachability</code>, <code>m11_metadata</code>, <code>conformal</code>,
+<code>m15_litingest</code>. M3, M6, M7, M9, M10, M12, M13, M14, <code>pooling</code>,
+<code>global_fit</code> and <code>reality_check</code> have none and <b>report zero rather than a
+guess</b>.</p>
+
+<div class="callout">
+  <div class="lbl">Stage B has a priority order, not a vibe</div>
+  The coverage artifact names <b>179 unexplained field paths</b> machine-readably:
+  <b>165 <code>no_adapter</code></b> + <b>14 <code>not_declared</code></b>. The single highest-value
+  target is <b>M6 — 119 of 329 paths, 36% of the entire denominator, at 0%</b>
+  (<code>sequence_axis</code> + <code>propensity</code>), then M3 (35), M7 (7), M9 (4).
+</div>
+
+<h3>6.3 Verification of M17's own claims</h3>
+<div class="grid3">
+  <div class="card">
+    <h4>Adapter contract</h4>
+    <p class="small"><b>151 declared key paths checked, 0 failures.</b> When an upstream module changes
+    shape the M17 suite fails <em>loudly</em> instead of silently degrading every explanation to
+    <code>explanation_available: false</code>.</p>
+  </div>
+  <div class="card">
+    <h4>Cross-artifact value identity</h4>
+    <p class="small"><b>0 mismatched of 132,292 checked.</b> M17 nodes read the <em>originating</em>
+    artifact, not the assembled M7 spine — so this proves the explained number is the number the
+    product displays.</p>
+  </div>
+  <div class="card">
+    <h4>Determinism</h4>
+    <p class="small">Consecutive full runs are <b>byte-identical by SHA-256</b>. The 90 MB full graph
+    dump is therefore not written by default: a regenerable dump beats a stored one, and
+    <code>web/server.py</code> indexes large per-series JSONLs into memory at startup.</p>
+  </div>
+</div>
+<p class="small">Default outputs are <code>explanation_coverage.json</code> plus a deterministic
+stratified sample, <code>explanations_sample.jsonl</code> — verified today as 9 records: a manifest,
+one <code>__corpus__</code> graph, and 7 series graphs (both worked-example anchors, one per distinct
+M5 <code>gates_failed</code> signature, the first γ-joined series, and the first series with no M5
+record; ties broken lexicographically).</p>
+
+<div class="callout ok">
+  <div class="lbl">M17's own artifact WAS stale — a live instance of the failure mode M17 exists to prevent
+    &nbsp;REGENERATED 2026-08-06</div>
+  <code>explanation_coverage.json</code> was written <b>2026-08-04 18:15</b>;
+  <code>m17_explain.py</code> was modified <b>2026-08-05 15:15</b> as part of the FitProvenance change.
+  So the artifact's own <code>honesty.fit_provenance_absent</code> block and its named narrowing #4
+  still read <b>"no such record exists … no test asserts it"</b> — which, as of the change described in
+  §5, <b>is no longer true</b>. A stored honesty claim drifted away from the thing it describes: exactly
+  the category error M17's "projections are computed on read, never stored" rule was written to
+  prevent, found inside M17's own output.
+  <br><br>
+  <b>What this does and does not affect.</b> The coverage <em>counts</em> are taken over the M7 spine,
+  which this change did not touch, so they are reported here as current — and both instance denominators
+  were independently reproduced today. It is the <em>prose</em> that is stale. Regeneration is the final
+  step of the in-flight rebuild chain, so this is <b>queued, not an open defect</b>. M17's role was
+  always to <em>report</em>, never to derive, and that has not changed: post-fix it publishes the
+  record's <b>address</b> (artifact + key path + recipe table) rather than copying its values, and still
+  reports <code>available: false</code> with a reason for methods that fit nothing.
+</div>
+
+<h3>6.4 What M17 refuses</h3>
+<p>No prose beyond deterministic templates · no merged confidence scalar · no causal verb from a
+statistical-only source · <b>no explanation it cannot trace</b> (→ <code>explanation_available:
+false</code> plus a reason; never narrated around, never partially guessed) · and <b>no quantitative
+counterfactual unless the M11/M13 edge carries <code>gain_basis: "service_c_measured"</code></b> — a
+<code>structural_estimate</code> edge renders as an <b>upper bound</b> inheriting M8's validity ceiling
+verbatim.</p>
+<p class="small">Five <b>named narrowings</b> ship <em>in the artifact</em>, so a user meets them in the
+data rather than by reading source: the conformal interval is <b>not constructed</b> (M17 attaches the
+<em>marginal</em> quantile verbatim — building \(t_{50}\pm q\) is arithmetic on engine values, and
+selecting the Mondrian stratum needs an assay-endpoint classification M17 is not licensed to make);
+<code>m2_fit.py:152</code> collapses <b>three</b> distinct causes into one string, and the cause exists
+only in that function's local scope so <em>no adapter can disambiguate it</em>; M15 claim confidence is
+corpus-scoped only (its ledger holds fixture-document claims with no <code>series_id</code>, and joining
+them to the kinetics corpus would be a fabricated link); <code>fit_provenance</code> is
+<b>addressed, not derived</b>; and <code>structure_features.json</code> (17 MB) is deliberately not
+read.</p>
+
+<!-- ===================================================================== -->
+<h2 id="buildid"><span class="n">7</span>Why <code>engine_build_id</code> deliberately does not bump<span class="new">new</span></h2>
+<div class="card">
+  <p>This report is generated against <b><code>e660cb452b41</code></b> — <b>the same build id as the
+  2026-07-21 report</b>, and that is a deliberate governance decision, not an oversight.</p>
+  <p><code>engine_build_id</code> is a hash over every comparability axis, and §7 gates cross-build
+  comparison on it: results from different ids are <b>not directly comparable</b>. That makes a bump a
+  <em>positive assertion</em> — it says "the numbers moved; do not compare these to the previous run."
+  The FitProvenance change is <b>additive and value-preserving</b>: it writes down quantities the
+  fitting loops had already computed and discarded. No fitted value moved. So bumping the id would
+  <b>assert a non-comparability that does not exist</b>, invalidating an entire corpus of correct,
+  still-comparable results for a change that moved nothing. Under §7's own logic, that is as much a
+  false statement as failing to bump when values <em>do</em> move.</p>
+  <p><b>The argument is not accepted on its own terms.</b> "An argument is not a proof, and reasoning is
+  precisely what M17 just taught this codebase not to trust." So the claim is checked mechanically by
+  <code>artifact_invariance.py</code> (§5.5), which fails on any pre-existing value that moved or
+  vanished and on any new key outside a four-name allow-list. <b>Verified today: 0 violations across
+  9,633 model-fits in <code>fits.jsonl</code> and all 55 in <code>dose_response_fits.jsonl</code>.</b>
+  <b>All five artifacts verified 2026-08-06: <code>all_ok: true</code>, 0 violations.</b></p>
+  <div class="callout">
+    <div class="lbl">The contrast that makes the rule legible</div>
+    Applying Service&nbsp;C's calibrated thresholds <em>did</em> move published values, and correctly
+    flipped the id <code>bc442463dfdf → e660cb452b41</code>, marking every first-pass result
+    non-comparable. Giving all 13 registry models ≥2 genuine starts <b>would</b> move fitted values —
+    and is therefore deferred to its own governed change <em>with</em> a build-id bump and a full M2→M9
+    rebuild (§15). <b>The id tracks whether the science moved, not whether the code changed.</b>
+  </div>
+  <p class="small">The two numerical basin tolerances are likewise kept out of
+  <code>calibrated_thresholds.py</code> for the same reason: filing them there would drag
+  <code>thresholds_version</code> — a build-id input — for constants that were never calibrated against
+  held-out data.</p>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="pipeline"><span class="n">8</span>The pipeline, module by module</h2>
+<p class="small">Each module is a pure function consuming the canonical <code>AggregationSeries</code>.
+Numbers below are live at build <code>e660cb452b41</code>.</p>
+
+<h3 id="m0" class="mod">M0 — Dataset Selection &amp; Cohort Assembly <span class="mtag">m0_cohort.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The entry point. CPAD holds many datasets per protein; what is scientifically
+  <em>licensed</em> depends on what the user assembles and on what <em>varies</em> across it. M0 runs
+  a Service-A comparability gate <em>before</em> any fitting and routes to a <code>data_mode</code>:</p>
+  <div class="tbl-scroll"><table>
+    <tr><th>Assembled selection</th><th>data_mode</th><th>Unlocks</th></tr>
+    <tr><td>1 dataset</td><td>single_curve</td><td>per-curve descriptive + features (M4/M5)</td></tr>
+    <tr><td>≥2 identical condition vectors</td><td>replicates</td><td>random-effects meta + nucleation scatter</td></tr>
+    <tr><td>concentration varies (≥3), else matched</td><td>concentration_series</td><td>dual-γ (M4) + shared-rate ODE (global_fit)</td></tr>
+    <tr><td>pH or T varies, conc fixed</td><td>condition_series</td><td>feature-vs-condition surface (no γ)</td></tr>
+    <tr><td>&gt;1 condition axis co-varies</td><td>confounded</td><td><b>refused</b> → descriptive-only + confound flag</td></tr>
+  </table></div>
+  <p class="small">Refusing confounded assemblies (Invariant 19) is the point: a comparison that
+  isn't licensed is never silently run.</p>
+</div>
+
+<h3 id="m1" class="mod">M1 — Ingestion, Normalization, Artifact Gate, Censoring &amp; QC <span class="mtag">m1_ingest.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Faithful triage of every curve — no fitting yet. Assigns a
+  <code>fittability_class</code>, a <code>censoring_class</code>, and a normalization discipline that
+  <b>only min–max-normalizes when a plateau is validated</b> (never manufacturing a plateau on a
+  right-censored curve). All heuristics are scale-robust (CPAD intensities are digitized a.u.).</p>
+  <p><b>Live triage, recounted from <code>curves_triaged.jsonl</code> (1,654 curves).</b></p>
+  <div class="grid2">
+    <div>
+      <div class="tbl-scroll"><table>
+        <tr><th>Fittability</th><th class="num">n</th></tr>
+        <tr><td>fittable</td><td class="num">1,240</td></tr>
+        <tr><td>suspect</td><td class="num">408</td></tr>
+        <tr><td>unfittable</td><td class="num">6</td></tr>
+      </table></div>
+    </div>
+    <div>
+      <div class="tbl-scroll"><table>
+        <tr><th>Censoring</th><th class="num">n</th></tr>
+        <tr><td>none</td><td class="num">736</td></tr>
+        <tr><td>left</td><td class="num">607</td></tr>
+        <tr><td>right</td><td class="num">168</td></tr>
+        <tr><td>left_right</td><td class="num">130</td></tr>
+        <tr><td>interval</td><td class="num">13</td></tr>
+      </table></div>
+    </div>
+  </div>
+  <p class="small">The lag-slope gate <code>LAG_SLOPE_FRAC</code> runs the Service-C-calibrated
+  <b>0.45</b> (held-out separation AUC 1.0), superseding the first-pass 0.30 — correcting an
+  over-flagging of "no lag" as left-censoring. <b>918 curves = 55.5% of the corpus are censored in some
+  way</b>, which is why censoring propagates through every downstream module. <b>(The 2026-07-21 report
+  stated "60%" in prose and "918 (56%)" in its table; the artifact says 55.5% — see §14.)</b></p>
+</div>
+
+<h3 id="m2" class="mod">M2 — Model-Fitting Bank <span class="mtag">m2_fit.py · models.py · mechanistic.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Fit (only) a bank of models on three axes; selection is M3, mechanism is M5.</p>
+  <ul>
+    <li><b>Kinetic (signal vs time):</b> linear-no-threshold, logistic, Gompertz, Richards
+    (generalised-logistic), exponential, power/scaling, Brain–Cousens (hormesis), Finke–Watzky.</li>
+    <li><b>Dose–response (response vs conc):</b> LNT, threshold (hockey-stick), Hill 4PL,
+    Brain–Cousens, scaling.</li>
+    <li><b>Tier-B mechanistic (ODE):</b> one Knowles/Cohen moment framework covering
+    nucleation-elongation, secondary-nucleation, saturating-secondary, fragmentation — integrated
+    with LSODA, fit in log-rate space.</li>
+  </ul>
+  <p>Each fit reports SSE / \(R^2\) / AIC / AICc / BIC and parameter SEs. Candidates are routed by
+  M1's handling (a sigmoid is never forced onto a non-monotonic curve).</p>
+  <div class="callout ok">
+    <div class="lbl">Changed this wave</div>
+    <code>fit_one</code> no longer discards its multi-start history. It <b>retains the per-start
+    ledger</b> — including starts that <em>failed</em>, which it previously <code>continue</code>d past
+    without recording — and hands it to <code>fit_provenance.basin_ledger()</code>. Every one of the
+    <b>9,633</b> model-fits in <code>fits.jsonl</code> now carries a <code>provenance</code> block with
+    a §7 basin verdict. Full measurement in §5.
+  </div>
+</div>
+
+<h3 id="m3" class="mod">M3 — Comparison, Selection &amp; Identifiability <span class="mtag">m3_select.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The statistical spine. <b>Model selection runs <em>inside</em> the bootstrap</b>
+  (Mammen wild resampling): each resample re-fits and re-selects, so PRISE reports honest
+  <em>selection-stability frequencies</em> instead of pretending the winner was known.</p>
+  <p>Per curve: Akaike weights \(w_i = e^{-\Delta_i/2}\big/\sum_j e^{-\Delta_j/2}\); a cross-model
+  <b>t50 predictive interval</b> (pooled only over the model-transferable quantity, flagged when
+  selection is multimodal); per-model conditional CIs (never pooled across models); and an
+  <b>identifiability</b> diagnostic — the condition number of the column-normalised sensitivity
+  matrix, with a practical-non-identifiability flag at the Service-C-calibrated cutoff
+  <code>COND_NUMBER_NONIDENT = 107</code> (was a round-guess 1000).</p>
+  <p class="small">New: M3 now emits a <code>bootstrap_provenance</code> block — a real seed, algorithm
+  and a <code>stream_policy</code> that <b>records its own defect</b> (constant seed 0 per curve ⇒
+  correlated weight sequences across equal-length curves). <b>Confirmed 2026-08-06:</b> all 1,240 records carry
+  <code>selection.bootstrap_provenance</code> (<code>m3/wild-bootstrap-mammen-1.0</code>,
+  <code>rng_seed 0</code>, <code>requested_B 150</code>, <code>accepted_B 150</code> — a genuinely
+  tracked count, unlike M4's). Rebuilding at B=150 reproduced every stored value, 0 violations.</p>
+  <p class="small">Deferred &amp; documented: block/sieve bootstrap for serial correlation, BCa
+  intervals, corpus-scale FDR.</p>
+</div>
+
+<h3 id="m4" class="mod">M4 — Feature Extractor, Definition Contract &amp; Dual-γ <span class="mtag">m4_features.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Turn selected models into interpretable quantities under a <b>versioned definition
+  contract</b> (<code>m4-defs-1.0</code>) — because a Gompertz t50 and a tangent-intercept lag are
+  only comparable across proteins when computed the <em>same</em> way.</p>
+  <p><b>Single-curve features</b> (read off the selected model on a dense grid): t50 (primary),
+  tangent-intercept lag, the dimensionless <b>lag-to-t50 ratio</b>, inflection time, max rate,
+  t10/t90, transition sharpness, plateau, dynamic range — each <b>censoring-aware</b> and with a
+  non-cooperative guard (a line/saturation has no interior inflection → lag returned <code>None</code>,
+  never a fake argmax).</p>
+  <p><b>Dual-γ</b> — the headline mechanistic constraint for a concentration series:</p>
+  $$ t_{50}(m)\;\propto\;m^{-\gamma}, \qquad \log t_{50} = c - \gamma\,\log m. $$
+  <p>Two <em>separately-provenanced, never-merged</em> estimators: (1) <code>gamma_regression</code> —
+  a <b>censored</b> log–log regression (right-censored curves contribute an inequality
+  \(P(Y\ge \text{bound})\)), with a curvature test, an informative-censoring test, an
+  m<sub>crit</sub> identifiability diagnostic, and a negative-γ driving-force gate; (2)
+  <code>gamma_global</code> — a phenomenological <b>master-curve collapse</b> coupling every curve
+  through one shared logistic shape in rescaled time \(\tau=t/t_{50}(m)\). An operational
+  disagreement test always reports \(|\gamma_{\text{reg}}-\gamma_{\text{collapse}}|\) against a
+  pre-registered margin (0.3). γ is a <em>constraint, not a discriminator</em>.</p>
+  <div class="callout ok">
+    <div class="lbl">Live corpus finding, recounted from <code>features.jsonl</code></div>
+    Of 1,240 fittable curves, <b>690 are genuinely cooperative</b> (<code>has_interior_inflection</code>
+    true). Across the <b>532</b> with a defined tangent-intercept lag, the <b>lag-to-t50 ratio clusters
+    at median 0.700</b> — the textbook signature of nucleation-dependent amyloid kinetics, surfaced as
+    a corpus result. Over the 52 concentration series, <b>77 γ fits run cleanly and 59 resolve a
+    scaling exponent</b> (95% CI excludes 0) — the count now known to have been gated by a previously
+    unrecorded bootstrap stream (§5.2).
+  </div>
+  <p class="small">New: M4 emits <code>bootstrap_provenance</code> whose recipe carries an explicit
+  <code>load_bearing_note</code> — "<em>this stream gates a published count</em>". An untracked accepted
+  resample count is reported as <code>accepted_B_tracked: false</code> rather than back-filled with the
+  requested count: <b>a number nobody measured does not get invented to fill the field.</b>
+  <b>Confirmed 2026-08-06:</b> <code>gamma.jsonl</code> carries <code>bootstrap_provenance</code>
+  — <code>requested_B 300</code>, <code>rng_seed 0</code>, <code>accepted_B_tracked: false</code>,
+  and a <code>gates_published_count</code> field naming
+  <code>m7_assemble.gamma_significant() → scaling tier</code> as the downstream consumer, so the
+  artifact now states what depends on it.</p>
+</div>
+
+<h3 id="globalfit" class="mod">global_fit — Shared-rate Knowles/Cohen ODE global fit <span class="mtag">global_fit.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The real AmyloFit-grade fit the design promised. For a concentration series it fits
+  <b>all member curves simultaneously with shared microscopic parameters</b>
+  \(\{\log_{10}k_n,\log_{10}k_+,\log_{10}k_2, n_c, n_2, [K_M]\}\) — <em>reaction orders estimated,
+  not hard-fixed at 2</em> — with only the monomer concentration varying per curve. Residuals from
+  every curve stack into one vector; fit with bounded TRF least-squares, three deterministic starts,
+  per mechanism family, AICc-ranked.</p>
+  <p>It emits an <b>observed Fisher Information</b> identifiability report</p>
+  $$ \mathcal{I} = S^{\mathsf T}\Sigma^{-1}S, \qquad \Sigma=\sigma^2 I, $$
+  <p>eigen-decomposed into identifiable <em>combinations</em> vs sloppy directions, plus an analytic
+  third \(\gamma_{\text{mech}}\) from the fitted orders (Meisl/Knowles:
+  \(\gamma=\tfrac{n_2+1}{2}\) secondary, \(\tfrac{n_c+1}{2}\) primary, \(\tfrac12\) fragmentation).
+  <b>Honesty:</b> these fits are sloppy on this corpus — only stiff rate combinations are
+  identifiable, so the value is the reaction-order <em>constraint</em>, and it does <em>not</em>
+  license a single mechanism.</p>
+  <div class="callout ok">
+    <div class="lbl">Changed this wave — and the value is now measured</div>
+    The basin comparison is made on the <b>shared</b> parameter block only (the per-curve base/amp
+    nuisance pair would otherwise dominate the distance with a scale nobody interprets), and the
+    decorative <code>seed</code> is now recorded as <code>seed_is_effective: false</code> with its
+    reason. The reported outcome is that <code>global_fit</code>'s own shared-rate ODE fit returns
+    <b><code>knife_edge</code></b> — converting its longstanding <em>"SLOPPY"</em> prose into a
+    §7-evaluable verdict. <b>Measured 2026-08-06, after the rebuild completed:</b> across the 16 mechanism fits in
+    <code>global_fit.json</code>, <b>11 are <code>knife_edge</code> and 5 are <code>stable</code></b>.
+    Example — ABeta40 / <code>nucleation_elongation</code>: 3 starts, 3 converged, <b>3 distinct
+    basins</b>, SSE relative gap <b>7.1×10<sup>−8</sup></b> but parameter distance <b>0.234</b>.
+    Three materially different parameter vectors fit indistinguishably well; which one wins is a
+    numerical accident. The module's longstanding <em>"SLOPPY"</em> prose is now a machine-readable
+    §7 verdict — and the FIM-based <code>sloppy</code> flag and this optimizer-level basin verdict
+    are <b>independent</b> measures that agree, which is worth more than either alone.
+  </div>
+  <p class="small">Pre-fix example retained for shape only: ABeta40 series → best family
+  nucleation-elongation, \(n_c\approx2.96\), \(\gamma_{\text{mech}}\approx1.98\), \(R^2\approx0.99\),
+  sloppy (1 stiff / 2 sloppy directions).</p>
+</div>
+
+<h3 id="pooling" class="mod">pooling — Empirical-Bayes partial-pooling spine <span class="mtag">pooling.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The §4 hierarchical layer: shrink noisy single-curve estimates toward their
+  <b>condition+assay-matched stratum</b> mean by a frozen, versioned, monotone function of each
+  estimate's own sampling variance — deterministic empirical-Bayes (James–Stein), closed-form, no
+  MCMC. Two-level Gaussian with a DerSimonian–Laird moment \(\tau^2\):</p>
+  $$ \hat\theta_i^{\text{EB}} = \bar\theta + B_i(\hat\theta_i-\bar\theta), \qquad
+     B_i = \frac{\tau^2}{\tau^2+s_i^2}. $$
+  <p>Cross-condition pooling is forbidden (Service-A discipline). This is the defensible first layer
+  of the spine, not a full latent-rate ODE hierarchy (documented as a deferred extension).</p>
+</div>
+
+<h3 id="m5" class="mod">M5 — Classification &amp; Regime Registry <span class="mtag">m5_classify.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Emit three things against a declarative, versioned <code>REGIME_REGISTRY</code>
+  (<code>m5-regimes-1.0</code>): a <b>descriptive regime</b> (pure shape, always available), a
+  <b>mechanistic equivalence class + failed gates</b> (never a single mechanism), and a
+  <b>model-agnostic anomaly detector</b> (Wald–Wolfowitz runs test on residuals → corpus
+  Benjamini–Hochberg FDR, plus a material-misfit \(R^2<0.9\) gate).</p>
+  <div class="callout">
+    <div class="lbl">Live corpus, from <code>m7_rollup.json</code></div>
+    <span class="pill real">cooperative_sigmoidal 679</span>
+    <span class="pill">gradual_non_cooperative 502</span>
+    <span class="pill">no_detectable 48</span>
+    <span class="pill">threshold_driven 11</span>
+    <span class="pill stub">(no resolved regime) 414</span>
+    <br><span class="small">Internal-consistency check: cooperative 679 + threshold 11 = 690, exactly
+    M4's interior-inflection count. Anomaly rollup: 1,097 testable · 498 FDR-significant · 19
+    actionable. <b>Mechanistic inference licensed on 0 curves</b> — correct, because agitation/seeding
+    are unknown corpus-wide.</span>
+  </div>
+  <p class="small">Shape thresholds are Service-C-calibrated (<code>THRESHOLD_SHARPNESS</code>
+  3.0→5.7, <code>THRESHOLD_LAG_RATIO</code> 0.80→0.97); the higher bar is why <code>threshold_driven</code>
+  fell from a first-pass 79 to <b>11</b> and cooperative rose to 679.</p>
+</div>
+
+<h3 id="m6" class="mod">M6 — Propensity Scorer &amp; Sequence Axis <span class="mtag">m6_propensity.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> A propensity statement in <b>three never-collapsed views</b> — <em>surface</em>
+  (feature-vs-driving-force + γ), <em>intrinsic</em> (a leakage-free corpus anchor, query excluded
+  from its own stratum, else a versioned reference scale), and <em>cohort</em> (a Hazen mid-rank
+  percentile, self-excluded, suppressed for singletons). Because low t50 = high propensity, every
+  record carries an explicit <code>direction</code> and a sign-corrected percentile so a consumer
+  can't sort backwards.</p>
+  <p>The <b>sequence axis is de-conflated</b>: TANGO / AGGRESCAN / PASTA / Waltz as separate named
+  sub-axes, and a comparison is <b>licensed only on endpoint match</b> — vs an amyloid dye
+  (ThT/ThS/Congo Red) only the amyloid-specific PASTA &amp; Waltz are licensed; TANGO &amp; AGGRESCAN
+  (generic β-aggregation) are barred; an unknown assay licenses nothing.</p>
+  <div class="callout warn">
+    <div class="lbl">Recounted — and it does not match the 2026-07-21 report</div>
+    Live from <code>propensity.jsonl</code>: <b>160 protein×construct records</b> across <b>43 distinct
+    UniProt ids</b> — <b>124</b> with a sequence axis, <b>131</b> with structure linkage, <b>125</b>
+    carrying an intrinsic corpus-anchored value, <b>40</b> cohort-suppressed, <b>68</b> with a γ
+    surface; <b>35</b> are right-censored <code>lower_bound</code> records (a "≥" value isn't rankable).
+    The 2026-07-21 report published 151 / 119 / 126 / 108 / 39 / 65 for the same quantities. The file
+    has not changed since 2026-07-02, so that report was auditing <em>the same bytes</em>.
+    <b>We do not know why the counts diverge.</b> The artifact values are used here; see §14.
+  </div>
+</div>
+
+<h3 id="m7" class="mod">M7 — Output Assembler &amp; Build ID <span class="mtag">m7_assemble.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Join M1–M6 into one <code>ProteinAnalysisResult</code> per curve (no new inference),
+  with graceful degradation (a compact result for the common signal-only case, not a caveat
+  avalanche) and an FDR-aware corpus rollup. The sortable <b>information_yield</b> tier
+  (mechanistic &gt; scaling &gt; descriptive &gt; signal_only &gt; uninformative) requires a
+  <em>significant</em> γ for <code>scaling</code> — a reliable-but-CI-spans-0 γ falls to
+  <code>descriptive</code>, no borrowed claim.</p>
+  <div class="tbl-scroll"><table>
+    <tr><th>information_yield (live)</th><th class="num">curves</th><th></th><th>descriptive_regime</th><th class="num">curves</th></tr>
+    <tr><td>mechanistic</td><td class="num">0</td><td></td><td>cooperative_sigmoidal</td><td class="num">679</td></tr>
+    <tr><td>scaling</td><td class="num">59</td><td></td><td>gradual_non_cooperative</td><td class="num">502</td></tr>
+    <tr><td>descriptive</td><td class="num">1,135</td><td></td><td>(no resolved regime)</td><td class="num">414</td></tr>
+    <tr><td>signal_only</td><td class="num">454</td><td></td><td>no_detectable_aggregation</td><td class="num">48</td></tr>
+    <tr><td>uninformative</td><td class="num">6</td><td></td><td>threshold_driven</td><td class="num">11</td></tr>
+  </table></div>
+  <p><b>γ reliability vs significance is kept separate:</b> 77 curves have a γ fit/CI that ran cleanly;
+  <b>59</b> of those additionally have a CI excluding 0 and earn <code>scaling</code>. The gap is the
+  reliable-but-CI-spans-0 population — no scaling resolved, and no claim borrowed. Live: 959 curves have
+  a propensity attached; 87 are construct-mismatch-suppressed (no Wild-Type bleed onto a mutant).</p>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="validation"><span class="n">9</span>Cross-cutting validation stack</h2>
+
+<h3 id="servicec" class="mod">Service C — Synthetic Calibration &amp; Identifiability <span class="mtag">service_c.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The de-circularized backbone. It generates curves from a <em>known</em> ground
+  truth under a <b>pre-registered</b> noise/artifact/censoring law (fixed from physics/instrument
+  specs, never tuned to the data it later judges), runs the <em>real</em> engine on them, and measures
+  what the engine recovers — deterministic (seeded → byte-identical).</p>
+  <ul>
+    <li><b>Parameter recovery</b> — bias / RMSE / Wald-95% coverage per parameter and t50.</li>
+    <li><b>The concentration-series advantage, measured (K2):</b> a single curve collapses all four
+    Tier-B mechanisms into <b>one</b> equivalence class; a γ-resolved multi-concentration family
+    <b>splits them into four singletons</b>, resolving all six pairwise distinctions. This is the
+    quantitative basis of the M8/M9 boundary.</li>
+    <li><b>FDR-null with a power arm</b> — realized false-discovery-proportion 0 with demonstrated
+    power on a bank-unrepresentable alternative (control only claimed where power is shown).</li>
+    <li><b>Calibration</b> — held-out threshold recommendations (out-of-sample AUC reported; a test
+    proves the leakage mechanism on pure noise) → the governed apply step.</li>
+    <li><b>De-circularization (C1)</b> — a mismatched generator (ODE truth vs closed-form fitter) is
+    reported as <b>mechanism-misidentification degradation</b>: matched mechanism-ID accuracy 0.667,
+    mismatched 0.0, yet coarse-regime accuracy holds at 0.933 — the engine degrades on <em>mechanism</em>
+    exactly where it should, not on shape.</li>
+  </ul>
+  <p class="small">Deferred: an external forward-model (KMC/Smoluchowski) generator, artifact-realism
+  distributional check, synthetic→real transfer.</p>
+</div>
+
+<h3 id="conformal" class="mod">conformal — Split / Mondrian Conformal Prediction <span class="mtag">conformal.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Finite-sample-valid, distribution-free coverage — the thing bootstrap percentile
+  intervals under-deliver on this small/noisy/censored corpus. Calibrated on Service-C synthetic
+  curves (the only ground truth), running the real engine on each. For a continuous target the
+  split-conformal score is \(s=|\hat t_{50}-t_{50}|\); the interval uses the empirical quantile</p>
+  $$ q = \Big\lceil (n+1)(1-\alpha)\Big\rceil\text{-th of the calibration scores},\qquad
+     \big[\hat t_{50}-q,\ \hat t_{50}+q\big]\ \text{covers} \ge 1-\alpha. $$
+  <p><b>Mondrian</b>: the quantile is stratified by the same tags the engine already emits
+  (<code>censoring × assay × regime</code>) so coverage holds within strata; right-censored t50 becomes
+  a one-sided \([\hat t_{50}-q,\infty)\). The regime classifier yields <b>prediction sets</b> with
+  the same guarantee (set size &gt; 1 only when evidence is genuinely split).</p>
+  <div class="callout ok">
+    <div class="lbl">Live validation (α = 0.1, target 0.90), from <code>service_c_conformal.json</code></div>
+    t50 marginal realized coverage <b>0.9739</b> (mean width 7.84 h, 110 one-sided, n=153); regime
+    marginal coverage <b>0.915</b> (mean set size 2.275, 127 ambiguous sets of 200) — both ≥ target.
+    Per-stratum quantiles are much tighter than the pooled marginal.
+  </div>
+  <p class="small">Honesty: calibrated on synthetic truth; real-data coverage holds insofar as the
+  pre-registered noise/censoring law matches the digitized traces — a stated, testable assumption.
+  M17 attaches the <em>marginal</em> quantile verbatim and refuses to construct the interval (§6.4).</p>
+</div>
+
+<h3 id="reality" class="mod">reality_check — Blind External Falsification <span class="mtag">reality_check.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The de-circularizing falsification test — a <em>thermometer against fixed
+  points</em>, not a statistical calibration. Run blind, once, on the handful of proteins the field
+  considers mechanistically resolved (reserved solely for this role, never used for anchoring):
+  does PRISE's honest output <em>contradict</em> consensus?</p>
+  <div class="callout ok">
+    <div class="lbl">Live result</div>
+    <b>5 / 5 fixed points CONSISTENT, 0 contradictions, 0 insufficient</b> (Aβ42, Aβ40, α-synuclein,
+    insulin, β2-microglobulin). PRISE's honest refusal to name a single mechanism does not contradict
+    the field on any resolved case it can see. <span class="small">This is a non-contradiction reading
+    on a tiny n — <em>not</em> proof of correctness.</span>
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="phase2"><span class="n">10</span>Phase-2 research deliverables (M8–M10)</h2>
+
+<h3 id="m8" class="mod">M8 — Inferential Reachability Map <span class="mtag">m8_reachability.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Consolidate existing artifacts into a falsifiable map of <em>what is inferable from
+  CPAD's bulk kinetics, and what is not</em> — no new inference. Every headline carries the
+  conditioning clause "reachability under the PRISE forward model" and a validity ceiling.</p>
+  <p><b>The boundary (the headline).</b> A <b>structural upper bound of 33 proteins / 48 concentration
+  series</b> are rich enough that Service C shows a γ-series <em>could</em> resolve mechanism — vs
+  <b>0 actually licensed</b> → <b>GAP = 33</b>.</p>
+  <p><b>Blocker census, impact-ranked (re-read; the ordering is corrected from the 2026-07-21 report — see §14):</b></p>
+  <div class="tbl-scroll"><table>
+    <tr><th class="num">rank</th><th>blocker</th><th class="num">curves</th><th class="num">fraction</th><th>blocks rung</th></tr>
+    <tr><td class="num">1</td><td>agitation_seeding_unknown</td><td class="num">1,654</td><td class="num">100%</td><td>mechanistic_licensed</td></tr>
+    <tr><td class="num">2</td><td>no_concentration_series</td><td class="num">1,005</td><td class="num">60.8%</td><td>scaling</td></tr>
+    <tr><td class="num">3</td><td>censoring_biases_t50</td><td class="num">918</td><td class="num">55.5%</td><td>descriptive_regime</td></tr>
+  </table></div>
+  <p>M8 <em>consumes</em> M11 to make the map causal: median metadata_score is <b>0.685</b> but median
+  mechanistic-completeness is only <b>0.40</b> — the corpus records the <em>conditions</em> but not the
+  mechanism-gating {agitation, seeded}, which is <em>why</em> the gap is unresolved. Censoring is
+  flagged <code>gain_basis: not_a_metadata_field</code> — it is a data-window limit, so no metadata
+  action unblocks it. If <code>metadata_quality.json</code> is absent, M8 degrades gracefully.</p>
+</div>
+
+<h3 id="m9" class="mod">M9 — Experimental-Design Recommender <span class="mtag">m9_recommender.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> For each unit, the experiment that would most reduce <em>practical</em> degeneracy,
+  ranked by <b>reduction ÷ cost</b>, from a Service-C-distilled rule table whose gains are
+  <em>quantified by Service C's measured degeneracy reduction</em> (the 1→4 Tier-B split — a measured
+  ~4×). It is dependency-honest: recording agitation/seeding only unblocks mechanism where a series
+  <em>already</em> exists, and is discounted + flagged elsewhere. Full EIG is deferred to M13.</p>
+  <div class="callout">
+    <div class="lbl">Live headline, from <code>m9_rollup.json</code></div>
+    <b>Recording agitation &amp; seeding is corpus-rank 1</b> (priority 4.0, cheap): it advances 1,653
+    of 1,654 units and is <b>sufficient on the 444 units that already sit in a series</b> — but only
+    <b>necessary-not-sufficient on 1,209 single-curve units</b>, where the binding prerequisite is a
+    concentration series (corpus-rank 2, priority 1.0). One unit receives a structural refusal.
+  </div>
+</div>
+
+<h3 id="m10" class="mod">M10 — Cross-modal Sequence × Kinetics × Structure <span class="mtag">m10_crossmodal.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> PRISE uniquely co-holds sequence predictors, measured kinetics, and structure/APR
+  for the <em>same</em> proteins. M10 asks the honest question: <em>does a sequence-only predictor
+  actually predict the measured rate/regime?</em> — at protein-level rigor (effective n = proteins,
+  not curves).</p>
+  <p><b>The binding honesty constraint — a variance ceiling.</b> A sequence-only predictor is a
+  per-protein <em>constant</em>; it cannot explain any within-protein t50 variance. Live: the
+  between-protein fraction is only <b>0.3199</b>, so <b>the most any sequence predictor could explain
+  is ~32%</b> — the other 68% is condition-driven. Coverage: 45 proteins / 1,433 curves; effective
+  n ≈ 20 proteins; PASTA n=20, Waltz n=14.</p>
+  <div class="callout ok">
+    <div class="lbl">Fixed since the last report — a verdict that read its direction off a p-value</div>
+    P3 discordance fires on <b>2 of 22</b> proteins (Ure2, α-B-crystallin) — an observed rate of
+    <b>0.0909</b> against a pre-registered null of <b>0.3119</b>. The old verdict asserted the observed
+    rate "EXCEEDS the null" for a rate <b>3.4× under it</b>, because a two-sided binomial p is
+    direction-blind. <code>discordance_direction()</code> now resolves the two axes from different
+    inputs — <b>direction</b> from \(\operatorname{sign}(\text{observed}-\text{null})\),
+    <b>significance</b> from \(p<\alpha\) (here p = 0.0219) — and the below-null branch explicitly
+    <em>refuses to claim a win</em> (conservative null, thin n). Fixed in <code>b1396f3</code>.
+  </div>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="wave"><span class="n">11</span>The M11–M16 wave</h2>
+
+<h3 id="m11" class="mod">M11 — Metadata Quality &amp; Information Completeness <span class="mtag">m11_metadata.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Formalize and quantify the metadata layer the engine <em>already</em> licenses
+  inference against — every gate M11 reasons about mirrors a real M5/M8 gate. Per series it computes a
+  weighted <b>metadata_score</b> \(=\sum_f w_f\,\text{present}(f)\big/\sum_f w_f\), a separate
+  <b>uncertainty</b> scalar, and a per-missing-field <b>Δ-inferential-power</b>, labelled
+  <code>service_c_measured</code> where anchored.</p>
+  <div class="callout">
+    <div class="lbl">Live (1,654 curves / 105 proteins)</div>
+    Median metadata_score <b>0.685</b> — and the whole distribution sits between <b>0.525</b> and
+    <b>0.787</b>, so the corpus records conditions <em>consistently</em>. But median
+    <b>mechanistic_completeness is 0.40</b> (mean 0.356), and the universal blocker
+    {agitation, seeded} is unknown on <b>1,654 / 1,654 curves</b>. <b>Completeness ≠ correctness</b>,
+    and information-gain numbers are structural upper bounds except the Service-C-measured ones.
+  </div>
+</div>
+
+<h3 id="m12" class="mod">M12 — Information Content &amp; Experimental-Design Geometry <span class="mtag">m12_information.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Unify the information geometry the pipeline already touches into one per-curve
+  treatment — <em>consistent with</em>, not a third opinion of, M3/M4/global_fit. Given a fitted
+  curve it computes the sensitivity Jacobian \(S\), the observed FIM \(\mathcal I = S^{\mathsf T}\Sigma^{-1}S\),
+  its eigen-spectrum (effective rank, condition number, spectral entropy), per-parameter observability
+  (CRLB \(\text{SE}\ge\sqrt{[\mathcal I^{-1}]_{jj}}\)), the per-point information-density profile
+  \(D(t)\) by lag/growth/plateau phase, redundancy \(n_{\text{eff}}\) vs \(n\), and a
+  Sherman–Morrison optimal-next-timepoint scan.</p>
+  <div class="callout">
+    <div class="lbl">Live (1,240 curves analysed, 1,240 ok)</div>
+    Median effective rank <b>4.0</b> = median parameter count <b>4.0</b> (only <b>5.3%</b> sloppy, 66
+    curves); median information-richness <b>0.570</b>; median redundancy <b>0.279</b>; and
+    <b>87.4% of curves carry more information in the growth phase than the plateau</b> (median split
+    lag 0.264 / growth 0.435 / plateau 0.305) — so the modal recommended action is
+    <em>sample denser at the transition</em> (489 curves).
+  </div>
+  <p class="small">Honesty: all metrics are local / Laplace-linearized / model-conditional and
+  <b>post-selection</b>; sloppy models are counted and reported, not hidden.</p>
+</div>
+
+<h3 id="m13" class="mod">M13 — Bayesian Optimal Experimental Design (BOED) <span class="mtag">m13_boed.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> The rigorous BOED capstone of the design thread (M9 rules → M12 geometry → M13
+  multi-variable BOED). It scores candidate next experiments ξ by expected information gain, reusing
+  M12's exact FIM machinery on <em>prospective</em> designs. For the linear-Gaussian/Laplace regime
+  the EIG is a D-optimality log-det:</p>
+  $$ \text{EIG}(\xi)\;\approx\;\tfrac12\log\det\!\big(\mathcal I_{\text{prior}}+\mathcal I(\xi)\big)
+     -\tfrac12\log\det\mathcal I_{\text{prior}}, $$
+  <p>ranked by EIG ÷ cost, with a non-dominated Pareto frontier and a greedy K-step batch whose
+  marginal gains diminish (submodular log-det). It is honest that its design variables are of two
+  kinds — <b>quantitative</b> (a real simulated \(\mathcal I(\xi)\)) and <b>gating</b> (agitation,
+  seeding), which give a <em>licensing</em> unblock rather than a smooth FIM direction and are labelled
+  <code>gain_basis: licensing</code>.</p>
+  <p class="small">Live: <b>839 units</b> (49 series, 790 single-curve), 839 ok. Top-recommendation
+  distribution — increase_measurement_frequency 482 · extend_sampling_duration 241 ·
+  add_concentration_series 86 · record_agitation_and_seeding 23 · add_single_concentration 4 ·
+  vary_pH 3. Costs are a versioned estimate table <b>for ranking only</b>, not lab economics.</p>
+</div>
+
+<h3 id="m14" class="mod">M14 — Cross-Study Hierarchical Meta-Analysis <span class="mtag">m14_meta.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Generalize the replicate-level random-effects meta (<code>pooling.py</code>) up to the
+  <b>study</b> level (one publication = one study). Because raw t50 can't be pooled across
+  concentrations, it is a <em>meta-regression</em> on condition-adjusted log-t50:</p>
+  $$ \hat\theta_c = \mu + \beta\,x_{\text{condition}} + u_{\text{study}} + \varepsilon_c,\qquad
+     u_{\text{study}}\sim N(0,\tau^2_{\text{between}}), $$
+  <p>with \(\tau^2_{\text{between}}\) by DerSimonian–Laird (Paule–Mandel refinement) + BLUP shrinkage,
+  and — under weak priors — a posterior-predictive interval for a <em>new</em> study. Laboratory effect
+  is estimable only where an author group spans ≥2 studies, else flagged
+  <code>CONFOUNDED_WITH_STUDY</code>; batch is not recorded in the corpus and is flagged
+  <b>unidentifiable</b> rather than fabricated.</p>
+  <p class="small">Live: <b>60 proteins</b>; <b>11 receive a meta-analysis</b> (≥2 studies with point
+  t50); <b>49 are single-study</b> and reported as such, with no pooling. Not a full latent-ODE MCMC
+  hierarchy (documented deferral).</p>
+</div>
+
+<h3 id="m15" class="mod">M15 — Literature Ingestion &amp; Claim Extraction <span class="mtag">m15_litingest.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Turn papers into <b>structured, traceable claims — never trusted facts</b>. Every
+  extraction is a <code>Claim</code> with full provenance (doi + page + char-span + verbatim text), a
+  calibrated confidence, and an entry in an <b>append-only immutable ledger</b> — a correction
+  <em>appends</em> a superseding claim, and divergent values across papers surface as
+  <code>conflict</code> records (both provenances kept, never auto-resolved). Accuracy is
+  <em>measured</em> against CPAD, not asserted.</p>
+  <div class="callout ok">
+    <div class="lbl">Live validation vs curated CPAD (PMID 18258258)</div>
+    Precision / recall / accuracy = <b>1.00 / 1.00 / 1.00</b> (tp 6, fp 0, fn 0) across protein,
+    concentration, temperature, pH, assay and buffer. Ledger holds <b>59 claims</b>; <b>2 conflicts</b>
+    logged and marked <code>UNRESOLVED — surfaced, never auto-resolved</code>.
+  </div>
+  <div class="callout ok">
+    <div class="lbl">Fixed since the last report — stubs became capability-detected seams</div>
+    The four front-ends (<code>pdf_to_document</code>, <code>ocr_page</code>, <code>ner_extract</code>,
+    <code>digitize_figure_curve</code>) now resolve at call time: injection → detected library
+    (PyMuPDF/pdfminer/pytesseract/spaCy adapters) → an honest <code>NotImplementedError</code>
+    <em>naming</em> the missing dependency. Detection uses <code>importlib.util.find_spec</code>, so
+    module import stays stdlib-only and never executes a third-party module. <b>No regex imitation is
+    ever substituted for a real parse/OCR/NER</b>, ML-NER is stamped below every deterministic method
+    and never laundered upward, and figure digitization stays injection-only by design — pixel-tracing
+    without a calibrated axis would fabricate data. Fixed in <code>b1396f3</code>; tests 24 → 36.
+  </div>
+</div>
+
+<h3 id="m16" class="mod">M16 — Sequence ↔ Structure ↔ Kinetics Bridge <span class="mtag">m16_structure.py</span></h3>
+<div class="card">
+  <p><b>Role.</b> Extend M10 with a <b>structure-feature axis</b> — do structure-derived features
+  associate with measured kinetics? — at the same protein-level rigor (LOPO CV, permutation nulls,
+  variance ceiling, BH-FDR). Version <code>m16-structure-2.0</code> computes <b>real 3D features from
+  actual PDB coordinates in pure numpy</b> (no BioPython/DSSP/FreeSASA). Every extractor stamps a
+  fidelity label:</p>
+  <p>
+    <span class="pill real">contact_map — Cβ distance matrix, contact order · EXACT</span>
+    <span class="pill real">real_sasa — Shrake–Rupley rolling-ball (96 sphere pts) · EXACT algorithm</span>
+    <span class="pill approx">secondary_struct — φ/ψ dihedral geometry · APPROXIMATION (not DSSP H-bonding)</span>
+    <span class="pill real">hydrophobic_patches — SASA-exposed clusters via contact map</span>
+  </p>
+  <div class="callout">
+    <div class="lbl">Live coverage &amp; result</div>
+    382 sequence proteins → 45 in kinetics → 26 with an APR proxy → 14 with a PDB reference →
+    <b>11 with real 3D features</b> (10 native, 1 fibril = tau/4NP8); <b>11/11 PDB fetches succeeded,
+    0 failed</b>. <b>30 association cards</b> (18 real-3D, 12 proxy). The structure→kinetics variance
+    ceiling is <b>42.73%</b> between-protein. Honestly, the associations are weak — <b>LOPO R² is
+    negative</b> on the headline cards, i.e. no out-of-sample predictive skill, reported as a null
+    rather than dressed up. And a first-class caveat rides every card: <b>a native-monomer structure is
+    not the fibril state</b>, so any structure→kinetics link is associative and confounded.
+  </div>
+  <p class="small">The engine↔web 3D-schema desync reported on 2026-07-21 is <b>closed</b>
+  (<code>b1396f3</code>): <code>web/</code> now surfaces the nested
+  <code>{proxy, has_real_3d[, real_3d]}</code> block, the 1-D proxy is always present and stamped
+  <code>is_3d_derived=false</code>, a real 3D value appears <em>only</em> where a PDB was fetched and
+  parsed, and <code>test_web.py</code> asserts the full schema on <b>both</b> branches — so fabricating
+  a 3D number or flipping an honesty stamp now fails the suite.</p>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="web"><span class="n">12</span>The web application</h2>
+<div class="card">
+  <p>A working stdlib-based HTTP server (<code>web/server.py</code>) + single-page frontend
+  (<code>web/index.html</code>, <code>static/app.js</code>) exposes the engine over a JSON API: browse
+  proteins (M0), plot a curve with its M1 triage, run an analysis to the assembled
+  <code>ProteinAnalysisResult</code>, and open per-milestone panels — pooling, reachability (M8),
+  information density (M12), the BOED Pareto frontier (M13), the M14 forest/funnel/heterogeneity
+  plots, the M15 claims/conflicts browser, and the M16 structure ↔ kinetics panel. The honesty UI is
+  the differentiator: censoring badges, degeneracy cards, calibrated-confidence-with-its-caveat, and
+  the <code>information_yield</code> badge. The frozen corpus stays server-side (licensing); the
+  browser receives only derived results.</p>
+  <div class="callout warn">
+    <div class="lbl">The engine can explain any series; the product cannot show it</div>
+    <b>M17 has no web surface.</b> Neither <code>web/server.py</code> nor <code>static/app.js</code>
+    contains an M17 endpoint or panel — consistent with M17's own declared scope
+    (<code>stage_a_edits_nothing</code>: "Stage A changes no file in m0..m16 and no file in
+    <code>web/</code>"), but it means the evidence graph exists and is unreachable from the UI. Per-series
+    trees are built on demand in ~10 ms, so this is a wiring task, not a computation one — and it is the
+    wave-2 deliverable. See §15.
+  </div>
+  <p class="small">Web suite status: last verified passing at <code>b1396f3</code> ("test_web all
+  endpoints passed, engine_ok=True"), which closed the 2026-07-21 M16 schema failure. <b>Re-run 2026-08-06 against the current working tree: PASS</b> (exit 0). It asserts by exit code
+  and has no <code>def test_</code> functions, so the runner now reports it as an explicit
+  exit-code suite rather than miscounting it as an unparseable failure.</p>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="results"><span class="n">13</span>Corpus results at a glance</h2>
+<p class="small">Every row re-read from the named artifact by this audit. Rows marked <b>†</b> are
+corrected relative to the 2026-07-21 report (§14).</p>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Quantity</th><th class="num">Value</th><th>Source artifact</th></tr>
+  <tr><td>Curves in corpus / proteins / concentration-series groups</td><td class="num">1,654 / 105 / 52</td><td>curves_triaged.jsonl</td></tr>
+  <tr><td>Fittable / suspect / unfittable</td><td class="num">1,240 / 408 / 6</td><td>curves_triaged.jsonl (M1)</td></tr>
+  <tr><td><b>†</b> Censored in some way</td><td class="num">918 (55.5%)</td><td>curves_triaged.jsonl (M1)</td></tr>
+  <tr><td>Genuinely cooperative (interior inflection)</td><td class="num">690</td><td>features.jsonl (M4)</td></tr>
+  <tr><td>Lag-to-t50 ratio, median</td><td class="num">0.700</td><td>features.jsonl (n=532)</td></tr>
+  <tr><td>γ fits reliable / γ significant (CI excludes 0)</td><td class="num">77 / 59</td><td>m7_rollup.json</td></tr>
+  <tr><td><b>†</b> Ladder rung: descriptive_regime</td><td class="num">1,194 (72.2%)</td><td>m8_reachability.json</td></tr>
+  <tr><td>Mechanistically licensed curves</td><td class="num">0</td><td>m7_rollup.json / m8_reachability.json</td></tr>
+  <tr><td>Structural-reachable boundary (proteins / series)</td><td class="num">33 / 48</td><td>m8_reachability.json</td></tr>
+  <tr><td>M8 GAP (structural − licensed)</td><td class="num">33</td><td>m8_reachability.json</td></tr>
+  <tr><td><b>†</b> Blocker rank 2 / rank 3</td><td class="num">1,005 (60.8%) / 918 (55.5%)</td><td>m8_reachability.json</td></tr>
+  <tr><td><b>†</b> M6 propensity records (seq axis / structure / anchored)</td><td class="num">160 (124 / 131 / 125)</td><td>propensity.jsonl</td></tr>
+  <tr><td>Proteins with real 3D structure features</td><td class="num">11 of 14 PDB-referenced</td><td>structure_kinetics_associations.json</td></tr>
+  <tr><td>Reality-check fixed points consistent</td><td class="num">5 / 5</td><td>reality_check.json</td></tr>
+  <tr><td>Conformal t50 / regime coverage (target 0.90)</td><td class="num">0.974 / 0.915</td><td>service_c_conformal.json</td></tr>
+  <tr><td><b>NEW</b> Kinetic model-fits carrying §2.3 provenance</td><td class="num">9,633 / 9,633</td><td>fits.jsonl</td></tr>
+  <tr><td><b>NEW</b> §7 basin verdicts: stable / not_evaluable / knife_edge / no_fit</td><td class="num">4,710 / 4,487 / 260 / 176</td><td>fits.jsonl</td></tr>
+  <tr><td><b>NEW</b> Knife-edge rate among evaluable fits</td><td class="num">5.2% (260/4,970)</td><td>fits.jsonl</td></tr>
+  <tr><td><b>NEW</b> Artifact invariance violations (2 of 5 artifacts checked)</td><td class="num">0</td><td>artifact_invariance.py</td></tr>
+  <tr><td><b>NEW</b> M17 explanation coverage (paths / instances all / explainable)</td><td class="num">45.6% / 51.0% / 49.5%</td><td>explanation_coverage.json</td></tr>
+  <tr><td><b>NEW</b> M17 graph size (nodes / edges)</td><td class="num">174,952 / 66,863</td><td>explanation_coverage.json</td></tr>
+  <tr><td>Engine tests passing</td><td class="num">574 / 574</td><td>engine/run_all_tests.py</td></tr>
+</table>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="corrections"><span class="n">14</span>Corrections to the 2026-07-21 report<span class="new">important</span></h2>
+
+<div class="callout danger">
+  <div class="lbl">Why this section exists</div>
+  <code>reports/README.md</code> defines these reports as <b>point-in-time and descriptive</b>. Two
+  reports quietly disagreeing, with no explanation, is exactly the failure this project exists to
+  avoid. Every number below was re-read from the artifact named. <b>A published number that turned out
+  wrong is not an embarrassment to bury — it is a finding, and the correction is the product
+  working.</b> Four figures in the 2026-07-21 report are not supported by the artifacts.
+</div>
+
+<div class="tbl-scroll">
+<table>
+  <tr><th>#</th><th>Quantity</th><th>2026-07-21 published</th><th>Live artifact</th><th>Source</th><th>Cause</th></tr>
+  <tr>
+    <td class="num">1</td>
+    <td><b>Inference ladder — <code>descriptive_regime</code> rung</b></td>
+    <td class="num">1,240 (75.0%)</td>
+    <td class="num"><b>1,194 (72.2%)</b></td>
+    <td><code>m8_reachability.json</code> → <code>inference_ladder.rungs</code></td>
+    <td><b>Known.</b> The <code>fittable</code> row's value (1,240 / 75.0%) was duplicated into the row
+      below it. The artifact has carried 1,194 / 0.7219 throughout.</td>
+  </tr>
+  <tr>
+    <td class="num">2</td>
+    <td><b>M8 blocker census — ranks 2 and 3</b></td>
+    <td>"censoring <span class="mono">1,020 (62%)</span> · no concentration series
+      <span class="mono">1,005 (61%)</span>"</td>
+    <td><b>rank 2</b> <code>no_concentration_series</code> <b>1,005 (60.8%)</b>;
+      <b>rank 3</b> <code>censoring_biases_t50</code> <b>918 (55.5%)</b></td>
+    <td><code>m8_reachability.json</code> → <code>blocker_census.blockers_impact_ranked</code></td>
+    <td><b>Partly known.</b> Both the value <em>and</em> the impact ordering were wrong. The figure
+      <span class="mono">1,020</span> appears nowhere in the artifact; the censoring blocker has always
+      been 918, the same 918 the same report printed in its own results table.</td>
+  </tr>
+  <tr>
+    <td class="num">3</td>
+    <td><b>Fraction of the corpus censored</b></td>
+    <td>"<b>60%</b>" in the §M1 prose; "918 (56%)" in the results table</td>
+    <td class="num"><b>918 = 55.5%</b></td>
+    <td><code>curves_triaged.jsonl</code> (1,654 − 736 uncensored)</td>
+    <td><b>Known.</b> An internal inconsistency in that report: the table was very nearly right, the
+      prose was not. Neither 60% nor 56% is the artifact value.</td>
+  </tr>
+  <tr>
+    <td class="num">4</td>
+    <td><b>M6 propensity record counts</b></td>
+    <td class="num">151 records · 119 seq-axis · 126 structure · 108 anchored · 39 suppressed ·
+      65 γ-surface</td>
+    <td class="num"><b>160</b> records (43 UniProts) · <b>124</b> seq-axis · <b>131</b> structure ·
+      <b>125</b> anchored · <b>40</b> suppressed · <b>68</b> γ-surface</td>
+    <td><code>propensity.jsonl</code></td>
+    <td><b>Unknown.</b> The file has not been modified since <b>2026-07-02 12:44</b>, so the July report
+      was auditing <em>the same bytes</em> and still published different counts. No re-derivation
+      reproduces its figures. <b>We do not know why they diverge.</b></td>
+  </tr>
+</table>
+</div>
+
+<div class="callout ok">
+  <div class="lbl">What the 2026-07-21 report got right, and what it caused</div>
+  Its three named gaps have all been <b>closed</b> by <code>b1396f3</code>: the M16 engine↔web 3D-schema
+  desync, the M15 stubs (now capability-detected seams), and the stale in-repo docs. It also
+  <em>caused</em> the discovery of a real verdict bug: while closing its list, M10's P3 discordance was
+  found to be reading its direction off a two-sided p-value. A gaps section that gets acted on is the
+  mechanism working; this section is the same mechanism pointed backwards.
+</div>
+
+<p class="small">Not corrected, because it was right at the time: the July report's <b>477 / 477</b>
+test result is reproducible at its own commit <code>6bd81fe</code>. See §16 for the full ladder to
+today's count.</p>
+
+<!-- ===================================================================== -->
+<h2 id="gaps"><span class="n">15</span>Honest gaps, discrepancies &amp; deferrals</h2>
+
+<div class="callout warn">
+  <div class="lbl">Gap A — §2.3 / §10.12 / §7: what is now met, and what is still not</div>
+  <b>Met:</b> <code>FitProvenance</code> is emitted by every module that runs an optimizer; §10.12's
+  <code>[test]</code> tag is now earned by <code>test_fit_provenance.py</code> (with negative controls,
+  not just positive ones) and <code>test_artifact_invariance.py</code>; §7's basin-stability gate is
+  <b>evaluable</b> and exposed as a callable.
+  <br><br>
+  <b>Still not met, stated plainly:</b>
+  <b>(a)</b> §7's <b>pinned containerized reference environment</b> (pinned BLAS + thread/reduction
+  policy + vendored libm) does not exist — <code>env_manifest</code> is the coarse interpreter tag
+  <code>python3.13</code>, so "tolerance-reproducible under the pinned reference environment" is
+  <em>not</em> assertable and the bitwise CI tripwire is meaningful on one machine only.
+  <b>(b)</b> <b>9 of 13 registry models are single-start</b>, so their stability is <em>unevaluated</em>
+  rather than verified — a narrower guarantee than "basin-stable" implies. <b>(c)</b> M3's
+  <b>constant-seed stream policy</b> (every curve restarts from seed 0, so equal-length curves receive
+  identical Mammen weight sequences) is recorded in the provenance and not yet fixed.
+</div>
+
+<div class="callout warn">
+  <div class="lbl">Gap B — the single-start fix is deliberately deferred, and the reason is governance</div>
+  Giving every registry model ≥2 genuine starts is a ~10-line change. It is <b>not</b> being made
+  quietly, because it <b>changes fitted values</b>: a model that currently reports the first
+  constructed start's optimum could land elsewhere. That requires its own governed change — an
+  <code>engine_build_id</code> <b>bump</b> and a full M2→M9 rebuild, marking prior results
+  non-comparable by design. Bundling it into an additive provenance change would have smuggled a
+  value-moving edit under a non-bumping one. This is the mirror image of §7's argument: <b>the id must
+  bump when the science moves, and must not when it doesn't.</b>
+</div>
+
+<div class="callout warn">
+  <div class="lbl">Gap C — M17 explains about half of what the engine emits</div>
+  Coverage is <b>45.6% of distinct paths</b>, and the two instance figures (<b>51.0%</b> all-series,
+  <b>49.5%</b> explainable-series) are reported separately and never blended, because they decompose
+  into two populations with different fixes:
+  <ul>
+    <li><b>Missing adapters (Stage B's to close):</b> 165 of the 179 unexplained paths.
+    <b>M6 alone is 119 paths = 36% of the entire denominator, at 0%</b>, followed by M3 (35), M7 (7),
+    M9 (4). <b>M6 is the first Stage B target.</b></li>
+    <li><b>Engine output gaps (Stage B <em>cannot</em> close):</b> for <b>414 unfittable/suspect
+    series</b> there is no regime, no feature vector and no refusal <em>in existence</em> — nothing to
+    explain. Those return <code>explanation_available: false</code> naming it as such.</li>
+  </ul>
+  A further 14 paths are <code>not_declared</code>, mostly an artifact of the <em>published</em> leaf
+  rule: a block that is <code>null</code> on a compact record contributes its own parent path as a leaf,
+  so <code>gamma_global</code>, <code>descriptive_regime</code> and <code>curve_features.features</code>
+  appear as unexplained paths <em>alongside</em> their fully-explained children. Counted because the
+  denominator rule counts them, not because the value is untraced.
+</div>
+
+<div class="callout warn">
+  <div class="lbl">Gap D — M17 has no web surface</div>
+  The engine can explain any series; <b>the product cannot show it</b>. There is no
+  <code>/api/explain</code> endpoint and no panel. This is the honest state and the declared scope of
+  Stage A, not an oversight — but the evidence graph is currently reachable only from the CLI. Per-series
+  trees build on demand in ~10 ms, and the 90 MB full dump is deliberately <em>not</em> shipped
+  (<code>web/server.py</code> indexes large per-series JSONLs into memory at startup, which would add
+  hundreds of MB to the boot footprint of a zero-install local demo). <b>This is the wave-2
+  deliverable.</b>
+</div>
+
+<div class="callout ok">
+  <div class="lbl">Gap E — CLOSED 2026-08-06: M17's artifact regenerated, honesty prose now correct</div>
+  <code>explanation_coverage.json</code> predates the FitProvenance change, so its
+  <code>honesty.fit_provenance_absent</code> block and named narrowing #4 still assert "no such record
+  exists … no test asserts it" — no longer true. Counts are unaffected (they are over the untouched M7
+  spine, and both instance denominators were independently reproduced by this audit); the <em>prose</em>
+  is stale. Regeneration is the final step of the in-flight rebuild chain. Detail and why it matters: §6.3.
+</div>
+
+<div class="callout warn">
+  <div class="lbl">Gap F — M15's real-document accuracy is unmeasured</div>
+  The front-end <em>seams</em> now ship (capability-detected + injectable, with adapters for
+  PyMuPDF/pdfminer/pytesseract/spaCy), but <b>no backing library is installed here and no PDF corpus is
+  bundled</b>, so the deterministic core still runs on fixture documents and <b>real-document
+  extraction accuracy remains unmeasured</b>. The 1.00 / 1.00 / 1.00 validation in §11 is against
+  curated CPAD on one PMID, not against a real PDF pipeline. What genuinely remains is a validated run
+  against real PDFs — not the wiring.
+</div>
+
+<div class="card">
+  <h4>Documented within-module deferrals (by design, clearly flagged in <code>engine/README.md</code>)</h4>
+  <ul>
+    <li><b>M3</b> — block/sieve bootstrap for serial correlation, BCa intervals, a cross-validated
+    descriptive-vs-mechanistic criterion, corpus-scale FDR control.</li>
+    <li><b>M4</b> — separate left-censoring algebra (left-only t50 is excluded from γ, not modelled)
+    and an errors-in-variables term for concentration uncertainty.</li>
+    <li><b>M5</b> — Service-C confusion-matrix equivalence classes, the FDR single-mechanism degeneracy
+    threshold, and calibration of the anomaly runs-test p-threshold (still first-pass).</li>
+    <li><b>M6</b> — leave-one-<em>study</em>-out leakage control; the reference scales
+    (<code>m6-refscale-1.0</code>) and the n≥20 interval floor are first-pass.</li>
+    <li><b>M7</b> — <code>env_manifest</code> is <code>python3.13</code> only; OS/BLAS/RNG fingerprints
+    await the pinned-container guarantee (same blocker as Gap A(a)).</li>
+    <li><b>M9</b> — the full EIG/optimal-design computation (M13 now computes real D-optimality EIG for
+    the quantitative variables; M9 remains the Service-C-distilled rule table and does not pretend
+    otherwise).</li>
+    <li><b>M12</b> — model-averaging the FIM over M3's selection posterior (results are currently
+    post-selection, conditional on the M2-selected model).</li>
+    <li><b>M14 / pooling</b> — a full latent-ODE-rate MCMC hierarchy; the shipped estimator is
+    deterministic closed-form meta-regression.</li>
+    <li><b>M17 Stage B</b> — adapters ranked by the measured gap (M6 → M3 → M7 → M9, then
+    M10/M12/M13/M14); widening <code>m2_fit.py:152</code> so its three collapsed failure causes become
+    distinguishable; having <code>conformal.py</code> emit the per-series Mondrian stratum + interval so
+    M17 can <em>read</em> rather than derive it; and on-demand per-series trees in <code>web/</code>.</li>
+    <li><b>Service C</b> — external forward-model (KMC/Smoluchowski) generator, artifact-realism
+    distributional check, synthetic→real transfer, M6 null-disagreement calibration.</li>
+  </ul>
+</div>
+
+<div class="callout">
+  <div class="lbl">The standing scientific ceiling (not a bug — the finding)</div>
+  0 curves license a single mechanism because agitation &amp; seeding are unrecorded corpus-wide. This
+  is a <em>metadata</em> ceiling: PRISE quantifies exactly which <b>33 proteins / 48 series</b> would
+  cross it, and that recording two fields is the cheapest way through. Every reachability count is an
+  upper bound conditional on forward-model adequacy (Service C's measured mismatch degradation is the
+  backing evidence), and the map ships with that clause attached, not as a footnote.
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="repro"><span class="n">16</span>Reproducibility &amp; test suite</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Build identity</h4>
+    <p class="small mono">
+      engine_build_id&nbsp;=&nbsp;e660cb452b41&nbsp;(unchanged — §7)<br>
+      corpus_version&nbsp;=&nbsp;c09ac0cf398e<br>
+      thresholds_version&nbsp;=&nbsp;thresholds-1.0<br>
+      m1..m7&nbsp;=&nbsp;{triage,fitbank,select,defs,regimes,anchor,assembler}-1.0<br>
+      m17&nbsp;=&nbsp;m17-explain-1.0 · fit&nbsp;prov&nbsp;=&nbsp;fitprov-1.0<br>
+      etl&nbsp;=&nbsp;cpad-kinetics-1.0 · cpad-sequence-1.1<br>
+      env&nbsp;=&nbsp;python3.13
+    </p>
+    <p class="small">Cross-build comparison is blocked unless ids match. Applying the Service-C
+    calibration flipped the id from <code>bc442463dfdf</code>, invalidating first-pass results by
+    design. This wave <b>correctly does not bump it</b> — see §7.</p>
+  </div>
+  <div class="card">
+    <h4>Test suite</h4>
+    <p><b>27 engine test files.</b> There is no pytest collector — every test file is a self-running
+    stdlib script; run it directly and read its exit code.</p>
+    <p><b>574 test functions</b> counted statically across the working tree today. <b>Run 2026-08-06: 574 / 574 passing, 0 failures</b>, across 27 engine suites, plus
+    <code>web/test_web.py</code> PASS by exit code. The runner now cross-checks its run count against
+    a static <code>def test_</code> count and fails loudly on disagreement — added after it was caught
+    mis-parsing <code>"17/17 passed"</code> as <b>7</b> (a greedy <code>\S*</code> backtracking into
+    the number), which under-reported the total by exactly 10. The same bug would have read
+    <code>"15/17 passed"</code> as <b>7 passed, 0 failed</b>, hiding real failures.</p>
+    <p class="small">New this wave: <code>test_fit_provenance.py</code> (15) and
+    <code>test_artifact_invariance.py</code> (7). Largest files: M17 (58), M7 (47), M16 (37),
+    M15 (36), M6 (33), M10 (30), Service C (29), M9 (28), M5 (26).</p>
+  </div>
+</div>
+
+<h4>How the count got here — the ladder, not a single baseline</h4>
+<div class="tbl-scroll">
+<table>
+  <tr><th>Commit</th><th>What landed</th><th class="num">test files</th><th class="num">tests</th></tr>
+  <tr><td><code>6bd81fe</code></td><td>the 2026-07-21 report itself (its published 477/477 is reproducible here)</td><td class="num">24</td><td class="num">477</td></tr>
+  <tr><td><code>b1396f3</code></td><td>closed that report's gap list + the M10 P3 direction bug</td><td class="num">24</td><td class="num">494</td></tr>
+  <tr><td><code>b978025</code></td><td>M17 Stage A</td><td class="num">25</td><td class="num">552</td></tr>
+  <tr><td><i>working tree</i></td><td>FitProvenance + artifact invariance</td><td class="num">27</td><td class="num"><b>574</b></td></tr>
+</table>
+</div>
+<p class="small">Counted by static enumeration of <code>def test_*</code> at each commit. The
+2026-07-21 report's 477 was correct <em>at its own commit</em>; the number has moved three times since,
+which is why the ladder is published rather than a single figure.</p>
+
+<div class="callout ok">
+  <div class="lbl">All five values RESOLVED 2026-08-06 — this report is complete</div>
+  <ol style="margin:.4em 0">
+    <li>Engine test-suite pass result (target 574 / 574) — §16, hero badge, §13.</li>
+    <li>Full 5-artifact invariance result — §5.5, §7.</li>
+    <li>Confirmation that <code>gamma.jsonl</code>, <code>m3_sample.jsonl</code> and
+        <code>global_fit.json</code> carry provenance — §5.5, §8 (M3, M4).</li>
+    <li><code>global_fit</code>'s own basin verdict (reported as <code>knife_edge</code>; unverifiable
+        today) — §8 (global_fit).</li>
+    <li>Regeneration of <code>explanation_coverage.json</code> — §6.3, §15 Gap E.</li>
+  </ol>
+  All five were filled on <b>2026-08-06</b>, after the rebuild chain completed, the 5-artifact
+  invariance check returned <code>all_ok: true</code>, and the full suite ran <b>574 / 574</b> green.
+  None remain outstanding.
+</div>
+
+<div class="footer">
+  <p>PRISE — Protein aggregation Regime Inference &amp; Scoring Engine · Full product report ·
+  generated 2026-08-05 against engine build <code>e660cb452b41</code> by auditing the live product and
+  re-reading every number from its own artifacts. Descriptive snapshot; the code, tests, and
+  <code>PRISE_DESIGN.md</code> are the source of truth. Supersedes
+  <code>2026-07-21_full-product-report.html</code> for current numbers, and corrects four of its
+  published figures (§14). PRISE is under active development — this is not the final product.</p>
+</div>
+
+</div>
+</body>
+</html>

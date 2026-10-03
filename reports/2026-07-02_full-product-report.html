@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>PRISE — Full Product Report</title>
+<script>
+  MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$']] }, svg:{fontCache:'global'} };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+  :root{
+    --bg:#0f141b; --panel:#161d27; --panel2:#1b2431; --ink:#e6edf3; --muted:#9fb0c0;
+    --faint:#6b7d8f; --line:#28323f; --accent:#5ec6a8; --accent2:#4ea1d3;
+    --warn:#e0a458; --danger:#e06c6c; --ok:#5ec6a8;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px 120px}
+  header.hero{padding:54px 22px 30px;border-bottom:1px solid var(--line);
+    background:radial-gradient(1200px 300px at 50% -80px,#1c2b34,transparent);}
+  header.hero .wrap{padding-bottom:0}
+  h1{font-size:2.1rem;margin:.1em 0 .15em;letter-spacing:-.02em}
+  h1 .sub{color:var(--accent);font-weight:600}
+  .tagline{color:var(--muted);font-size:1.05rem;max-width:720px}
+  .badges{margin:18px 0 4px;display:flex;flex-wrap:wrap;gap:8px}
+  .badge{background:var(--panel2);border:1px solid var(--line);border-radius:999px;
+    padding:3px 11px;font-size:.78rem;color:var(--muted)}
+  .badge.ok{border-color:#2c5a4a;color:var(--ok)}
+  .badge.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  h2{font-size:1.5rem;margin:2.4em 0 .5em;padding-top:.3em;border-top:1px solid var(--line);letter-spacing:-.01em}
+  h2 .n{color:var(--faint);font-weight:600;margin-right:.5rem;font-size:1.1rem}
+  h3{font-size:1.12rem;margin:1.6em 0 .3em;color:#cfe0ee}
+  h4{font-size:.98rem;margin:1.2em 0 .2em;color:var(--accent2)}
+  p{margin:.6em 0}
+  a{color:var(--accent2)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0c1118;
+    border:1px solid var(--line);border-radius:5px;padding:.05em .4em;font-size:.86em;color:#cbd8e3}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:14px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+  .callout{border-left:3px solid var(--accent);background:var(--panel2);border-radius:0 10px 10px 0;
+    padding:12px 16px;margin:14px 0}
+  .callout.warn{border-left-color:var(--warn)}
+  .callout.danger{border-left-color:var(--danger)}
+  .callout.honest{border-left-color:var(--accent2)}
+  .callout h4{margin-top:0}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}
+  th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:.03em}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .pill{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+  .pill.ok{color:var(--ok);border-color:#2c5a4a}.pill.no{color:var(--danger);border-color:#5a2c2c}
+  .pill.part{color:var(--warn);border-color:#5a4a2c}
+  ul,ol{margin:.5em 0 .5em 0;padding-left:1.3em}
+  li{margin:.28em 0}
+  .toc{columns:2;column-gap:26px;font-size:.92rem}
+  @media(max-width:720px){.toc{columns:1}}
+  .toc a{color:var(--muted);text-decoration:none;display:block;padding:2px 0}
+  .toc a:hover{color:var(--accent)}
+  .eq{overflow-x:auto;padding:2px 0}
+  .muted{color:var(--muted)} .faint{color:var(--faint)} .small{font-size:.85rem}
+  hr{border:none;border-top:1px solid var(--line);margin:2em 0}
+  .kpi{display:inline-block;text-align:center;padding:6px 16px 4px}
+  .kpi .v{font-size:1.55rem;font-weight:700;color:var(--accent)}
+  .kpi .l{font-size:.74rem;color:var(--muted)}
+  .footer{color:var(--faint);font-size:.82rem;border-top:1px solid var(--line);margin-top:40px;padding-top:16px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>PRISE <span class="sub">— Protein-aggregation Rigorous Inference &amp; Scaling Engine</span></h1>
+    <p class="tagline">A pure-analytical framework that reads real protein-aggregation kinetics from the CPAD&nbsp;2.0
+    database and answers, honestly, <em>what can be inferred and what cannot</em> — with a working local web product on top.</p>
+    <div class="badges">
+      <span class="badge ok">17 engine modules</span>
+      <span class="badge ok">362 tests, 0 failures</span>
+      <span class="badge ok">reality-check 5/5 consistent</span>
+      <span class="badge mono">build&nbsp;e660cb452b41</span>
+      <span class="badge">CPAD&nbsp;2.0 · 1,654 curves · 105 proteins</span>
+      <span class="badge">web app: 12 live endpoints</span>
+    </div>
+    <p class="small faint" style="margin-top:14px">This report was written <b>after</b> auditing the actually-running product
+    (every endpoint hit, every artifact inspected). Where the functional product differs from the original plan, the report
+    describes <b>what is real</b> and flags the gap.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<h2 id="toc" style="border-top:none">Contents</h2>
+<div class="toc card">
+  <a href="#what">1 · What PRISE is</a>
+  <a href="#verdict">2 · Functional-product verdict (audited)</a>
+  <a href="#data">3 · The data foundation (CPAD 2.0)</a>
+  <a href="#pipeline">4 · The pipeline &amp; the mathematics</a>
+  <a href="#m0">4.0 · M0 — cohort assembly</a>
+  <a href="#m1">4.1 · M1 — triage &amp; censoring</a>
+  <a href="#m2">4.2 · M2 — model bank</a>
+  <a href="#m3">4.3 · M3 — selection &amp; identifiability</a>
+  <a href="#m4">4.4 · M4 — features &amp; dual-γ</a>
+  <a href="#gf">4.5 · Global Knowles/Cohen ODE fit</a>
+  <a href="#m5">4.6 · M5 — regime &amp; mechanism</a>
+  <a href="#m6">4.7 · M6 — propensity &amp; sequence axis</a>
+  <a href="#pool">4.8 · Empirical-Bayes pooling</a>
+  <a href="#m7">4.9 · M7 — assembler &amp; build-id</a>
+  <a href="#m8">4.10 · M8 — reachability map</a>
+  <a href="#m9">4.11 · M9 — design recommender</a>
+  <a href="#m10">4.12 · M10 — cross-modal</a>
+  <a href="#conf">4.13 · Conformal prediction</a>
+  <a href="#sc">4.14 · Service C — calibration</a>
+  <a href="#rc">4.15 · Reality check</a>
+  <a href="#web">5 · The web product</a>
+  <a href="#results">6 · Real corpus results</a>
+  <a href="#constraints">7 · Constraints &amp; honest limits</a>
+  <a href="#gaps">8 · Gaps vs the plan</a>
+  <a href="#future">9 · Future improvements</a>
+  <a href="#repro">10 · Reproducibility</a>
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="what"><span class="n">1</span>What PRISE is</h2>
+<p><b>The problem.</b> Protein aggregation (amyloid formation) is measured by kinetic assays — most commonly
+Thioflavin-T (ThT) fluorescence rising over time as fibrils form. Thousands of such curves sit in the public
+<b>CPAD 2.0</b> database, but they are heterogeneous, noisy, censored, digitised from figures, and stripped of much
+experimental metadata. The scientific questions — <em>what is the aggregation regime? how fast? which nucleation
+mechanism? how does it scale with concentration? how aggregation-prone is this protein?</em> — are routinely
+<b>over-answered</b> in the literature relative to what the data actually support.</p>
+
+<p><b>PRISE's thesis.</b> Build a computational framework that fits candidate models, compares them, classifies the
+aggregation regime, computes a propensity score, extracts curve characteristics — and, above all, <b>refuses to
+claim more than the data license</b>, reporting the boundary between the inferable and the unknowable. It is a
+<em>pure analytical core</em>: it ingests a frozen snapshot of CPAD 2.0 (and PDB structure links) at build time and
+performs no live database calls at run time.</p>
+
+<div class="callout honest">
+  <h4>The through-line: honesty over false precision</h4>
+  Every module is built so that a refusal is a first-class output. PRISE reports censoring as inequalities, refuses to
+  name a mechanism it cannot license (0 licensed corpus-wide — see M5), demotes the scaling exponent γ to a
+  <em>constraint</em>, gives finite-sample coverage guarantees instead of over-tight bootstrap intervals, and stamps
+  every result with an <code>engine_build_id</code> that gates comparability. It has now also been checked, blind,
+  against published consensus on field-resolved proteins (§4.15).
+</div>
+
+<!-- ===================================================================== -->
+<h2 id="verdict"><span class="n">2</span>Functional-product verdict (audited)</h2>
+<p>I hit every web endpoint and inspected every artifact before writing. <b>The product is functional and internally
+consistent.</b></p>
+<table>
+  <tr><th>Component</th><th>Status</th><th>Evidence</th></tr>
+  <tr><td>Analytical engine (ETL → M0–M10 + Service C + conformal + pooling + global-fit + reality-check)</td>
+      <td><span class="pill ok">functional</span></td><td>17 modules; 362 unit/integration tests pass, 0 failures</td></tr>
+  <tr><td>Web app (stdlib server + vanilla-JS SPA)</td><td><span class="pill ok">functional</span></td>
+      <td>All 12 endpoints return 200 with valid payloads; three working tabs</td></tr>
+  <tr><td>Calibrated engine (Service-C thresholds applied, governed)</td><td><span class="pill ok">functional</span></td>
+      <td>build <code>e660cb452b41</code>; versioned, reversible apply record</td></tr>
+  <tr><td>Full-corpus M3 (bootstrap selection + identifiability)</td><td><span class="pill ok">functional</span></td>
+      <td>Now run on all 1,240 fittable curves (was a 50-curve sample)</td></tr>
+  <tr><td>External validation (blind reality check)</td><td><span class="pill ok">passes</span></td>
+      <td>5/5 field-resolved proteins consistent with consensus, 0 contradictions</td></tr>
+  <tr><td>Corpus-scale Knowles/Cohen ODE global fit</td><td><span class="pill part">build-time only</span></td>
+      <td>Inherently too slow to run corpus-wide (stiff ODE × 62-curve series); runs on a limited set</td></tr>
+  <tr><td>Deployment / multi-user / auth / export</td><td><span class="pill no">not built</span></td>
+      <td>Single-user local prototype; production path documented, not implemented</td></tr>
+</table>
+
+<!-- ===================================================================== -->
+<h2 id="data"><span class="n">3</span>The data foundation — CPAD 2.0</h2>
+<p>PRISE bundles a frozen, version-hashed snapshot of the <b>Curated Protein Aggregation Database (CPAD 2.0)</b>
+(Rawat, Prabakaran et al., <i>Amyloid</i> 2020) in two layers, joined by UniProt ID:</p>
+<div class="grid2">
+  <div class="card"><h4>Kinetics layer</h4>
+    <b>1,654</b> time-resolved aggregation curves across <b>105</b> proteins (81,484 usable (time, intensity) points),
+    of which <b>1,526</b> have ≥6 points. <b>52</b> concentration-series groups span <b>34</b> proteins. Every value is
+    a curator's <b>graph digitisation</b> of a published figure — so PRISE carries a per-point digitisation-uncertainty
+    flag throughout.</div>
+  <div class="card"><h4>Sequence &amp; structure layer</h4>
+    Per-UniProt aggregation predictors (<b>TANGO, AGGRESCAN, PASTA 2.0</b>, Waltz-DB amyloid-hexapeptide coverage),
+    curated aggregation-prone regions (APRs), and amyloid structures (PDB cross-refs). 382 UniProts, 231 with WT
+    predictor reductions, 267 with APRs, 74 with structures.</div>
+</div>
+<div class="callout warn"><h4>Data-residency constraint (design-shaping)</h4>
+CPAD bulk data is attribution-gated and not redistributable. PRISE therefore serves only <b>derived analytical results</b>
+and <b>single curves for plotting</b> (with attribution) — never a bulk-download endpoint. The corpus is
+<code>.gitignore</code>d; all <code>data/processed/*</code> artifacts are regenerable from the ETL.</div>
+
+<!-- ===================================================================== -->
+<h2 id="pipeline"><span class="n">4</span>The pipeline &amp; the mathematics</h2>
+<p>Each module is a <b>pure function</b> (data in → JSON-serialisable data out), versioned, deterministic under a fixed
+seed. The engine is a directed pipeline; below, each stage is described with the mathematics it actually implements.</p>
+
+<!-- M0 -->
+<h3 id="m0">4.0 · M0 — Dataset selection &amp; cohort assembly <span class="pill">m0-cohort-1.0</span></h3>
+<p>The entry point. Given a user-selected set of datasets for one protein, M0 detects the <b>data mode</b> from what varies
+across the selection and routes to the correct assembled analysis, after a hard <b>comparability gate</b>:</p>
+<table>
+  <tr><th>What varies</th><th>data_mode</th><th>Routed analysis</th></tr>
+  <tr><td>nothing (1 dataset)</td><td>single_curve</td><td>per-curve M1→M5</td></tr>
+  <tr><td>replicates (identical conditions, ≥2)</td><td>replicates</td><td>random-effects meta-analysis (§4.8)</td></tr>
+  <tr><td>concentration only (≥3)</td><td>concentration_series</td><td>dual-γ + global ODE fit</td></tr>
+  <tr><td>pH or T (conc fixed)</td><td>condition_series</td><td>feature-vs-condition surface</td></tr>
+  <tr><td>&gt;1 axis co-varies</td><td><b>confounded</b></td><td><b>mechanism/scaling refused</b> (Invariant 19)</td></tr>
+</table>
+<p>Different construct or assay ⇒ hard confound flag; missing comparability-critical fields ⇒ degrade &amp; widen, never
+silently merge (Service-A discipline). Every result carries a <b>window of validity</b> = the measured condition ranges,
+beyond which inference is not licensed.</p>
+
+<!-- M1 -->
+<h3 id="m1">4.1 · M1 — Ingestion, artifact gate &amp; censoring <span class="pill">m1-triage-1.0</span></h3>
+<p>M1 triages each curve with <b>scale-robust</b> heuristics (CPAD intensities are a.u. with unknown normalisation, so
+decisions use each curve's own dynamic range and point-to-point noise). It emits:</p>
+<ul>
+  <li><b>fittability_class</b> ∈ {fittable, suspect, unfittable} + reasons.</li>
+  <li><b>censoring_class</b> ∈ {none, left, right, left_right, interval}. <b>Right</b> = still rising at the end (no plateau)
+     ⇒ \(t_{50}\) is a <em>lower bound</em> and min–max normalisation is invalid; <b>left</b> = no lag phase at \(t_0\)
+     (curve underway) ⇒ lag undefined, \(t_{50}\) biased early.</li>
+  <li><b>normalization discipline</b>: baseline subtraction always; min–max only when a plateau is validated (never
+     manufacture a plateau on a right-censored curve).</li>
+</ul>
+<div class="callout"><h4>Calibrated thresholds (governed apply, thresholds-1.0)</h4>
+M1's lag-slope fraction was applied at its <b>Service-C held-out-validated</b> value <b>0.45</b> (was a first-pass 0.30).
+This corrected an over-flagging of "left/no-lag": left-censoring dropped <b>711 → 607</b> curves. The previous value is
+retained; the change is dated, reversible, and bumps <code>engine_build_id</code>.</div>
+
+<!-- M2 -->
+<h3 id="m2">4.2 · M2 — Model-fitting bank <span class="pill">m2-fitbank-1.0</span></h3>
+<p>Bounded, multi-start least-squares (scipy TRF) of a licensed bank of models. Per fit it reports SSE, \(R^2\), and the
+information criteria. For a Gaussian error model with \(n\) points and \(p\) parameters, with
+\(\hat\sigma^2 = \mathrm{SSE}/n\):</p>
+<div class="eq">$$\ln\hat L = -\tfrac{n}{2}\big(\ln 2\pi + \ln\hat\sigma^2 + 1\big),\qquad
+\mathrm{AIC}=2p-2\ln\hat L,\qquad
+\mathrm{AICc}=\mathrm{AIC}+\frac{2p(p+1)}{n-p-1}.$$</div>
+<p>The <b>Akaike weight</b> of model \(i\) (its posterior model probability under a uniform prior) is</p>
+<div class="eq">$$\Delta_i=\mathrm{AICc}_i-\min_j\mathrm{AICc}_j,\qquad
+w_i=\frac{e^{-\Delta_i/2}}{\sum_j e^{-\Delta_j/2}}.$$</div>
+<table>
+  <tr><th>Family</th><th>Models</th><th>Meaning</th></tr>
+  <tr><td>descriptive</td><td>LNT (line), logistic, Gompertz, Richards, exponential, scaling-law (power)</td>
+      <td>cooperative sigmoids = nucleation-dependent shape; LNT/scaling = linear/power growth</td></tr>
+  <tr><td>biphasic</td><td>Brain–Cousens</td><td>hormesis/biphasic (a dose model, shown on the time axis for comparison)</td></tr>
+  <tr><td>autocatalytic</td><td>Finke–Watzky</td><td>2-step; its constants are <em>not</em> amyloid nucleation rates</td></tr>
+  <tr><td>mechanistic (Tier B)</td><td>nucleation-elongation, secondary nucleation, saturating-secondary, fragmentation</td>
+      <td>Knowles/Cohen integrated rate laws (ODE) — sloppy from one curve</td></tr>
+  <tr><td>dose</td><td>dr_lnt, dr_threshold (hockey-stick), dr_hill (4PL), dr_brain_cousens, dr_scaling</td>
+      <td>fits \(k_\mathrm{agg}\) vs concentration (the R-rows)</td></tr>
+</table>
+
+<!-- M3 -->
+<h3 id="m3">4.3 · M3 — Selection &amp; identifiability (bootstrap-enveloped) <span class="pill">m3-select-1.0</span></h3>
+<p><b>Model selection runs inside the bootstrap</b> (honest post-selection inference): each wild (Mammen) resample
+\(y^\star_i=\hat y_i+r_i\,\varepsilon_i\) (with two-point weights \(\varepsilon\), \(E\varepsilon=0,\ \mathrm{Var}\,\varepsilon=1\),
+preserving heteroscedasticity) re-fits the candidates and re-selects. PRISE reports <b>selection-stability
+frequencies</b> — how often each model wins — rather than pretending the winner was known. A cross-model predictive
+interval is emitted only for the transferable functional \(t_{50}\), with a multimodality flag.</p>
+<p><b>Practical identifiability.</b> For the winning model, PRISE forms the column-normalised sensitivity (Jacobian)
+matrix \(\tilde J\) (\(\tilde J_{\cdot j}=\partial f/\partial\theta_j\) scaled to unit norm) and reports the
+<b>collinearity condition number</b> \(\kappa=\lambda_\max/\lambda_\min\) of \(\tilde J^\top\tilde J\); the eigenvector of
+\(\lambda_\min\) is the sloppiest (least-constrained) direction.</p>
+<div class="callout honest small"><b>Honest relabel:</b> this statistic is a <em>sensitivity-collinearity condition
+number</em>, not the Fisher-information parameter covariance. It detects <em>practical</em> non-identifiability. The true
+observed FIM lives in the global ODE fit (§4.5). The calibrated cutoff is \(\kappa&gt;107\) (Service-C held-out; was 1000).</div>
+<p class="small muted">Now run on all 1,240 fittable curves (previously a 50-curve demonstration sample).</p>
+
+<!-- M4 -->
+<h3 id="m4">4.4 · M4 — Feature extractor &amp; dual-γ <span class="pill">m4-defs-1.0</span></h3>
+<p>Features are read off the <b>selected model</b> on a dense grid, under a <b>versioned definition contract</b> (a Gompertz
+\(t_{50}\) and a tangent-intercept lag from two different definitions are not comparable). Key definitions:</p>
+<ul>
+  <li>\(t_{50}\): first time the fitted signal reaches \(y_\min+0.5(y_\max-y_\min)\) — tagged point / lower-bound /
+      biased-early by censoring.</li>
+  <li><b>Tangent-intercept lag:</b> \(\ \tau_{\text{lag}}=t_\text{infl}-\dfrac{y_\text{infl}-y_\min}{\dot y_\max}\ \)
+      (max-slope tangent's crossing of the baseline). Returned <code>None</code> for non-cooperative shapes (no interior
+      inflection) — never an arbitrary <code>argmax</code>.</li>
+  <li><b>lag-to-\(t_{50}\) ratio</b> \(=\tau_{\text{lag}}/t_{50}\) — a dimensionless shape invariant; a rare single-curve
+      mechanistic signal (median ≈ 0.71 across cooperative curves).</li>
+</ul>
+<h4>Dual-γ — the headline mechanistic constraint</h4>
+<p>The <b>half-time scaling exponent</b> \(\gamma\) is defined by \(t_{50}\propto[m]^{-\gamma}\), i.e.
+\(\log t_{50}=c-\gamma\log[m]\). PRISE computes it two independent ways and <b>never merges them</b>:</p>
+<ul>
+  <li><b>\(\gamma_\text{regression}\)</b> — a <b>censored</b> log–log ML regression. Uncensored points contribute a Gaussian
+      density; a right-censored \(t_{50}\) contributes the inequality \(P(Y\ge \text{bound})=1-\Phi\!\big(\tfrac{\text{bound}-\mu}{\sigma}\big)\).
+      Ships with a curvature test (concentration-dependent reaction order), an informative-censoring test, and an m_crit
+      identifiability diagnostic.</li>
+  <li><b>\(\gamma_\text{collapse}\)</b> — a phenomenological master-curve collapse coupling all member curves through one
+      shared logistic shape + one \(\gamma\) (free per-curve amplitude). Explicitly <em>not</em> a shared-rate ODE fit
+      (<code>method="master_curve_collapse"</code>).</li>
+</ul>
+<div class="callout warn"><h4>Two honesty gates that fire on real data</h4>
+<b>Negative-γ gate:</b> a fitted \(\gamma&lt;0\) (\(t_{50}\) rising with concentration — non-physical) is flagged
+<code>gamma_physical=false</code> and never emitted as a clean estimate (<b>10 real series</b> gated). <b>Disagreement
+test:</b> always reports the raw \(|\gamma_\text{reg}-\gamma_\text{collapse}|\) and a collapse-quality gate
+(<code>collapse_r2&lt;0.8</code> ⇒ <em>shape not concentration-invariant</em>) — <b>12 series</b> now flagged disagreeing
+(a prior version suppressed all but 2).</div>
+
+<!-- global fit -->
+<h3 id="gf">4.5 · Global Knowles/Cohen ODE fit <span class="pill">global-fit-1.0</span></h3>
+<p>The real shared-rate mechanistic fit. All member curves of a concentration series are fit <b>simultaneously</b> with
+shared microscopic parameters, only the monomer concentration varying per curve. The moment (mass/number) equations are</p>
+<div class="eq">$$\frac{dP}{dt}=k_n\,m^{n_c}+k_2\,m^{n_2}\,\frac{M}{1+m^{n_2}/K_M}+k_-M,\qquad
+\frac{dM}{dt}=2k_+\,m\,P,\qquad m=m_\text{tot}-M,$$</div>
+<p>where \(P\) is fibril number, \(M\) fibril mass, \(k_n,k_+,k_2,k_-\) the primary-nucleation, elongation,
+secondary-nucleation and depolymerisation rates, and \(n_c,n_2\) the reaction orders. Crucially PRISE <b>estimates
+\(n_c,n_2\)</b> (they are hard-fixed at 2 everywhere else) and reports the <b>observed FIM</b> \(\ \mathcal I=J^\top\Sigma^{-1}J\ \)
+eigendecomposition to identify which <em>combinations</em> of rates are constrained. From the fitted orders it derives an
+analytic <b>third</b> \(\gamma_\text{mechanistic}\) (e.g. \(\gamma=(n_2+1)/2\) for a secondary-nucleation-dominated
+half-time), a consistency cross-check on the two phenomenological \(\gamma\)s.</p>
+<div class="callout danger"><h4>Honest performance limit</h4>
+The corpus-scale global ODE fit is <b>inherently too slow to run routinely</b> — a single 62-curve series requires
+integrating 62 stiff ODEs per residual evaluation × multi-start × least-squares iterations, and did not finish even on
+three series. It is a <b>build-time-only enrichment</b>; <code>dual_gamma</code> joins its output where present. This is a
+compute reality, not a defect: the honest finding it delivers is that this corpus generally <em>cannot</em> pin unique
+microscopic rates (heavy sloppiness), only reaction-order constraints.</div>
+
+<!-- M5 -->
+<h3 id="m5">4.6 · M5 — Classification &amp; regime registry <span class="pill">m5-regimes-1.0</span></h3>
+<p>Three outputs against a declarative, versioned regime registry:</p>
+<ol>
+  <li><b>Descriptive regime</b> (always available, pure shape): cooperative_sigmoidal / gradual_non_cooperative /
+     threshold_driven / non_monotonic_settling / no_detectable_aggregation / anomalous_unclassified.</li>
+  <li><b>Mechanistic verdict → equivalence class.</b> M5 <b>never names a single mechanism</b>. It returns the equivalence
+     class and every gate it failed: assay-licensed (mass-proportional ThT/ThS only), shape-gated (γ a consistency check
+     only), <b>hard-branched on agitation &amp; seeding</b> (quiescent vs shaken are different mechanisms), and
+     data-regime-conditional in its degeneracy.</li>
+  <li><b>Confidence + rationale + condition vector + window of validity.</b></li>
+</ol>
+<p>Plus a model-agnostic <b>anomaly detector</b>: a Wald–Wolfowitz runs test on the best-fit residual signs (few runs ⇒
+systematic misfit), controlled corpus-wide by <b>Benjamini–Hochberg FDR</b> (reject \(p_{(k)}\le \tfrac{k}{m}\alpha\) for
+the largest such \(k\)), with a material-misfit effect-size gate (\(R^2&lt;0.9\)) before anything becomes a human-triage
+registry proposal. The registry is human-governed; M5 never mutates it.</p>
+<div class="callout"><b>Why 0 mechanisms are licensed corpus-wide:</b> agitation and seeding are <em>unrecorded</em> for
+essentially every CPAD curve, so the quiescent-vs-shaken hard branch is undetermined and the mechanistic gate refuses.
+This is the correct, data-earned result — and it is the crux of the M8 reachability finding.</div>
+
+<!-- M6 -->
+<h3 id="m6">4.7 · M6 — Propensity scorer &amp; sequence axis <span class="pill">m6-anchor-1.0 · m6-refscale-1.0</span></h3>
+<p>Propensity is reported in <b>three views, never collapsed</b> into one number:</p>
+<ul>
+  <li><b>surface</b> — feature-vs-driving-force + the two γ's (primary where a series exists).</li>
+  <li><b>intrinsic</b> — a leakage-free <b>corpus anchor</b> (the query protein excluded from its own condition/assay-matched
+     stratum) when effective \(n\ge8\), else a versioned reference scale. Position uses the Hazen mid-rank plotting
+     position \(\ \text{pct}=100\cdot(\#\text{below}+0.5\,\#\text{equal})/N\ \), and a sign-corrected
+     <b>propensity percentile</b> (low \(t_{50}\) = high propensity).</li>
+  <li><b>cohort</b> — rank/percentile within the analysis cohort, suppressed for singletons; amplitude/a.u. features are
+     barred (only time-domain features are portable).</li>
+</ul>
+<p><b>Sequence axis (de-conflated).</b> TANGO / AGGRESCAN / PASTA / Waltz are separate named sub-axes with granularity,
+endpoint, version and an explicit per-predictor reduction. Only <b>PASTA &amp; Waltz</b> are amyloid-specific; TANGO &amp;
+AGGRESCAN are generic β-aggregation. A sequence-vs-kinetics comparison is <b>licensed only on endpoint match</b> — vs an
+amyloid dye (ThT/ThS/Congo Red/Cytofluor) only PASTA/Waltz are licensed; an unknown assay licenses nothing.
+Zyggregator/CamSol are declared absent; NuAPRpred declared intentionally excluded. Structure linkage (PDB/APR) is
+associative only, with a fibril-polymorphism caveat, never causal.</p>
+
+<!-- pooling -->
+<h3 id="pool">4.8 · Empirical-Bayes partial pooling <span class="pill">pooling-1.0</span></h3>
+<p>The §4 hierarchical spine, deterministic (no MCMC). For a feature \(\theta\) with per-curve estimate \(\hat\theta_i\) and
+sampling variance \(s_i^2\), within a condition+assay-matched stratum, PRISE fits the two-level Gaussian
+\(\theta_i\sim N(\mu,\tau^2),\ \hat\theta_i\sim N(\theta_i,s_i^2)\), estimates \(\tau^2\) by DerSimonian–Laird, and shrinks:</p>
+<div class="eq">$$\hat\theta_i^{\text{pooled}}=w_i\hat\theta_i+(1-w_i)\mu,\qquad w_i=\frac{\tau^2}{\tau^2+s_i^2}.$$</div>
+<p>The weight is an explicit, frozen, versioned monotone function of \(s_i^2/\tau^2\). Noisy single curves in well-populated
+strata shrink hard toward the stratum mean; precise estimates barely move. Real corpus: <b>257 curves shrunk across 154
+strata, 60 replicate groups</b> (e.g. an Aβ40 outlier \(t_{50}\) of 37.6 h shrinks to 6.1 h at weight 0.21). Replicate
+groups additionally get a DerSimonian–Laird random-effects meta-analysis, retaining between-replicate \(t_{50}\) scatter
+as a <b>stochastic-nucleation signal</b>.</p>
+
+<!-- M7 -->
+<h3 id="m7">4.9 · M7 — Output assembler &amp; build-id <span class="pill">m7-assembler-1.0</span></h3>
+<p>Assembles one <code>ProteinAnalysisResult</code> per curve (no new inference) with a sortable
+<b>information-yield</b> ladder: <b>mechanistic &gt; scaling &gt; descriptive &gt; signal_only &gt; uninformative</b>.
+<code>scaling</code> requires a <em>significant</em> γ (reliable and 95% CI excludes 0), so a reliable-but-CI-spans-zero γ
+falls to descriptive. A <b>degenerate-case contract</b> emits a compact result (regime + yield + one ranked M9 hook + ≤3
+impact-ranked caveats) for the low tiers — not a caveat avalanche. It carries no manufactured certainty
+(<code>mechanistic.confidence</code> null when unlicensed; construct-mismatch refuses the propensity).</p>
+<p>The <b>engine_build_id</b> is a deterministic hash over every comparability axis — M1–M7 versions + anchor + reference
+scale + ETL schemas + a <code>corpus_version</code> folding every CPAD source digest + harness + env +
+<b>thresholds_version</b>. <code>comparable(a,b)</code> gates cross-build comparison on equality. Applying the calibrated
+thresholds bumped it <code>bc442463dfdf → e660cb452b41</code>, correctly marking prior results non-comparable.</p>
+
+<!-- M8 -->
+<h3 id="m8">4.10 · M8 — Inferential reachability map <span class="pill">m8-reachability-1.0</span></h3>
+<p>A consolidation (no new inference) into a falsifiable map of <em>what is inferable from CPAD, and what is not</em>, under
+a mandatory <b>validity ceiling</b>: all counts are upper bounds on reachability / lower bounds on degeneracy, conditional
+on forward-model adequacy. The headline is the <b>mechanistically-resolvable boundary</b>:</p>
+<div class="callout"><b>33 proteins / 48 series are structurally resolvable</b> (≥3-concentration, mass-assay families that a
+γ-resolved series <em>could</em> discriminate) — but <b>0 are actually licensed</b>. The entire GAP of 33 is closed by a
+single metadata fix: recording agitation &amp; seeding.</div>
+<p>It also emits the inference ladder (of 1,654 curves: signal-present 1,606 → fittable 1,240 → descriptive 1,211 →
+scaling ~59 → mechanistic 0), an impact-ranked blocker census, and a data-richness × condition-completeness grid.</p>
+
+<!-- M9 -->
+<h3 id="m9">4.11 · M9 — Experimental-design recommender <span class="pill">m9-recommender-1.0</span></h3>
+<p>Committed method: a <b>Service-C-distilled rule table</b> whose gains are quantified by Service C's <em>measured</em>
+degeneracy reduction (a γ-resolved series splits the Tier-B mechanism class 1 → 4 — a measured ~4× resolution). The full
+EIG/optimal-design computation is explicitly deferred. Candidates are ranked by <b>reduction ÷ cost</b>; the crediting is
+dependency-honest — recording agitation/seeding earns the full mechanism-unblock only where a concentration series
+<em>already exists</em>; on single-curve units it is discounted and flagged <em>necessary-but-not-sufficient</em>.
+Corpus headline: recording agitation &amp; seeding is the cheapest action that closes the M8 GAP.</p>
+
+<!-- M10 -->
+<h3 id="m10">4.12 · M10 — Cross-modal analysis <span class="pill">m10-crossmodal-1.0</span></h3>
+<p>PRISE uniquely co-holds, for the same proteins, sequence predictors × measured kinetics × structure. M10 mines that,
+enforcing that the effective \(n\) is the number of <b>proteins</b> (predictor scores are per-protein constants), not curves.</p>
+<table>
+  <tr><th>Analysis</th><th>Method</th><th>Result (current, calibrated)</th></tr>
+  <tr><td>P1 · sequence→kinetics</td><td>Spearman + leave-one-protein-out CV, permutation null, and a
+     between-protein <b>variance ceiling</b> (max variance any per-protein predictor could explain)</td>
+     <td><b>Null.</b> PASTA does not predict \(t_{50}\) (ρ≈−0.1, permutation p n.s., ceiling ≈ 38%). "Sequence predicts
+     <em>whether</em>, not <em>how fast</em>" — a clean, falsifiable negative.</td></tr>
+  <tr><td>P2 · APR burden → regime</td><td>Jonckheere–Terpstra trend across ordered regimes, protein-level permutation null</td>
+     <td>Median APR 0 / 0 / 4 (gradual / no-detectable / cooperative); <b>trend not significant</b> (permutation
+     \(p\approx0.26\)). <span class="muted">A pre-calibration version showed \(p=0.041\); the signal was partly driven by
+     the then-over-called <code>threshold_driven</code> bucket that calibration corrected — reported here honestly.</span></td></tr>
+  <tr><td>P3 · discordance scan</td><td>protein-level, censoring-aware 2×2 vs a pre-registered null disagreement rate</td>
+     <td>Observed disagreement 0.09 &lt; null 0.31; binomial \(p=0.022\) — sequence and kinetics <b>agree more than
+     chance</b>. Fills the previously-<code>None</code> §3-M6 null-disagreement rate.</td></tr>
+</table>
+
+<!-- conformal -->
+<h3 id="conf">4.13 · Conformal prediction <span class="pill">conformal-1.0</span></h3>
+<p>Distribution-free, finite-sample-valid intervals — stronger than the asymptotic bootstrap CIs. Split conformal on
+Service C's synthetic ground truth: nonconformity score \(s=|\hat t_{50}-t_{50}^{\text{true}}|\); the prediction interval
+is \(\hat t_{50}\pm q\) where \(q\) is the \(\lceil(n+1)(1-\alpha)\rceil/n\) empirical quantile of calibration scores,
+guaranteeing marginal coverage \(\ge1-\alpha\). It is <b>Mondrian</b> (a separate quantile per censoring/assay/regime
+stratum), one-sided for right-censored \(t_{50}\), and yields conformal <b>prediction sets</b> for the regime. Validated
+realized coverage at target 0.90: <b>\(t_{50}\) 0.974</b>, regime ~0.92 (Mondrian strata tighter — clean cooperative
+±3 h vs ±8 h marginal).</p>
+<div class="callout honest small"><b>Honest calibration caveat:</b> coverage is guaranteed against the <em>synthetic
+forward model</em> (the only source with known \(t_{50}\)); real-CPAD validity holds insofar as the pre-registered noise
+model matches digitised traces — a stated, testable assumption.</div>
+
+<!-- Service C -->
+<h3 id="sc">4.14 · Service C — validation &amp; identifiability engine <span class="pill">service-c-1.0</span></h3>
+<p>The de-circularised synthetic backbone. It generates curves from a <b>known</b> ground truth (closed-form or Tier-B ODE
++ pre-registered ThT noise / drift / digitisation / censoring), runs the real engine on them, and measures recovery. It
+delivers parameter-recovery bias/RMSE/coverage; <b>data-regime confusion matrices</b> that genuinely test the K2 claim
+(a single curve collapses the four Tier-B mechanisms to one class; a γ-resolved series splits them into four); calibration
+(<b>ECE 0.033 / Brier 0.063</b> on the descriptive confidence); an <b>FDR-null with a power arm</b> (realized FDP 0.0
+<em>and</em> power 0.98 — control is only claimed with demonstrated power); <b>held-out</b> threshold recommendations
+(train-chosen, out-of-sample AUC — the values now applied in §4.1/§4.3); and a <b>de-circularisation</b> metric — the
+mechanism-misidentification degradation when the generating model ≠ the fitting model (≈ 0.53–0.67), reported <em>on</em>
+the calibration itself.</p>
+<div class="callout warn small"><b>Stamped caveat:</b> the "a concentration series splits all four mechanisms" result is
+partly an artifact of hand-picked separable rate constants — the γ-separability is an <b>upper bound</b> on real-world
+discriminability. This caveat is surfaced in the artifact, not buried.</div>
+
+<!-- reality check -->
+<h3 id="rc">4.15 · Reality check — blind external validation <span class="pill">reality-check-1.0</span></h3>
+<p>The falsification test that de-circularises the whole engine (design §6C/C1): run PRISE <b>blind</b> on proteins the
+field considers mechanistically <b>resolved</b> and check its verdicts do not <em>contradict</em> published consensus. Five
+fixed points are pre-registered with citations (Aβ42 = secondary-nucleation, γ≈1.1, Cohen/Knowles PNAS 2013; Aβ40;
+α-synuclein, Buell PNAS 2014; insulin; β2-microglobulin). Because PRISE honestly <em>refuses</em> to name a mechanism, the
+correct test is <b>non-contradiction</b>: (1) modal regime must be cooperative/threshold; (2) γ within band where a strong
+consensus value exists; (3) the consensus mechanism must be a <em>member</em> of PRISE's equivalence class, not positively
+excluded.</p>
+<div class="callout"><h4>Result — PRISE passes</h4>
+<b>5 / 5 fixed points CONSISTENT, 0 contradictions</b> on the calibrated engine. Aβ42's PRISE γ = 1.18 falls inside the
+consensus band [0.8, 1.4] (γ≈1.1). Reserved-proteins/leakage discipline enforced (these 9 are used <em>solely</em> for
+this role). Honest framing: a thermometer against a few fixed points — <b>not</b> proof of correctness, <b>not</b>
+statistical calibration.</div>
+
+<!-- ===================================================================== -->
+<h2 id="web"><span class="n">5</span>The web product</h2>
+<p>A zero-install local web app: a Python <b>standard-library</b> HTTP server + a <b>vanilla-JS single-page app</b> (no
+build step), Plotly with an SVG fallback. Three tabs:</p>
+<ul>
+  <li><b>Browse &amp; analyze datasets</b> (landing) — pick a protein → a table of its real CPAD datasets (conditions,
+     censoring, yield) → click one for the full analysis: model-comparison table + multi-model plot overlay,
+     identifiability, features, propensity (3 views), sequence axis (endpoint-match licensing), dual-γ + global ODE fit,
+     empirical-Bayes pooled \(t_{50}\), conformal interval, M9 recommendation, and an honesty panel (gates failed,
+     caveats). <b>Multi-select</b> datasets → M0 cohort analysis (data-mode badge, confound refusal, window of validity).</li>
+  <li><b>Corpus overview</b> — the reachability ladder, blocker census, the GAP card, the M9 top action, and the
+     <b>reality-check</b> panel — each with a plain-language explainer (it is the aggregate of the per-dataset analyses,
+     not invented numbers).</li>
+  <li><b>Analyze your own curve</b> — paste/upload (time, signal) → M1→M5 run live.</li>
+</ul>
+<p><b>Live endpoints (all verified 200):</b> <code>/api/overview · /proteins · /protein/{id} · /curve · /models · /series-gamma ·
+/dose-response · /pooling · /crossmodal · /conformal · /reality-check</code> and <code>POST /cohort · /analyze</code>.
+A footer carries CPAD attribution + the data-residency note + <code>engine_build_id</code>.</p>
+
+<!-- ===================================================================== -->
+<h2 id="results"><span class="n">6</span>Real corpus results (calibrated engine, build e660cb452b41)</h2>
+<div class="card" style="text-align:center">
+  <span class="kpi"><span class="v">1,654</span><span class="l">curves · 105 proteins</span></span>
+  <span class="kpi"><span class="v">679</span><span class="l">cooperative sigmoidal</span></span>
+  <span class="kpi"><span class="v">59</span><span class="l">scaling (significant γ)</span></span>
+  <span class="kpi"><span class="v">0</span><span class="l">mechanistic licensed</span></span>
+  <span class="kpi"><span class="v">33</span><span class="l">resolvable-gap proteins</span></span>
+  <span class="kpi"><span class="v">5/5</span><span class="l">reality-check consistent</span></span>
+</div>
+<table>
+  <tr><th>Information-yield tier</th><th class="num">curves</th><th>Descriptive regime</th><th class="num">curves</th></tr>
+  <tr><td>mechanistic</td><td class="num">0</td><td>cooperative_sigmoidal</td><td class="num">679</td></tr>
+  <tr><td>scaling (γ CI excludes 0)</td><td class="num">59</td><td>gradual_non_cooperative</td><td class="num">502</td></tr>
+  <tr><td>descriptive</td><td class="num">1,135</td><td>threshold_driven</td><td class="num">11</td></tr>
+  <tr><td>signal_only</td><td class="num">454</td><td>no_detectable_aggregation</td><td class="num">48</td></tr>
+  <tr><td>uninformative</td><td class="num">6</td><td>(no resolved regime / not fittable)</td><td class="num">414</td></tr>
+</table>
+<p class="small muted">Cross-module consistency holds: cooperative 679 + threshold 11 = 690 = M4's interior-inflection count.
+γ: 77 reliable fits, of which 59 significant (CI excludes 0). The story: PRISE characterises the <em>shape</em> of ~73% of
+CPAD's curves, resolves a scaling exponent for ~4%, and licenses a mechanism for <b>none</b> — because the field's missing
+metadata (agitation/seeding) blocks it, a gap PRISE quantifies rather than papers over.</p>
+
+<!-- ===================================================================== -->
+<h2 id="constraints"><span class="n">7</span>Constraints &amp; honest limitations</h2>
+<ul>
+  <li><b>All calibration is synthetic.</b> Service C, the conformal coverage guarantee and the applied thresholds are
+     validated on synthetic ground truth under PRISE's own forward model. The blind reality check (§4.15) is the only
+     external anchor, and it is a <em>few-fixed-points non-contradiction</em> test, not statistical validation on real data.</li>
+  <li><b>Mechanism is unlicensed corpus-wide (0/1,654).</b> Correct, not a bug — CPAD lacks the agitation/seeding metadata
+     the quiescent-vs-shaken branch requires.</li>
+  <li><b>Cross-modal effective \(n\) ≈ 20–22 proteins</b> (predictor scores are per-protein constants), and the corpus is
+     biased to famous amyloids with essentially no negative class — so no honest specificity estimate for a
+     sequence→amyloid classifier is available.</li>
+  <li><b>Every kinetic value is a graph digitisation</b> — elevated, correlated point-wise uncertainty on every curve; the
+     wild bootstrap handles heteroscedasticity but not serial correlation, so per-curve CIs are lower bounds on width.</li>
+  <li><b>Corpus-scale global ODE fit is infeasible routinely</b> (stiff-ODE cost); it is a build-time enrichment only.</li>
+  <li><b>Single dataset ≠ protein truth.</b> A single censored curve can read gradual/non-cooperative while the protein's
+     aggregate is cooperative — PRISE deliberately does not over-read one curve (demonstrated on Aβ42).</li>
+  <li><b>The product is a single-user local prototype</b> — no deployment, concurrency, auth, persistence or export.</li>
+</ul>
+
+<!-- ===================================================================== -->
+<h2 id="gaps"><span class="n">8</span>Gaps vs the plan (honest)</h2>
+<table>
+  <tr><th>Plan element</th><th>Status</th><th>Note</th></tr>
+  <tr><td>M0–M10, Service C, conformal, pooling, reality-check</td><td><span class="pill ok">implemented</span></td><td>all functional, tested</td></tr>
+  <tr><td>Calibrated thresholds applied (governed)</td><td><span class="pill ok">done</span></td><td>thresholds-1.0, reversible</td></tr>
+  <tr><td>Full-corpus M3 bootstrap</td><td><span class="pill ok">done</span></td><td>1,240 curves (was 50)</td></tr>
+  <tr><td>Corpus-scale Knowles/Cohen global ODE fit</td><td><span class="pill part">partial</span></td><td>build-time only — too slow at scale</td></tr>
+  <tr><td>Full latent-rate Bayesian hierarchy (MCMC)</td><td><span class="pill part">approximated</span></td><td>deterministic feature-level empirical Bayes built instead</td></tr>
+  <tr><td>External forward-model generator (KMC / Smoluchowski)</td><td><span class="pill no">deferred</span></td><td>de-circularisation currently internal (ODE vs closed-form) + the reality check</td></tr>
+  <tr><td>Left-censoring EIV algebra in γ; ODE-family profile-likelihood</td><td><span class="pill no">deferred</span></td><td>right-censoring modelled; left-only excluded &amp; flagged</td></tr>
+  <tr><td>Zyggregator / CamSol predictors (solubility endpoint)</td><td><span class="pill no">declared absent</span></td><td>runnable from FASTA at build time — not done</td></tr>
+  <tr><td>Queryable M8 map; EIG-based M9</td><td><span class="pill part">summary / rule table</span></td><td>honest downgrades, per the design's options</td></tr>
+  <tr><td>Production web (FastAPI/React, async queue, deploy, export)</td><td><span class="pill no">not built</span></td><td>documented path; current app is a local stdlib prototype</td></tr>
+</table>
+
+<!-- ===================================================================== -->
+<h2 id="future"><span class="n">9</span>Future improvements (prioritised)</h2>
+<ol>
+  <li><b>More external fixed points + a real held-out real-corpus calibration.</b> Expand the reality check beyond 5
+     proteins and add leave-one-study-out coverage checks on adequate-\(n\) strata — the single biggest trust upgrade.</li>
+  <li><b>An external forward-model generator</b> (coarse-grained KMC / Smoluchowski) so the de-circularisation measures
+     degradation under a genuinely different physics, not just ODE-vs-closed-form.</li>
+  <li><b>Make the ODE global fit tractable</b> (surrogate/emulator or early-time linearised closed forms) so mechanism
+     constraints are available corpus-wide, not just build-time.</li>
+  <li><b>Productionise:</b> FastAPI + a typed frontend, an async job queue for the heavy fits, containerise with
+     <code>engine_build_id</code>-keyed caching, and a downloadable per-protein report — turning the prototype into a
+     deployable tool.</li>
+  <li><b>Run Zyggregator/CamSol from sequence</b> to add the solubility endpoint and a generic-aggregation axis, enabling
+     more sequence↔kinetics comparisons under endpoint matching.</li>
+  <li><b>Block/sieve bootstrap + BCa</b> for the serially-correlated digitised residuals, and left-censoring EIV algebra
+     in γ — closing the remaining statistical-rigor deferrals.</li>
+  <li><b>End-to-end frontend testing</b> (the product once shipped a runtime JS bug the API smoke test missed; a headless
+     browser test would prevent recurrence).</li>
+</ol>
+
+<!-- ===================================================================== -->
+<h2 id="repro"><span class="n">10</span>Reproducibility</h2>
+<p>Everything is deterministic under a fixed seed and byte-identical on re-run. Comparability is gated by a single
+<b>engine_build_id</b> that folds every version axis; a change anywhere (a threshold, a corpus byte, a schema) bumps it and
+marks prior results non-comparable. Current build: <code>e660cb452b41</code>. Module versions:
+<code>cpad-kinetics-1.0 · cpad-sequence-1.1 · m1-triage-1.0 · m2-fitbank-1.0 · m3-select-1.0 · m4-defs-1.0 ·
+global-fit-1.0 · m5-regimes-1.0 · m6-anchor-1.0 · m6-refscale-1.0 · m7-assembler-1.0 · m8-reachability-1.0 ·
+m9-recommender-1.0 · m10-crossmodal-1.0 · pooling-1.0 · conformal-1.0 · service-c-1.0 · reality-check-1.0 ·
+thresholds-1.0 · harness-1.0</code>. Governance: registry mutations and threshold applies are signed, dated,
+rationale-bearing, and reversible. Test suite: <b>350 engine tests + 12 ETL tests (362 total), 0 failures.</b></p>
+
+<div class="footer">
+  <p><b>PRISE — Protein-aggregation Rigorous Inference &amp; Scaling Engine.</b> Report generated from the audited,
+  running product (build <code>e660cb452b41</code>). Data: CPAD 2.0 (Rawat, Prabakaran et al., <i>Amyloid</i> 2020) —
+  derived analytical results only; raw bulk data not redistributed. The scientific posture throughout is
+  <b>honesty over false precision</b>: PRISE reports the boundary of what its data can support, and — where checked
+  blind against the field — does not contradict it.</p>
+</div>
+
+</div>
+</body>
+</html>
